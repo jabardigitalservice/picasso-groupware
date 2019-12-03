@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { db } from '@/lib/db'
+import { db } from '@/lib/firebase'
 
 export default {
   name: 'HelloWorld',
