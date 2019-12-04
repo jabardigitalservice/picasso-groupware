@@ -1,27 +1,37 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-      <button @click="signIn">Sign In</button>
-      <button @click="signOut">Sign Out</button>
-    </div>
-    <router-view/>
+    <template v-if="!loading">
+      <navbar/>
+      <router-view/>
+    </template>
   </div>
 </template>
 
 <script>
 import firebase from 'firebase'
+import { mapGetters } from 'vuex'
+import Navbar from './components/Navbar'
 
 export default {
+  components: {
+    Navbar
+  },
+
+  computed: mapGetters({
+    loading: 'auth/loading'
+  }),
+
   created () {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         console.log(user)
+        this.$store.dispatch('auth/login', { user: user })
       } else {
         console.log('not signed in')
         this.initOneTap()
       }
+
+      this.$store.commit('auth/AUTH_INITIALIZED')
     })
   },
 
@@ -46,24 +56,6 @@ export default {
       }, (error) => {
         console.log(error.type)
       })
-    },
-
-    signIn () {
-      const provider = new firebase.auth.GoogleAuthProvider()
-
-      firebase.auth().signInWithPopup(provider).then(function (result) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const token = result.credential.accessToken
-        console.log(token)
-        // The signed-in user info.
-        const user = result.user
-        console.log(user)
-        // ...
-      })
-    },
-
-    signOut () {
-      firebase.auth().signOut()
     }
   }
 }
