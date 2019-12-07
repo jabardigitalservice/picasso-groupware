@@ -21,15 +21,13 @@ export default {
     signIn () {
       const provider = new firebase.auth.GoogleAuthProvider()
 
-      firebase.auth().signInWithPopup(provider).then((result) => {
+      firebase.auth().signInWithRedirect(provider).then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        const token = result.credential.accessToken
-        console.log(token)
+        // const token = result.credential.accessToken
+        // console.log(token)
         // The signed-in user info.
-        const user = result.user
-        console.log(user)
-
-        window.googleyolo.cancelLastOperation()
+        // const user = result.user
+        // console.log(user)
 
         // Redirect home.
         // this.$router.push({ name: 'home' })

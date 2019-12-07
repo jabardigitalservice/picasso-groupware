@@ -24,11 +24,10 @@ export default {
   created () {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log(user)
+        // console.log(user)
         this.$store.dispatch('auth/login', { user: user })
       } else {
-        console.log('not signed in')
-        this.initOneTap()
+        // console.log('not signed in')
       }
 
       this.$store.commit('auth/AUTH_INITIALIZED')
@@ -36,27 +35,7 @@ export default {
   },
 
   methods: {
-    initOneTap () {
-      window.googleyolo.hint({
-        supportedAuthMethods: [
-          'https://accounts.google.com'
-        ],
-        supportedIdTokenProviders: [{
-          uri: 'https://accounts.google.com',
-          clientId: '867220352075-p0n1hr7adokqcc181vn48im473iuvml0.apps.googleusercontent.com'
-        }]
-      }).then((credential) => {
-        console.log(credential)
-
-        // Build Firebase credential with the Google ID token.
-        const googleCredential = firebase.auth.GoogleAuthProvider.credential(credential.idToken)
-
-        // Sign in with credential from the Google user.
-        firebase.auth().signInWithCredential(googleCredential)
-      }, (error) => {
-        console.log(error.type)
-      })
-    }
+    //
   }
 }
 </script>
