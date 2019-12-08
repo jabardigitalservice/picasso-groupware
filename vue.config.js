@@ -1,8 +1,8 @@
 module.exports = {
   pwa: {
     name: 'Groupware',
-    themeColor: '#1f9d55',
-    msTileColor: '#000000',
+    themeColor: '#399F4F',
+    msTileColor: '#FFFFFF',
     workboxOptions: {
       skipWaiting: true
     }

@@ -17,9 +17,7 @@ export default {
     db.collection('articles')
       .get()
       .then(querySnapshot => {
-        const documents = querySnapshot.docs.map(doc => doc.data())
-
-        console.log(documents)
+        // const documents = querySnapshot.docs.map(doc => doc.data())
       })
   }
 }

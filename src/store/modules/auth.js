@@ -16,6 +16,10 @@ export const getters = {
 
 // mutations
 export const mutations = {
+  [types.AUTH_LOADING] (state) {
+    state.loading = true
+  },
+
   [types.AUTH_INITIALIZED] (state) {
     state.loading = false
   },
@@ -24,7 +28,7 @@ export const mutations = {
     state.user = user
   },
 
-  [types.LOGOUT] (state) {
+  [types.UNAUTHENTICATED] (state) {
     state.user = null
   }
 }
@@ -36,10 +40,12 @@ export const actions = {
   },
 
   async logout ({ commit }) {
+    commit(types.AUTH_LOADING)
+
     try {
       await firebase.auth().signOut()
     } catch (e) { }
 
-    commit(types.LOGOUT)
+    commit(types.UNAUTHENTICATED)
   }
 }

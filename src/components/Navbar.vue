@@ -1,5 +1,5 @@
 <template>
-  <div id="nav" class="bg-brand-green text-white">
+  <div id="nav" class="bg-brand-green-dark text-white">
     <div class="container mx-auto">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
