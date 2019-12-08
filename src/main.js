@@ -3,13 +3,15 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
+import './lib/firebase'
 
-import '@/styles/app.scss'
+import '@fortawesome/fontawesome-free/js/all'
 
 Vue.config.productionTip = false
 
+/* eslint-disable no-new */
 new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount('#app')
+  ...App
+})
