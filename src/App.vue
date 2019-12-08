@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <loading ref="loading" />
+<!--    <loading ref="loading" />-->
 
     <transition name="page" mode="out-in">
       <component :is="layout" v-if="layout" />
@@ -10,7 +10,7 @@
 
 <script>
 import firebase from 'firebase'
-import Loading from './components/Loading'
+// import Loading from './components/Loading'
 
 // Load layout components dynamically.
 const requireContext = require.context('@/layouts', false, /.*\.vue$/)
@@ -28,7 +28,7 @@ export default {
   el: '#app',
 
   components: {
-    Loading
+    // Loading
   },
 
   data () {
@@ -39,7 +39,7 @@ export default {
   },
 
   mounted () {
-    this.$loading = this.$refs.loading
+    // this.$loading = this.$refs.loading
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {

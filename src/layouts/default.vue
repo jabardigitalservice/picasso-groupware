@@ -2,11 +2,11 @@
   <div class="select-none">
     <div class="bg-brand-green-dark h-10"></div>
     <div>
-      <transition name="page" mode="out-in">
+<!--      <transition name="page" mode="out-in">-->
         <slot>
           <router-view />
         </slot>
-      </transition>
+<!--      </transition>-->
     </div>
     <navbar></navbar>
   </div>

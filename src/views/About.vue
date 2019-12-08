@@ -42,6 +42,7 @@ export default {
     async signIn () {
       const provider = new firebase.auth.GoogleAuthProvider()
 
+      window.location.hash = ''
       await firebase.auth().signInWithRedirect(provider)
     },
 
