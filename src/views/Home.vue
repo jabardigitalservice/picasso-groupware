@@ -4,8 +4,8 @@
       <div class="flex flex-wrap">
         <div class="w-full bg-white p-4">
           <template v-if="!authLoading">
-            <img alt="Vue logo" src="../assets/logo.png">
-            <HelloWorld msg="Welcome"/>
+            <img alt="Vue logo" src="../assets/logo.png" class="mx-auto">
+            <HelloWorld msg="Groupware"/>
           </template>
           <template v-else>
             <content-loader-common/>

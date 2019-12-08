@@ -1,8 +1,8 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-
     <template v-if="!loading">
+      <h1>{{ msg }}</h1>
+
       <ul v-if="records.length > 0">
         <li v-for="record in records" :key="record.id">{{ record.title }}</li>
       </ul>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { db } from '@/lib/firebase'
+import { db } from '../lib/firebase'
 import ContentLoaderCommon from './ContentLoaderCommon'
 
 export default {
