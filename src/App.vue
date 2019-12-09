@@ -77,7 +77,7 @@ export default {
 
         // Get Token
         messaging.getToken().then((token) => {
-          console.log(token)
+          // console.log(token)
         })
       }).catch(() => {
         // console.log('Unable to get permission to notify.', err)
