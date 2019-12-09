@@ -11,6 +11,7 @@
 <script>
 import firebase from 'firebase'
 // import Loading from './components/Loading'
+import { messaging } from '@/lib/firebase'
 
 // Load layout components dynamically.
 const requireContext = require.context('@/layouts', false, /.*\.vue$/)
@@ -41,6 +42,8 @@ export default {
   mounted () {
     // this.$loading = this.$refs.loading
 
+    this.initFcm()
+
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         // console.log(user)
@@ -51,10 +54,6 @@ export default {
 
       this.$store.commit('auth/AUTH_INITIALIZED')
     })
-  },
-
-  created () {
-    //
   },
 
   methods: {
@@ -69,6 +68,24 @@ export default {
       }
 
       this.layout = layouts[layout]
+    },
+
+    initFcm () {
+      // Request Permission of Notifications
+      messaging.requestPermission().then(() => {
+        console.log('Notification permission granted.')
+
+        // Get Token
+        messaging.getToken().then((token) => {
+          console.log(token)
+        })
+      }).catch((err) => {
+        console.log('Unable to get permission to notify.', err)
+      })
+
+      messaging.onMessage((payload) => {
+        console.log('Message received. ', payload)
+      })
     }
   }
 }
