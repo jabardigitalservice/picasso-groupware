@@ -11,7 +11,7 @@
         <div class="text-center px-4 py-1">
           <router-link class="no-underline text-gray-700 block" to="/notifications">
             <i class="far fa-bell text-lg mb-2 notification-dot relative"></i>
-            <p class="text-xs">Notifications</p>
+            <p class="text-xs">Messages</p>
           </router-link>
         </div>
         <div class="text-center px-4 py-1">

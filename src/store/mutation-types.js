@@ -4,5 +4,8 @@ export const AUTH_INITIALIZED = 'AUTH_INITIALIZED'
 export const SET_USER = 'SET_USER'
 export const UNAUTHENTICATED = 'UNAUTHENTICATED'
 
+export const HOME_BANNERS_INIT = 'HOME_BANNERS_INIT'
+export const HOME_BANNERS_LOADED = 'HOME_BANNERS_LOADED'
+
 // lang.js
 export const SET_LOCALE = 'SET_LOCALE'

@@ -46,7 +46,7 @@ export const actions = {
 
     await dispatch('saveFcmToken', { user: user, token: fcmToken })
 
-    commit(types.SET_USER, { user: { name: user.displayName } })
+    commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL } })
   },
 
   async logout ({ commit }) {

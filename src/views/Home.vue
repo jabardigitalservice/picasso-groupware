@@ -2,10 +2,8 @@
   <div class="home">
     <div class="container mx-auto">
       <div class="flex flex-wrap">
-        <div class="w-full bg-white p-4">
-          <img alt="Vue logo" src="../assets/logo.png" class="mx-auto">
-
-          <HelloWorld msg="Groupware"/>
+        <div class="w-full">
+          <home-banner-list />
         </div>
       </div>
     </div>
@@ -13,14 +11,13 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 import { mapGetters } from 'vuex'
+import HomeBannerList from '@/components/HomeBannerList'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    HomeBannerList
   },
 
   computed: mapGetters({
