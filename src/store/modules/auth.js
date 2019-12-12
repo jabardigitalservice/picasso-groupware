@@ -43,6 +43,7 @@ export const actions = {
     })
 
     const fcmToken = await messaging.getToken()
+
     await dispatch('saveFcmToken', { user: user, token: fcmToken })
 
     commit(types.SET_USER, { user: { name: user.displayName } })
@@ -52,6 +53,9 @@ export const actions = {
     commit(types.AUTH_LOADING)
 
     try {
+      const fcmToken = await messaging.getToken()
+      await messaging.deleteToken(fcmToken)
+
       await firebase.auth().signOut()
     } catch (e) { }
 

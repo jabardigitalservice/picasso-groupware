@@ -23,6 +23,7 @@
 import { mapGetters } from 'vuex'
 import firebase from 'firebase'
 import ContentLoaderCommon from '../components/ContentLoaderCommon'
+import { messaging } from '@/lib/firebase'
 
 export default {
   components: {
@@ -43,7 +44,12 @@ export default {
       const provider = new firebase.auth.GoogleAuthProvider()
 
       window.location.hash = ''
+
       await firebase.auth().signInWithRedirect(provider)
+
+      // delete existing token
+      const fcmToken = await messaging.getToken()
+      await messaging.deleteToken(fcmToken)
     },
 
     signOut () {
