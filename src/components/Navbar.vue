@@ -9,7 +9,7 @@
           </router-link>
         </div>
         <div class="text-center px-4 py-1">
-          <router-link class="no-underline text-gray-700 block" to="/notifications">
+          <router-link class="no-underline text-gray-700 block" to="/messages">
             <i class="far fa-bell text-lg mb-2 notification-dot relative"></i>
             <p class="text-xs">Messages</p>
           </router-link>
