@@ -74,17 +74,12 @@ export default {
       // Request Permission of Notifications
       messaging.requestPermission().then(() => {
         // console.log('Notification permission granted.')
-
-        // Get Token
-        messaging.getToken().then((token) => {
-          // console.log(token)
-        })
       }).catch(() => {
         // console.log('Unable to get permission to notify.', err)
       })
 
       messaging.onMessage((payload) => {
-        // console.log('Message received. ', payload)
+        console.log('Message received. ', payload)
       })
     }
   }

@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import { db } from '../lib/firebase'
-import ContentLoaderCommon from './ContentLoaderCommon'
+import { db } from '@/lib/firebase'
+import ContentLoaderCommon from '@/components/ContentLoaderCommon'
 
 export default {
   props: {
