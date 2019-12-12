@@ -1,7 +1,7 @@
 <template>
   <div class="messages-list">
     <template v-if="!loading">
-      <div v-for="item in items" :key="item.id" class="w-full border-b p-4">
+      <div v-for="item in items" :key="item.id" class="w-full bg-white border-b p-4">
         <div>{{ item['title'] }}</div>
         <div>{{ formatPublishedDate(item['published_at']) }}</div>
       </div>

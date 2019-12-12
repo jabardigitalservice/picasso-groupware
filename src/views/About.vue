@@ -15,7 +15,7 @@
             </template>
           </template>
           <template v-else>
-            <content-loader-common/>
+            <content-loader-common />
           </template>
         </div>
       </div>
@@ -26,7 +26,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import firebase from 'firebase'
-import ContentLoaderCommon from '../components/ContentLoaderCommon'
+import ContentLoaderCommon from '@/components/ContentLoaderCommon'
 import { messaging } from '@/lib/firebase'
 
 export default {

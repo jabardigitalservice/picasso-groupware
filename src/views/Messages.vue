@@ -2,7 +2,7 @@
   <div class="messages">
     <div class="container mx-auto">
       <div class="flex flex-wrap">
-        <div class="w-full bg-white">
+        <div class="w-full">
           <template v-if="user">
             <messages-list />
           </template>
