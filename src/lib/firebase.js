@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import 'firebase/messaging'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyB2J4lGyL9MZNaUiRhmbCr3lfd2yT6fvHI',
@@ -21,6 +22,6 @@ export const db = firebase.firestore()
 // This is not always necessary, but it's used in other examples
 const { TimeStamp, GeoPoint, FieldValue } = firebase.firestore
 export { TimeStamp, GeoPoint, FieldValue }
-//
-// const messaging = firebase.messaging()
-// export { messaging }
+
+const messaging = firebase.messaging()
+export { messaging }
