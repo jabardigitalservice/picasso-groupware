@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home no-pull-refresh">
     <div class="container mx-auto">
       <div class="flex flex-wrap">
         <div class="w-full">
@@ -21,7 +21,7 @@ export default {
   },
 
   computed: mapGetters({
-    authLoading: 'auth/loading'
+    // authLoading: 'auth/loading'
   })
 }
 </script>

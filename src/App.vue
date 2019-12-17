@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+// import firebase from 'firebase'
 // import Loading from './components/Loading'
-import { messaging } from '@/lib/firebase'
+// import { messaging } from '@/lib/firebase'
 
 // Load layout components dynamically.
 const requireContext = require.context('@/layouts', false, /.*\.vue$/)
@@ -44,16 +44,16 @@ export default {
 
     this.initFcm()
 
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // console.log(user)
-        this.$store.dispatch('auth/login', { user: user })
-      } else {
-        // console.log('not signed in')
-      }
-
-      this.$store.commit('auth/AUTH_INITIALIZED')
-    })
+    // firebase.auth().onAuthStateChanged((user) => {
+    //   if (user) {
+    //     // console.log(user)
+    //     this.$store.dispatch('auth/login', { user: user })
+    //   } else {
+    //     // console.log('not signed in')
+    //   }
+    //
+    //   this.$store.commit('auth/AUTH_INITIALIZED')
+    // })
   },
 
   methods: {
@@ -72,15 +72,15 @@ export default {
 
     initFcm () {
       // Request Permission of Notifications
-      messaging.requestPermission().then(() => {
-        // console.log('Notification permission granted.')
-      }).catch(() => {
-        // console.log('Unable to get permission to notify.', err)
-      })
-
-      messaging.onMessage((payload) => {
-        // console.log('Message received. ', payload)
-      })
+      // messaging.requestPermission().then(() => {
+      //   // console.log('Notification permission granted.')
+      // }).catch(() => {
+      //   // console.log('Unable to get permission to notify.', err)
+      // })
+      //
+      // messaging.onMessage((payload) => {
+      //   // console.log('Message received. ', payload)
+      // })
     }
   }
 }

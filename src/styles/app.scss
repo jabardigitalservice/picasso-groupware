@@ -5,7 +5,10 @@
 @import 'elements/transitions';
 
 body {
-  background-color: #f7fafc;
+  // background-color: #f7fafc;
+}
+
+.no-pull-refresh {
   overscroll-behavior-y: none;
 }
 

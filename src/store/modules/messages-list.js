@@ -27,10 +27,8 @@ export const mutations = {
 
 // actions
 export const actions = {
-  async fetchItems ({ commit }, { userId }) {
-    const querySnapshot = await db.collection('users')
-      .doc(userId)
-      .collection('messages')
+  async fetchItems ({ commit }) {
+    const querySnapshot = await db.collection('messages')
       .get()
 
     const documents = querySnapshot.docs.map(doc => doc.data())

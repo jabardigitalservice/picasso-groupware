@@ -3,12 +3,7 @@
     <div class="container mx-auto">
       <div class="flex flex-wrap">
         <div class="w-full">
-          <template v-if="user">
-            <messages-list />
-          </template>
-          <template v-else>
-            Please login.
-          </template>
+          <messages-list />
         </div>
       </div>
     </div>
@@ -25,7 +20,7 @@ export default {
   },
 
   computed: mapGetters({
-    user: 'auth/user'
+    //
   }),
 
   mounted () {
