@@ -15,11 +15,11 @@ export const getters = {
 
 // mutations
 export const mutations = {
-  [types.HOME_BANNERS_INIT] (state) {
+  [types.HOME_ARTICLES_INIT] (state) {
     state.loading = true
   },
 
-  [types.HOME_BANNERS_LOADED] (state, { items }) {
+  [types.HOME_ARTICLES_LOADED] (state, { items }) {
     state.items = items
     state.loading = false
   }
@@ -28,15 +28,15 @@ export const mutations = {
 // actions
 export const actions = {
   async fetchItems ({ commit }) {
-    const querySnapshot = await db.collection('banners')
-      .orderBy('sequence')
+    const querySnapshot = await db.collection('articles')
+      .orderBy('published_at', 'desc')
       .limit(5)
       .get()
 
     const documents = querySnapshot.docs.map(doc => doc.data())
 
     await setTimeout(() => {
-      commit(types.HOME_BANNERS_LOADED, { items: documents })
+      commit(types.HOME_ARTICLES_LOADED, { items: documents })
     }, 1000)
   }
 }

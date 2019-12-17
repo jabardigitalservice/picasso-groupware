@@ -4,6 +4,7 @@
       <div class="flex flex-wrap">
         <div class="w-full">
           <home-banner-list />
+          <home-article-list />
         </div>
       </div>
     </div>
@@ -13,11 +14,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import HomeBannerList from '@/components/HomeBannerList'
+import HomeArticleList from '@/components/HomeArticleList'
 
 export default {
   name: 'home',
   components: {
-    HomeBannerList
+    HomeBannerList,
+    HomeArticleList
   },
 
   computed: mapGetters({
