@@ -1,5 +1,5 @@
 <template>
-  <div class="home-banner-list">
+  <div class="home-banner-list shadow">
     <template v-if="!loading">
       <carousel :pagination-enabled="false" :per-page="1" :mouse-drag="false">
         <slide v-for="item in items" :key="item.id" class="item">

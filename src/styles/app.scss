@@ -5,11 +5,15 @@
 @import 'elements/transitions';
 
 body {
-  // background-color: #f7fafc;
+  background-color: #F2F5F7;
 }
 
 .no-pull-refresh {
   overscroll-behavior-y: none;
+}
+
+a.router-link-exact-active {
+  color: #008C50;
 }
 
 .home-banner-list {
