@@ -28,8 +28,9 @@ export const mutations = {
 // actions
 export const actions = {
   async fetchItems ({ commit }) {
-    const querySnapshot = await db.collection('messages')
+    const querySnapshot = await db.collection('broadcasts')
       .orderBy('published_at', 'desc')
+      .limit(20)
       .get()
 
     const documents = querySnapshot.docs.map(doc => doc.data())
