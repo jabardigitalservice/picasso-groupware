@@ -15,11 +15,11 @@ export const getters = {
 
 // mutations
 export const mutations = {
-  [types.MESSAGES_LIST_INIT] (state) {
+  [types.EVENTS_INIT] (state) {
     state.loading = true
   },
 
-  [types.MESSAGES_LIST_LOADED] (state, { items }) {
+  [types.EVENTS_LOADED] (state, { items }) {
     state.items = items
     state.loading = false
   }
@@ -28,15 +28,15 @@ export const mutations = {
 // actions
 export const actions = {
   async fetchItems ({ commit }) {
-    const querySnapshot = await db.collection('broadcasts')
-      .orderBy('published_at', 'desc')
+    const querySnapshot = await db.collection('events')
+      .orderBy('start_datetime', 'desc')
       .limit(20)
       .get()
 
     const documents = querySnapshot.docs.map(doc => doc.data())
 
     await setTimeout(() => {
-      commit(types.MESSAGES_LIST_LOADED, { items: documents })
+      commit(types.EVENTS_LOADED, { items: documents })
     }, 1000)
   }
 }
