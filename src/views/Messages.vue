@@ -19,6 +19,10 @@ export default {
     MessagesList
   },
 
+  metaInfo: {
+    title: 'Messages'
+  },
+
   computed: mapGetters({
     //
   }),

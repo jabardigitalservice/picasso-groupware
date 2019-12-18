@@ -23,6 +23,10 @@ export default {
     HomeArticleList
   },
 
+  metaInfo: {
+    title: 'Home'
+  },
+
   computed: mapGetters({
     // authLoading: 'auth/loading'
   })
