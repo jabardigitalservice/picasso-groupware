@@ -3,7 +3,7 @@
     <div class="container mx-auto">
       <div class="flex flex-wrap">
         <div class="w-full">
-          <home-banner-list />
+          <home-banner-list class="my-2" />
           <home-article-list />
         </div>
       </div>
