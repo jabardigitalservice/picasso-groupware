@@ -3,7 +3,7 @@
     <template v-if="!loading">
       <carousel :autoplay="true" :autoplayTimeout="4000" :perPageCustom="[[768, 2], [1024, 4]]" :pagination-enabled="false" :per-page="1" :mouse-drag="false">
         <slide v-for="item in items" :key="item.id" class="item">
-          <div class="mx-2 my-2 h-32  bg-cover bg-center rounded-lg shadow" :style="`background-image: url(${item.url})`"></div>
+          <div class="mx-2 mb-2 h-32  bg-cover bg-center rounded-lg shadow" :style="`background-image: url(${item.url})`"></div>
         </slide>
       </carousel>
     </template>
