@@ -16,6 +16,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 
 // Get a Firestore instance
+firebase.firestore().enablePersistence().catch(() => {
+  //
+})
+
 export const db = firebase.firestore()
 
 // Export types that exists in Firestore
