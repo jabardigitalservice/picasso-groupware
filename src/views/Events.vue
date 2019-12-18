@@ -1,11 +1,7 @@
 <template>
   <div class="events">
     <div class="container mx-auto">
-      <div class="flex flex-wrap">
-        <div class="w-full">
-          <events-list />
-        </div>
-      </div>
+      <events-list class="mt-2" />
     </div>
   </div>
 </template>

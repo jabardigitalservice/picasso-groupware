@@ -1,11 +1,7 @@
 <template>
   <div class="messages">
     <div class="container mx-auto">
-      <div class="flex flex-wrap">
-        <div class="w-full">
-          <messages-list />
-        </div>
-      </div>
+      <messages-list class="mt-2" />
     </div>
   </div>
 </template>

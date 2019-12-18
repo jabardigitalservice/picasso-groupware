@@ -1,14 +1,16 @@
 <template>
   <div class="home-banner-list">
     <template v-if="!loading">
-      <div v-for="item in items" :key="item.id" class="bg-white rounded-lg shadow m-2 p-4">
-        <div class="flex">
-          <div class="flex items-center block mx-auto mr-4">
-            <i class="fas fa-check-circle text-brand-green text-lg" />
-          </div>
-          <div class="text-left flex-grow">
-            <p class="text-sm leading-normal">{{ item['title'] }}</p>
-            <p class="text-sm text-gray-600">{{ formatPublishedDate(item['published_at']) }}</p>
+      <div class="flex flex-wrap">
+        <div v-for="item in items" :key="item.id" class="w-full bg-white rounded-lg shadow mx-2 mb-2 p-4">
+          <div class="flex">
+            <div class="flex items-center block mx-auto mr-4">
+              <i class="fas fa-check-circle text-brand-green text-lg" />
+            </div>
+            <div class="text-left flex-grow">
+              <p class="text-sm leading-normal">{{ item['title'] }}</p>
+              <p class="text-sm text-gray-600">{{ formatPublishedDate(item['published_at']) }}</p>
+            </div>
           </div>
         </div>
       </div>
