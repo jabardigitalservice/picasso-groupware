@@ -4,22 +4,22 @@
       <div class="flex items-center w-full lg:max-w-sm lg:mx-auto justify-around flex-wrap">
         <div class="text-center px-4 py-1">
           <router-link class="no-underline text-gray-700 block" to="/">
-            <i class="fas fa-home text-lg mb-2" />
+            <i class="fas fa-home text-lg" />
             <p class="text-xs">Home</p>
           </router-link>
         </div>
         <div class="text-center px-4 py-1">
           <router-link class="no-underline text-gray-700 block" to="/messages">
-            <i class="far fa-bell text-lg mb-2 notification-dot relative" />
+            <i class="far fa-bell text-lg" />
             <p class="text-xs">Messages</p>
           </router-link>
         </div>
-<!--        <div class="text-center px-4 py-1">-->
-<!--          <router-link class="no-underline text-gray-700 block" to="/about">-->
-<!--            <i class="far fa-user text-lg mb-2"></i>-->
-<!--            <p class="text-xs">Profile</p>-->
-<!--          </router-link>-->
-<!--        </div>-->
+        <div class="text-center px-4 py-1">
+          <router-link class="no-underline text-gray-700 block" to="/events">
+            <i class="far fa-calendar text-lg" />
+            <p class="text-xs">Events</p>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
