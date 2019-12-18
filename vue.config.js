@@ -3,7 +3,7 @@ module.exports = {
     name: 'Groupware',
     themeColor: '#399F4F',
     manifestOptions: {
-      background_color: '#FFFFFF'
+      background_color: '#399F4F'
     }
   }
 }
