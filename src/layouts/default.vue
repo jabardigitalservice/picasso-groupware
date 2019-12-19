@@ -33,6 +33,7 @@ export default {
     this.$store.dispatch('home-articles/fetchItems')
     this.$store.dispatch('messages-list/fetchItems')
     this.$store.dispatch('events-list/fetchItems')
+    this.$store.dispatch('thankyou-list/fetchItems')
   }
 }
 </script>

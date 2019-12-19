@@ -16,5 +16,8 @@ export const MESSAGES_LIST_LOADED = 'MESSAGES_LIST_LOADED'
 export const EVENTS_INIT = 'EVENTS_INIT'
 export const EVENTS_LOADED = 'EVENTS_LOADED'
 
+export const THANKYOU_INIT = 'THANKYOU_INIT'
+export const THANKYOU_LOADED = 'THANKYOU_LOADED'
+
 // lang.js
 export const SET_LOCALE = 'SET_LOCALE'
