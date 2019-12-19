@@ -30,3 +30,5 @@ export { TimeStamp, GeoPoint, FieldValue }
 
 const messaging = firebase.messaging()
 export { messaging }
+
+export const analytics = firebase.analytics()
