@@ -62,9 +62,8 @@ export default {
       })
 
       this.message = ''
-      await this.$store.dispatch('thankyou-list/fetchItems')
-
       await this.$router.push('/thankyou')
+      await this.$store.dispatch('thankyou-list/fetchItems')
     }
   }
 }
