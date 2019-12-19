@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/messaging'
+import 'firebase/analytics'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyB2J4lGyL9MZNaUiRhmbCr3lfd2yT6fvHI',
