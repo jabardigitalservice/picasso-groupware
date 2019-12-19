@@ -9,7 +9,8 @@ const firebaseConfig = {
   projectId: 'sapajds',
   storageBucket: 'sapajds.appspot.com',
   messagingSenderId: '867220352075',
-  appId: '1:867220352075:web:dd6e33d19869652bfbb1ce'
+  appId: '1:867220352075:web:dd6e33d19869652bfbb1ce',
+  measurementId: 'G-9DQ4MEKRBE'
 }
 
 // Initialize Firebase
