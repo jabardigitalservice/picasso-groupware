@@ -1,12 +1,19 @@
 <template>
   <div class="messages">
     <div class="container mx-auto">
-      <div class="bg-white rounded-lg shadow m-2 p-4">
+      <div class="bg-white shadow p-4">
         <template v-if="!loading">
-          <p class="text-sm leading-normal">{{ item['title'] }}</p>
-          <p class="text-sm text-gray-600">{{ formatDateTimeShort(item['published_at'].toDate()) }}</p>
+          <div class="flex">
+            <div class="flex items-center block mx-auto mr-4">
+              <i class="fas fa-envelope text-brand-green text-lg" />
+            </div>
+            <div class="text-left flex-grow">
+              <p class="text-sm leading-normal">{{ item['title'] }}</p>
+              <p class="text-sm text-gray-600">{{ formatDateTimeShort(item['published_at'].toDate()) }}</p>
+            </div>
+          </div>
 
-          <div class="text-sm leading-normal mt-5">{{ item['content'] }}</div>
+          <div class="text-sm leading-normal mt-5 body-content">{{ `${formatContent(item['content'])}` }}</div>
         </template>
 
         <template v-else>
@@ -52,6 +59,10 @@ export default {
 
     async fetchItem (id) {
       await this.$store.dispatch('messages-detail/fetchItem', { id: id })
+    },
+
+    formatContent (content) {
+      return content
     }
   }
 }
