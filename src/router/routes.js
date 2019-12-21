@@ -11,5 +11,6 @@ export default [
   { path: '/thankyou', name: 'thankyou', component: page('ThankYou.vue') },
   { path: '/thankyou/create', name: 'thankyou.create', component: page('ThankYouCreate.vue') },
   { path: '/underconstruction', name: 'underconstruction', component: page('UnderConstruction.vue') },
+  { path: '/feedback/create', name: 'feedback.create', component: page('FeedbackCreate.vue') },
   { path: '*', component: page('errors/404.vue') }
 ]

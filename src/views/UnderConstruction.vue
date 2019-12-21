@@ -7,6 +7,10 @@
           <p class="text-sm">Fitur ini belum ada yang coding. Bantu dong. <br />Tulis feedback dan fitur dibutuhkan + vote gan.</p>
         </div>
 
+        <div class="mx-2 my-2">
+          <router-link to="/feedback/create" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Feedback atau Usul Fitur</router-link>
+        </div>
+
         <feedback-list class="mt-4" />
       </div>
     </div>
