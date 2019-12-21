@@ -35,8 +35,6 @@ export const actions = {
 
     const documents = querySnapshot.docs.map(doc => doc.data())
 
-    await setTimeout(() => {
-      commit(types.EVENTS_LOADED, { items: documents })
-    }, 1000)
+    commit(types.EVENTS_LOADED, { items: documents })
   }
 }
