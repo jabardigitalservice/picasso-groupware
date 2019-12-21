@@ -17,7 +17,7 @@
       </div>
     </template>
     <template v-else>
-      <div v-for="n in 5" :key="n" class="bg-white rounded-lg shadow m-2 p-4">
+      <div v-for="n in 5" :key="n" class="bg-white shadow p-4">
         <content-loader
           :speed="2"
           primaryColor="#f3f3f3"

@@ -8,14 +8,14 @@
               <p class="text-sm leading-normal">{{ item['title'] }}</p>
             </div>
             <div class="flex items-center block mx-auto mr-4">
-              <span class="text-sm mr-2">{{ item['votes_count'] }}</span> <i class="fas fa-heart text-red-500 text-lg" />
+              <span class="text-sm mr-2">{{ item['votes_count'] }}</span> <span @click="vote(item.id)"><i class="fas fa-heart text-red-500" /></span>
             </div>
           </div>
         </div>
       </div>
     </template>
     <template v-else>
-      <div v-for="n in 5" :key="n" class="bg-white rounded-lg shadow m-2 p-4">
+      <div v-for="n in 5" :key="n" class="bg-white shadow p-4">
         <content-loader
           :speed="2"
           primaryColor="#f3f3f3"
@@ -45,7 +45,11 @@ export default {
   }),
 
   methods: {
-    formatDateTimeShort
+    formatDateTimeShort,
+
+    async vote (id) {
+      await this.$store.dispatch('feedback-list/vote', { id: id })
+    }
   }
 }
 </script>

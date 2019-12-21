@@ -1,5 +1,5 @@
 import * as types from '../mutation-types'
-import { db } from '@/lib/firebase'
+import { db, FieldValue } from '@/lib/firebase'
 
 // state
 export const state = {
@@ -33,8 +33,19 @@ export const actions = {
       .limit(50)
       .get()
 
-    const documents = querySnapshot.docs.map(doc => doc.data())
+    const documents = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }))
 
     commit(types.FEEDBACK_LIST_LOADED, { items: documents })
+  },
+
+  async vote ({ commit, dispatch }, { id }) {
+    const querySnapshot = await db.collection('features_requests').doc(id)
+
+    await querySnapshot.update({ votes_count: FieldValue.increment(1) })
+
+    dispatch('fetchItems')
   }
 }
