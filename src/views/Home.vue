@@ -3,7 +3,7 @@
     <div class="container mx-auto">
       <home-banner-list class="my-2" />
 
-      <div class="flex flex-wrap shadow bg-white">
+      <div class="mx-0 sm:mx-2 flex flex-wrap shadow bg-white">
         <div class="w-1/3">
           <router-link to="/underconstruction">
             <div class="h-full p-3 py-4  text-center text-gray-700">
