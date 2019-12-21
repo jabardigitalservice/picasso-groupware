@@ -15,12 +15,12 @@ export const getters = {
 
 // mutations
 export const mutations = {
-  [types.MESSAGES_DETAIL_INIT] (state) {
+  [types.ARTICLES_DETAIL_INIT] (state) {
     state.item = null
     state.loading = true
   },
 
-  [types.MESSAGES_DETAIL_LOADED] (state, { item }) {
+  [types.ARTICLES_DETAIL_LOADED] (state, { item }) {
     state.item = item
     state.loading = false
   }
@@ -29,11 +29,11 @@ export const mutations = {
 // actions
 export const actions = {
   async fetchItem ({ commit }, { id }) {
-    commit(types.MESSAGES_DETAIL_INIT)
+    commit(types.ARTICLES_DETAIL_INIT)
 
-    const querySnapshot = await db.collection('broadcasts').doc(id)
+    const querySnapshot = await db.collection('articles').doc(id)
     const doc = await querySnapshot.get()
 
-    commit(types.MESSAGES_DETAIL_LOADED, { item: doc.data() })
+    commit(types.ARTICLES_DETAIL_LOADED, { item: doc.data() })
   }
 }
