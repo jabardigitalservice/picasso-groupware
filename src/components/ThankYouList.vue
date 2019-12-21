@@ -2,7 +2,7 @@
   <div class="events-list">
     <template v-if="!loading">
       <div class="flex flex-wrap">
-        <div v-for="item in items" :key="item.id" class="w-full bg-white rounded-lg shadow mx-2 mb-2 p-4">
+        <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4">
           <div class="flex">
             <div class="flex items-center block mx-auto mr-4">
               <i class="fas fa-heart text-red-500 text-lg" />
