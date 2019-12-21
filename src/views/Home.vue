@@ -5,7 +5,7 @@
 
       <div class="flex flex-wrap shadow bg-white">
         <div class="w-1/3">
-          <router-link to="/messages">
+          <router-link to="/underconstruction">
             <div class="h-full p-3 py-4  text-center text-gray-700">
               <i class="far fa-check-circle text-2xl" />
               <p class="text-xs mt-1">Checkin</p>
@@ -14,7 +14,7 @@
         </div>
 
         <div class="w-1/3">
-          <router-link to="/messages">
+          <router-link to="/underconstruction">
             <div class="h-full p-3 py-4  text-center text-gray-700">
               <i class="far fa-building text-2xl" />
               <p class="text-xs mt-1">Booking Ruangan</p>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="w-1/3">
-          <router-link to="/messages">
+          <router-link to="/underconstruction">
             <div class="h-full p-3 py-4 text-center text-gray-700">
               <i class="fas fa-wine-bottle text-2xl" />
               <p class="text-xs mt-1">Pesan Kopi</p>

@@ -4,12 +4,11 @@
       <div class="flex flex-wrap">
         <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6">
           <div class="flex">
-            <div class="flex items-center block mx-auto mr-4">
-              <i class="fas fa-heart text-red-500 text-lg" />
-            </div>
             <div class="text-left flex-grow">
-              <p class="text-sm leading-normal">{{ item['message'] }}</p>
-              <p class="text-sm text-gray-600">{{ formatDateTimeShort(item['feedback_at'].toDate()) }}</p>
+              <p class="text-sm leading-normal">{{ item['title'] }}</p>
+            </div>
+            <div class="flex items-center block mx-auto mr-4">
+              <span class="text-sm mr-2">{{ item['votes_count'] }}</span> <i class="fas fa-heart text-red-500 text-lg" />
             </div>
           </div>
         </div>
@@ -41,8 +40,8 @@ export default {
   },
 
   computed: mapGetters({
-    loading: 'thankyou-list/loading',
-    items: 'thankyou-list/items'
+    loading: 'feedback-list/loading',
+    items: 'feedback-list/items'
   }),
 
   methods: {
