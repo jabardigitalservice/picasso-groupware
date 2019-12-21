@@ -13,7 +13,7 @@
             </div>
           </div>
 
-          <div class="text-sm leading-normal mt-5 body-content">{{ `${formatContent(item['content'])}` }}</div>
+          <div class="text-sm leading-normal mt-5 body-content" v-html="formatContent(item['content'])"></div>
         </template>
 
         <template v-else>
