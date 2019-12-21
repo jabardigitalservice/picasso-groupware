@@ -1,7 +1,7 @@
 <template>
   <div class="messages">
     <div class="container mx-auto">
-      <div class="w-full lg:flex mx-4 mb-4">
+      <div class="w-full lg:flex px-4 mb-4">
         <p class="text-leading text-grey-darker">Messages</p>
       </div>
 
