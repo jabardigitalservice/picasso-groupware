@@ -1,11 +1,15 @@
 <template>
   <div class="messages">
     <div class="container mx-auto">
+      <div class="w-full lg:flex mx-4 mb-4">
+        <p class="text-leading text-grey-darker">Articles</p>
+      </div>
+
       <div class="bg-white shadow p-4">
         <template v-if="!loading">
           <div class="flex">
             <div class="flex items-center block mx-auto mr-4">
-              <i class="fas fa-envelope text-brand-green text-lg" />
+              <i class="fas fa-check-circle text-brand-green text-lg" />
             </div>
             <div class="text-left flex-grow">
               <p class="text-sm leading-normal">{{ item['title'] }}</p>
@@ -58,7 +62,7 @@ export default {
     formatDateTimeShort,
 
     async fetchItem (id) {
-      await this.$store.dispatch('messages-detail/fetchItem', { id: id })
+      await this.$store.dispatch('articles-detail/fetchItem', { id: id })
     },
 
     formatContent (content) {

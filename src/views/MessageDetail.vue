@@ -1,6 +1,10 @@
 <template>
   <div class="messages">
     <div class="container mx-auto">
+      <div class="w-full lg:flex mx-4 mb-4">
+        <p class="text-leading text-grey-darker">Messages</p>
+      </div>
+
       <div class="bg-white shadow p-4">
         <template v-if="!loading">
           <div class="flex">

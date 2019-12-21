@@ -1,6 +1,10 @@
 <template>
   <div class="events">
     <div class="container mx-auto">
+      <div class="w-full lg:flex mx-4 mb-4">
+        <p class="text-leading text-grey-darker">Events</p>
+      </div>
+
       <events-list class="mt-2" />
     </div>
   </div>

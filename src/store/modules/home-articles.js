@@ -33,10 +33,11 @@ export const actions = {
       .limit(5)
       .get()
 
-    const documents = querySnapshot.docs.map(doc => doc.data())
+    const documents = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }))
 
-    await setTimeout(() => {
-      commit(types.HOME_ARTICLES_LOADED, { items: documents })
-    }, 1000)
+    commit(types.HOME_ARTICLES_LOADED, { items: documents })
   }
 }
