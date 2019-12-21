@@ -2,7 +2,37 @@
   <div class="home no-pull-refresh">
     <div class="container mx-auto">
       <home-banner-list class="my-2" />
-      <home-article-list />
+
+      <div class="flex flex-wrap shadow bg-white">
+        <div class="w-1/3">
+          <router-link to="/messages">
+            <div class="h-full p-3 py-4  text-center text-gray-700">
+              <i class="far fa-check-circle text-2xl" />
+              <p class="text-xs mt-1">Checkin</p>
+            </div>
+          </router-link>
+        </div>
+
+        <div class="w-1/3">
+          <router-link to="/messages">
+            <div class="h-full p-3 py-4  text-center text-gray-700">
+              <i class="far fa-building text-2xl" />
+              <p class="text-xs mt-1">Booking Ruangan</p>
+            </div>
+          </router-link>
+        </div>
+
+        <div class="w-1/3">
+          <router-link to="/messages">
+            <div class="h-full p-3 py-4 text-center text-gray-700">
+              <i class="fas fa-wine-bottle text-2xl" />
+              <p class="text-xs mt-1">Pesan Kopi</p>
+            </div>
+          </router-link>
+        </div>
+      </div>
+
+      <home-article-list class="mt-4" />
     </div>
   </div>
 </template>
