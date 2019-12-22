@@ -1,5 +1,5 @@
 <template>
-  <div class="home no-pull-refresh">
+  <div class="home">
     <div class="container mx-auto">
       <home-banner-list class="my-2" />
 

@@ -1,7 +1,6 @@
 <template>
   <div id="app">
 <!--    <loading ref="loading" />-->
-
     <transition name="page" mode="out-in">
       <component :is="layout" v-if="layout" />
     </transition>
@@ -9,9 +8,7 @@
 </template>
 
 <script>
-// import firebase from 'firebase'
 // import Loading from './components/Loading'
-import { messaging, db, FieldValue } from '@/lib/firebase'
 
 // Load layout components dynamically.
 const requireContext = require.context('@/layouts', false, /.*\.vue$/)
@@ -42,8 +39,6 @@ export default {
   mounted () {
     // this.$loading = this.$refs.loading
 
-    this.initFcm()
-
     // firebase.auth().onAuthStateChanged((user) => {
     //   if (user) {
     //     // console.log(user)
@@ -68,35 +63,6 @@ export default {
       }
 
       this.layout = layouts[layout]
-    },
-
-    async initFcm () {
-      // Request Permission of Notifications
-      const permission = await Notification.requestPermission()
-
-      if (permission === 'granted') {
-        const token = await messaging.getToken()
-
-        this.saveToken(token)
-      }
-
-      messaging.onTokenRefresh(async () => {
-        const token = await messaging.getToken()
-
-        this.saveToken(token)
-      })
-    },
-
-    async saveToken (token) {
-      const tokenRef = await db.collection('tokens').doc(token)
-      const record = await tokenRef.get()
-
-      if (record.exists === false) {
-        tokenRef.set({
-          'token': token,
-          'createdAt': FieldValue.serverTimestamp()
-        })
-      }
     }
   }
 }
