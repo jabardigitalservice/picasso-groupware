@@ -71,6 +71,12 @@ export default {
       if (permission === 'default') {
         this.showPopupNotification = true
       }
+
+      if (permission === 'granted') {
+        const token = await messaging.getToken()
+
+        this.saveToken(token)
+      }
     },
 
     async allowNotification () {
