@@ -17,15 +17,15 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.setBackgroundMessageHandler(function(payload) {
-  // console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  // Customize notification here
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: '/img/icons/android-chrome-192x192.png'
-  };
-
-  return self.registration.showNotification(notificationTitle,
-    notificationOptions);
-});
+// messaging.setBackgroundMessageHandler(function(payload) {
+//   // console.log('[firebase-messaging-sw.js] Received background message ', payload);
+//   // Customize notification here
+//   const notificationTitle = payload.notification.title;
+//   const notificationOptions = {
+//     body: payload.notification.body,
+//     icon: '/img/icons/android-chrome-192x192.png'
+//   };
+//
+//   return self.registration.showNotification(notificationTitle,
+//     notificationOptions);
+// });
