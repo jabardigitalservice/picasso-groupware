@@ -68,8 +68,6 @@ export default {
     async checkPermission () {
       const permission = await Notification.permission
 
-      console.log(permission)
-
       if (permission === 'default') {
         this.showPopupNotification = true
       }
