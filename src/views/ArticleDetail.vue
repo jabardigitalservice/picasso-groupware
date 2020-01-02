@@ -18,6 +18,12 @@
           </div>
 
           <div class="text-sm leading-normal mt-5 body-content" v-html="formatContent(item['content'])"></div>
+
+          <template v-if="item['action_url']">
+            <div class="my-2">
+              <a :href="item['action_url']" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Baca Selengkapnya</a>
+            </div>
+          </template>
         </template>
 
         <template v-else>
