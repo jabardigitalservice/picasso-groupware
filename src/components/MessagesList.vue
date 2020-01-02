@@ -10,7 +10,7 @@
               </div>
               <div class="text-left flex-grow">
                 <p class="text-sm leading-normal">{{ item['title'] }}</p>
-                <p class="text-sm text-gray-600">{{ formatDateTimeShort(item['published_at'].toDate()) }}</p>
+                <p class="text-sm text-gray-600">{{ formatDateShort(item['published_at'].toDate()) }}</p>
               </div>
             </div>
           </router-link>
@@ -35,7 +35,7 @@
 <script>
 import { ContentLoader } from 'vue-content-loader'
 import { mapGetters } from 'vuex'
-import { formatDateTimeShort } from '@/lib/date'
+import { formatDateShort } from '@/lib/date'
 
 export default {
   components: {
@@ -48,7 +48,7 @@ export default {
   }),
 
   methods: {
-    formatDateTimeShort
+    formatDateShort
   }
 }
 </script>

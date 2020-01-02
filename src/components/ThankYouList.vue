@@ -9,7 +9,7 @@
             </div>
             <div class="text-left flex-grow">
               <p class="text-sm leading-normal">{{ item['message'] }}</p>
-              <p class="text-sm text-gray-600">{{ formatDateTimeShort(item['feedback_at'].toDate()) }}</p>
+              <p class="text-sm text-gray-600">{{ formatDateShort(item['feedback_at'].toDate()) }}</p>
             </div>
           </div>
         </div>
@@ -33,7 +33,7 @@
 <script>
 import { ContentLoader } from 'vue-content-loader'
 import { mapGetters } from 'vuex'
-import { formatDateTimeShort } from '@/lib/date'
+import { formatDateShort } from '@/lib/date'
 
 export default {
   components: {
@@ -46,7 +46,7 @@ export default {
   }),
 
   methods: {
-    formatDateTimeShort
+    formatDateShort
   }
 }
 </script>

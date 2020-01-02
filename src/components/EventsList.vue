@@ -9,7 +9,7 @@
 <!--            </div>-->
             <div class="text-left flex-grow">
               <p class="text-sm leading-normal">{{ item['title'] }}</p>
-              <p class="text-sm text-gray-600">{{ formatDateTimeShort(item['start_datetime'].toDate()) }}</p>
+              <p class="text-sm text-gray-600">{{ getDateTime(item) }}</p>
               <p class="text-sm text-gray-600 mt-1"><i class="fas fa-map-marker-alt text-red-500 mr-1" /> Bandung</p>
             </div>
           </div>
@@ -34,7 +34,7 @@
 <script>
 import { ContentLoader } from 'vue-content-loader'
 import { mapGetters } from 'vuex'
-import { formatDateTimeShort } from '@/lib/date'
+import { formatDateShort, formatDateTimeShort } from '@/lib/date'
 
 export default {
   components: {
@@ -47,7 +47,15 @@ export default {
   }),
 
   methods: {
-    formatDateTimeShort
+    getDateTime (item) {
+      const value = item['start_datetime'].toDate()
+
+      if (item['full_day']) {
+        return formatDateShort(value)
+      }
+
+      return formatDateTimeShort(value)
+    }
   }
 }
 </script>
