@@ -10,7 +10,7 @@
               </div>
               <div class="text-left flex-grow">
                 <p class="text-sm leading-normal">{{ item['title'] }}</p>
-                <p class="text-sm text-gray-600">{{ formatDateTimeShort(item['published_at'].toDate()) }}</p>
+                <p class="text-sm text-gray-600">{{ item['author_name'] }}</p>
               </div>
             </div>
           </router-link>
