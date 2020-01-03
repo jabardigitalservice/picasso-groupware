@@ -66,6 +66,8 @@ export default {
 
   methods: {
     async checkPermission () {
+      if (!messaging) return
+
       const permission = await Notification.permission
 
       if (permission === 'default') {
@@ -80,6 +82,8 @@ export default {
     },
 
     async allowNotification () {
+      if (!messaging) return
+
       // Request Permission of Notifications
       const permission = await Notification.requestPermission()
 
