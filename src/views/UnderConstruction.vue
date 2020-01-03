@@ -20,6 +20,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import FeedbackList from '@/components/FeedbackList'
+import { analytics } from '@/lib/firebase'
 
 export default {
   components: {
@@ -36,6 +37,8 @@ export default {
 
   mounted () {
     this.fetchItems()
+
+    analytics.logEvent('underconstruction_list_view')
   },
 
   methods: {

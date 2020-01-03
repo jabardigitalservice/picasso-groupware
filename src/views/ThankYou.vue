@@ -14,6 +14,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import ThankYouList from '@/components/ThankYouList'
+import { analytics } from '@/lib/firebase'
 
 export default {
   components: {
@@ -29,7 +30,7 @@ export default {
   }),
 
   mounted () {
-    //
+    analytics.logEvent('thankyou_list_view')
   },
 
   methods: {

@@ -21,7 +21,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { db, FieldValue } from '@/lib/firebase'
+import { analytics, db, FieldValue } from '@/lib/firebase'
 
 export default {
   components: {
@@ -43,7 +43,7 @@ export default {
   }),
 
   mounted () {
-    //
+    analytics.logEvent('thankyou_create_view')
   },
 
   methods: {

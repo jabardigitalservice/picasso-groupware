@@ -21,7 +21,7 @@
 
           <template v-if="item['action_url']">
             <div class="my-2">
-              <a :href="item['action_url']" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">{{ item['action_title'] }}</a>
+              <a :href="item['action_url']" @click="clickAction" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">{{ item['action_title'] }}</a>
             </div>
           </template>
         </template>
@@ -45,6 +45,7 @@
 import { mapGetters } from 'vuex'
 import { ContentLoader } from 'vue-content-loader'
 import { formatDateShort } from '@/lib/date'
+import { analytics } from '@/lib/firebase'
 
 export default {
   components: {
@@ -69,10 +70,16 @@ export default {
 
     async fetchItem (id) {
       await this.$store.dispatch('messages-detail/fetchItem', { id: id })
+
+      analytics.logEvent('message_detail_view', { id: id })
     },
 
     formatContent (content) {
       return content
+    },
+
+    clickAction () {
+      analytics.logEvent('message_detail_click_action', { id: this.$route.params.id })
     }
   }
 }

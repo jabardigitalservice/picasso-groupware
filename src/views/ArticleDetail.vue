@@ -45,6 +45,7 @@
 import { mapGetters } from 'vuex'
 import { ContentLoader } from 'vue-content-loader'
 import { formatDateTimeShort } from '@/lib/date'
+import { analytics } from '@/lib/firebase'
 
 export default {
   components: {
@@ -69,6 +70,8 @@ export default {
 
     async fetchItem (id) {
       await this.$store.dispatch('articles-detail/fetchItem', { id: id })
+
+      analytics.logEvent('article_detail_view', { id: id })
     },
 
     formatContent (content) {

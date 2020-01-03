@@ -13,6 +13,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import EventsList from '@/components/EventsList'
+import { analytics } from '@/lib/firebase'
 
 export default {
   components: {
@@ -28,7 +29,7 @@ export default {
   }),
 
   mounted () {
-    //
+    analytics.logEvent('events_list_view')
   },
 
   methods: {
