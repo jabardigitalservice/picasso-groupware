@@ -1,5 +1,10 @@
 module.exports = {
   pwa: {
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: './src/sw.js',
+      swDest: 'service-worker.js'
+    },
     name: 'Groupware',
     themeColor: '#399F4F',
     manifestOptions: {
