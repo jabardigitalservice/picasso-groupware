@@ -22,6 +22,7 @@
 
 <script>
 // import Loading from './components/Loading'
+import firebase from 'firebase'
 
 // Load layout components dynamically.
 const requireContext = require.context('@/layouts', false, /.*\.vue$/)
@@ -67,16 +68,16 @@ export default {
   mounted () {
     // this.$loading = this.$refs.loading
 
-    // firebase.auth().onAuthStateChanged((user) => {
-    //   if (user) {
-    //     // console.log(user)
-    //     this.$store.dispatch('auth/login', { user: user })
-    //   } else {
-    //     // console.log('not signed in')
-    //   }
-    //
-    //   this.$store.commit('auth/AUTH_INITIALIZED')
-    // })
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // console.log(user)
+        this.$store.dispatch('auth/login', { user: user })
+      } else {
+        // console.log('not signed in')
+      }
+
+      // this.$store.commit('auth/AUTH_INITIALIZED')
+    })
   },
 
   methods: {

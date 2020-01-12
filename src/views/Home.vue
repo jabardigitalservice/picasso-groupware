@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <div class="container mx-auto">
-      <home-banner-list class="my-2" />
+      <home-banner-list class="mt-2" />
+
+      <user-info class="my-2" />
 
       <div class="mx-0 sm:mx-2 flex flex-wrap shadow bg-white">
         <div class="w-1/3">
@@ -41,12 +43,14 @@
 import { mapGetters } from 'vuex'
 import HomeBannerList from '@/components/HomeBannerList'
 import HomeArticleList from '@/components/HomeArticleList'
+import UserInfo from '@/components/UserInfo'
 
 export default {
   name: 'home',
   components: {
     HomeBannerList,
-    HomeArticleList
+    HomeArticleList,
+    UserInfo
   },
 
   metaInfo: {
