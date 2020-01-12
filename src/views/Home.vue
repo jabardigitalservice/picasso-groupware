@@ -5,8 +5,8 @@
 
       <div class="mx-0 sm:mx-2 flex flex-wrap shadow bg-white">
         <div class="w-1/3">
-          <router-link to="/underconstruction">
-            <div class="h-full p-3 py-4  text-center text-gray-700">
+          <router-link to="/checkins">
+            <div class="h-full p-3 py-4 text-center text-gray-700">
               <i class="far fa-check-circle text-2xl" />
               <p class="text-xs mt-1">Checkin</p>
             </div>
