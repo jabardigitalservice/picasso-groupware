@@ -12,3 +12,9 @@ export function formatDateTimeShort (date, formatStr = 'eeee, PP p') {
     locale: id
   })
 }
+
+export function formatTime (date, formatStr = 'p') {
+  return format(date, formatStr, {
+    locale: id
+  })
+}

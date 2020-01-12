@@ -16,8 +16,10 @@
       <template v-else>
         <div>
           <div class="w-full p-2">
-            <router-link to="/thankyou/create" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Checkin</router-link>
+            <router-link to="/checkins/create" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Checkin</router-link>
           </div>
+
+          <checkins-list class="mt-2" />
         </div>
       </template>
     </div>
@@ -26,12 +28,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import { analytics } from '@/lib/firebase'
+import { analytics } from '@/lib/firebase'
 import LoginButton from '@/components/LoginButton'
+import CheckinsList from '@/components/CheckinsList'
 
 export default {
   components: {
-    LoginButton
+    LoginButton,
+    CheckinsList
   },
 
   metaInfo: {
@@ -45,12 +49,12 @@ export default {
   mounted () {
     this.fetchItems()
 
-    // analytics.logEvent('underconstruction_list_view')
+    analytics.logEvent('checkins_list_view')
   },
 
   methods: {
     async fetchItems () {
-      // await this.$store.dispatch('feedback-list/fetchItems')
+      await this.$store.dispatch('checkins-list/fetchItems')
     }
   }
 }
