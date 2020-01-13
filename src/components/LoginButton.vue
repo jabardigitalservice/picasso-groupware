@@ -6,9 +6,13 @@
 
 <script>
 import firebase from 'firebase'
+import { analytics } from '@/lib/firebase'
+
 export default {
   methods: {
     async signIn () {
+      analytics.logEvent('login')
+
       const provider = new firebase.auth.GoogleAuthProvider()
 
       window.location.hash = ''

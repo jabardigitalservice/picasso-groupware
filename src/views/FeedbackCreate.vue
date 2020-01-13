@@ -47,6 +47,8 @@ export default {
 
   methods: {
     async submitFeedback () {
+      analytics.logEvent('feedback_create_click')
+
       const title = this.title
 
       if (title === '') {

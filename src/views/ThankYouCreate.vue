@@ -48,6 +48,8 @@ export default {
 
   methods: {
     async submitFeedback () {
+      analytics.logEvent('thankyou_create_click')
+
       const message = this.message
 
       if (message === '') {

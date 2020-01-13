@@ -50,6 +50,8 @@ export default {
 
   methods: {
     async submit () {
+      analytics.logEvent('checkins_click')
+
       const message = this.message
 
       if (message === '') {
