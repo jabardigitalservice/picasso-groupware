@@ -2,16 +2,26 @@
   <div class="events-list">
     <template v-if="!loading">
       <div class="flex flex-wrap">
-        <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6">
-          <div class="flex items-center">
-            <img class="w-10 h-10 rounded-full mr-4" :src="item['user_photo']" />
-            <div class="flex-auto text-sm">
-              <p class="text-gray-900 font-bold">{{ item['user_name'] }}</p>
-              <p class="text-gray-900">{{ item['message'] }}</p>
-              <p class="text-gray-600">{{ formatTime(item['checkin_at'].toDate()) }}</p>
+        <template v-if="items.length > 0">
+          <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6">
+            <div class="flex items-center">
+              <img class="w-10 h-10 rounded-full mr-4" :src="item['user_photo']" />
+              <div class="flex-auto text-sm">
+                <p class="text-gray-900 font-bold">{{ item['user_name'] }}</p>
+                <p class="text-gray-900">{{ item['message'] }}</p>
+                <p class="text-gray-600">{{ formatTime(item['checkin_at'].toDate()) }}</p>
+              </div>
             </div>
           </div>
-        </div>
+        </template>
+        <template v-else>
+          <div class="w-full shadow bg-white mb-2 p-4">
+            <div class="text-center">
+              <i class="far fa-4x fa-sad-tear mb-4 text-gray-600" />
+              <p class="text-sm">Belum ada yang checkin. Kantor sepi.</p>
+            </div>
+          </div>
+        </template>
       </div>
     </template>
     <template v-else>

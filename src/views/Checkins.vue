@@ -15,11 +15,15 @@
       </template>
       <template v-else>
         <div>
-          <div class="w-full p-2">
-            <router-link to="/checkins/create" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Checkin</router-link>
+          <div class="w-full px-4 mb-4">
+            <p class="text-leading text-grey-darker">{{ formatDateLong(new Date()) }}</p>
           </div>
 
           <checkins-list class="mt-2" />
+
+          <div class="w-full p-2">
+            <router-link to="/checkins/create" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Checkin</router-link>
+          </div>
         </div>
       </template>
     </div>
@@ -29,8 +33,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import { analytics } from '@/lib/firebase'
+
 import LoginButton from '@/components/LoginButton'
 import CheckinsList from '@/components/CheckinsList'
+import { formatDateLong } from '@/lib/date'
 
 export default {
   components: {
@@ -53,6 +59,8 @@ export default {
   },
 
   methods: {
+    formatDateLong,
+
     async fetchItems () {
       await this.$store.dispatch('checkins-list/fetchItems')
     }

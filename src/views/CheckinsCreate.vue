@@ -24,6 +24,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { analytics, db, FieldValue } from '@/lib/firebase'
+import { format } from 'date-fns'
 
 export default {
   components: {
@@ -58,8 +59,13 @@ export default {
         return false
       }
 
+      const currentDate = new Date()
+      const dbCurrentDate = format(currentDate, 'yyyyMMdd')
+
+      await db.collection('checkins').doc(dbCurrentDate).set({})
+
       const collectionRef = await db.collection('checkins')
-        .doc('20200113')
+        .doc(dbCurrentDate)
         .collection('records')
 
       await collectionRef.add({

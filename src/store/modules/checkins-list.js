@@ -1,5 +1,6 @@
 import * as types from '../mutation-types'
 import { db } from '@/lib/firebase'
+import { format } from 'date-fns'
 
 // state
 export const state = {
@@ -28,8 +29,11 @@ export const mutations = {
 // actions
 export const actions = {
   async fetchItems ({ commit }) {
+    const currentDate = new Date()
+    const dbCurrentDate = format(currentDate, 'yyyyMMdd')
+
     const querySnapshot = await db.collection('checkins')
-      .doc('20200113')
+      .doc(dbCurrentDate)
       .collection('records')
       .orderBy('checkin_at')
       .get()
