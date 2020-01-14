@@ -21,7 +21,7 @@
 
           <template v-if="item['action_url']">
             <div class="my-2">
-              <a :href="item['action_url']" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Baca Selengkapnya</a>
+              <a :href="item['action_url']" @click="clickAction" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Baca Selengkapnya</a>
             </div>
           </template>
         </template>
@@ -76,6 +76,10 @@ export default {
 
     formatContent (content) {
       return content
+    },
+
+    clickAction () {
+      analytics.logEvent('article_detail_click_action', { id: this.$route.params.id })
     }
   }
 }
