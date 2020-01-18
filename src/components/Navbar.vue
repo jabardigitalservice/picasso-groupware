@@ -8,19 +8,19 @@
             <p class="text-xs">Home</p>
           </router-link>
         </div>
-        <div class="text-center px-2 py-1">
+        <div v-if="user" class="text-center px-2 py-1">
           <router-link class="no-underline text-gray-700 block" to="/messages">
             <i class="far fa-bell text-lg" />
             <p class="text-xs">Messages</p>
           </router-link>
         </div>
-        <div class="text-center px-2 py-1">
+        <div v-if="user" class="text-center px-2 py-1">
           <router-link class="no-underline text-gray-700 block" to="/events">
             <i class="far fa-calendar text-lg" />
             <p class="text-xs">Events</p>
           </router-link>
         </div>
-        <div class="text-center px-2 py-1">
+        <div v-if="user" class="text-center px-2 py-1">
           <router-link class="no-underline text-gray-700 block" to="/thankyou">
             <i class="far fa-heart text-lg" />
             <p class="text-xs">Thank You</p>
@@ -32,7 +32,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  //
+  computed: mapGetters({
+    // authLoading: 'auth/loading'
+    user: 'auth/user'
+  })
 }
 </script>
