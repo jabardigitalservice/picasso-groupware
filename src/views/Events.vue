@@ -5,7 +5,14 @@
         <p class="text-leading text-grey-darker">Events</p>
       </div>
 
-      <events-list class="mt-2" />
+      <div class="bg-red-800 text-center py-4 lg:px-4">
+        <div class="p-2 items-center text-white lg:rounded-full flex lg:inline-flex" role="alert">
+          <span class="flex rounded-full bg-red-500 uppercase px-2 py-1 text-xs font-bold mr-3">New</span>
+          <span class="mr-2 text-left text-sm flex-auto">Request ke Koordinator untuk akses ke Shared Google Calendar JDS</span>
+        </div>
+      </div>
+
+      <events-list />
     </div>
   </div>
 </template>
