@@ -3,7 +3,7 @@
     <div class="container mx-auto">
       <home-banner-list class="mt-2" />
 
-      <user-info class="my-2" />
+      <user-info class="mx-0 sm:mx-2 bg-white shadow" />
 
       <div class="mx-0 sm:mx-2 flex flex-wrap shadow bg-white">
         <div class="w-1/3">

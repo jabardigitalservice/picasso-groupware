@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="user">
-      <div class="mx-2 p-4 rounded-lg bg-white shadow">
+      <div class="p-4">
         <div class="flex items-center">
           <img class="w-10 h-10 rounded-full mr-4" :src="user.photo" />
           <div class="flex-auto text-sm">
