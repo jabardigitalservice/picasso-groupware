@@ -3,16 +3,7 @@ import 'firebase/firestore'
 import 'firebase/messaging'
 import 'firebase/analytics'
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyB2J4lGyL9MZNaUiRhmbCr3lfd2yT6fvHI',
-  authDomain: 'sapajds.firebaseapp.com',
-  databaseURL: 'https://sapajds.firebaseio.com',
-  projectId: 'sapajds',
-  storageBucket: 'sapajds.appspot.com',
-  messagingSenderId: '867220352075',
-  appId: '1:867220352075:web:dd6e33d19869652bfbb1ce',
-  measurementId: 'G-9DQ4MEKRBE'
-}
+import { firebaseConfig } from '@/config'
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
@@ -33,7 +24,7 @@ let messaging = null
 
 if (firebase.messaging.isSupported()) {
   messaging = firebase.messaging()
-  messaging.usePublicVapidKey('BL_nig-pnj8MoSA2R--XHCIAeKCZf2-_GDidutJIq1e5Q0p2Tem4aLGohU_3Roz8GT2A8aFAc8y2YsNXq2k5BFU')
+  messaging.usePublicVapidKey(firebaseConfig.publicVapidKey)
 }
 
 export { messaging }
