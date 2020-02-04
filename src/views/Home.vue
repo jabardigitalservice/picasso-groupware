@@ -1,40 +1,50 @@
 <template>
   <div class="home">
     <div class="container mx-auto">
-      <home-banner-list class="mt-2" />
 
-      <user-info class="mx-0 sm:mx-2 bg-white shadow" />
+      <div class="flex flex-col md:flex-row">
+        <div class="w-full md:w-1/3">
+          <home-banner-list class="mt-2" />
 
-      <div class="mx-0 sm:mx-2 flex flex-wrap shadow bg-white">
-        <div class="w-1/3">
-          <router-link to="/checkins">
-            <div class="h-full p-3 py-4 text-center text-gray-700">
-              <i class="far fa-check-circle text-2xl" />
-              <p class="text-xs mt-1">Checkin</p>
+          <user-info class="mx-0 sm:mx-2 bg-white shadow" />
+
+          <div class="mx-0 sm:mx-2 flex flex-wrap shadow bg-white">
+            <div class="w-1/3">
+              <router-link to="/checkins">
+                <div class="h-full p-3 py-4 text-center text-gray-700">
+                  <i class="far fa-check-circle text-2xl" />
+                  <p class="text-xs mt-1">Checkin</p>
+                </div>
+              </router-link>
             </div>
-          </router-link>
+
+            <div class="w-1/3">
+              <router-link to="/underconstruction">
+                <div class="h-full p-3 py-4  text-center text-gray-700">
+                  <i class="far fa-building text-2xl" />
+                  <p class="text-xs mt-1">Booking Ruangan</p>
+                </div>
+              </router-link>
+            </div>
+
+            <div class="w-1/3">
+              <router-link to="/underconstruction">
+                <div class="h-full p-3 py-4 text-center text-gray-700">
+                  <i class="fas fa-wine-bottle text-2xl" />
+                  <p class="text-xs mt-1">Pesan Kopi</p>
+                </div>
+              </router-link>
+            </div>
+          </div>
         </div>
+        <div class="w-full md:w-2/3">
+          <div class="px-4 mt-4">
+            <p class="text-leading text-grey-darker">Articles</p>
+          </div>
 
-        <div class="w-1/3">
-          <router-link to="/underconstruction">
-            <div class="h-full p-3 py-4  text-center text-gray-700">
-              <i class="far fa-building text-2xl" />
-              <p class="text-xs mt-1">Booking Ruangan</p>
-            </div>
-          </router-link>
-        </div>
-
-        <div class="w-1/3">
-          <router-link to="/underconstruction">
-            <div class="h-full p-3 py-4 text-center text-gray-700">
-              <i class="fas fa-wine-bottle text-2xl" />
-              <p class="text-xs mt-1">Pesan Kopi</p>
-            </div>
-          </router-link>
+          <home-article-list class="mt-2" />
         </div>
       </div>
-
-      <home-article-list class="mt-4" />
     </div>
   </div>
 </template>
