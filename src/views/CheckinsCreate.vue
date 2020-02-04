@@ -4,10 +4,20 @@
       <div class="w-full bg-white shadow p-4">
         <div class="flex flex-wrap">
           <div class="w-full px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-message">
-              Checkin Kehadiran
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-type">
+              Apakah Anda Hadir?
             </label>
-            <textarea v-model="message" id="input-message" rows="5" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Contoh: Hadir di Command Center / Maulana Yusuf / Diskominfo atau Izin"/>
+            <select v-model="type" class="h-12 sm:h-10 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="input-type">
+              <option :value="null">Select...</option>
+              <option value="HADIR">Hadir Dong</option>
+              <option value="IZIN">Sakit / Izin</option>
+              <option value="OTHER">Into the Unknown</option>
+            </select>
+
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-message">
+              Catatan
+            </label>
+            <textarea v-model="message" id="input-message" rows="5" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Contoh: Hadir di Command Center / Maulana Yusuf / Diskominfo / Pantry"/>
             <button @click="submit" class="w-full bg-brand-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
               Checkin
             </button>
@@ -37,6 +47,7 @@ export default {
 
   data () {
     return {
+      type: null,
       message: ''
     }
   },
@@ -53,9 +64,10 @@ export default {
     async submit () {
       await analytics.logEvent('checkins_click')
 
+      const type = this.type
       const message = this.message
 
-      if (message === '') {
+      if (type === null || message === '') {
         return false
       }
 
@@ -69,12 +81,15 @@ export default {
         .collection('records')
 
       await collectionRef.add({
+        type: type,
         message: message,
+        user_id: this.user.id,
         user_name: this.user.name,
         user_photo: this.user.photo,
         checkin_at: FieldValue.serverTimestamp()
       })
 
+      this.type = null
       this.message = ''
 
       await this.$router.push('/checkins')

@@ -36,7 +36,7 @@ export const mutations = {
 // actions
 export const actions = {
   async login ({ dispatch, commit }, { user }) {
-    commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL } })
+    commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL, id: user.uid } })
   },
 
   async logout ({ commit }) {
