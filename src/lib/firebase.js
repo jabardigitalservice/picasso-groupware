@@ -17,8 +17,8 @@ export const db = firebase.firestore()
 
 // Export types that exists in Firestore
 // This is not always necessary, but it's used in other examples
-const { TimeStamp, GeoPoint, FieldValue } = firebase.firestore
-export { TimeStamp, GeoPoint, FieldValue }
+const { Timestamp, GeoPoint, FieldValue } = firebase.firestore
+export { Timestamp, GeoPoint, FieldValue }
 
 let messaging = null
 
