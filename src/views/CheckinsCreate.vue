@@ -90,8 +90,14 @@ export default {
       const checkinHour = this.checkinHour
       const checkinMinute = this.checkinMinute
 
-      if (type === null || message === '' || checkinHour === '' || checkinMinute === '') {
+      if (type === null || message === '') {
         return false
+      }
+
+      if (type === 'HADIR') {
+        if (checkinHour === null || checkinMinute === null) {
+          return false
+        }
       }
 
       const currentDate = new Date()
@@ -104,9 +110,12 @@ export default {
         .collection('records')
 
       let checkinAt = new Date()
-      checkinAt = setHours(checkinAt, checkinHour)
-      checkinAt = setMinutes(checkinAt, checkinMinute)
-      checkinAt = setSeconds(checkinAt, 0)
+
+      if (type === 'HADIR') {
+        checkinAt = setHours(checkinAt, checkinHour)
+        checkinAt = setMinutes(checkinAt, checkinMinute)
+        checkinAt = setSeconds(checkinAt, 0)
+      }
 
       await collectionRef.add({
         type: type,
