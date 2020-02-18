@@ -15,13 +15,15 @@
       </template>
       <template v-else>
         <div>
-          <div class="w-full px-4 mb-4">
-            <p class="text-leading text-grey-darker">{{ formatDateLong(new Date()) }}</p>
+          <div class="w-full px-2 sm:px-0">
+            <select v-model="selectedDate" @change="changeDate" class="h-12 w-full appearance-none block text-gray-700 border border-gray-300 bg-white rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+              <option v-for="date in getListDate()" :key="format(date, 'yyyyMMdd')" :value="format(date, 'yyyyMMdd')">{{ formatDateLong(date) }}</option>
+            </select>
           </div>
 
           <checkins-list class="mt-2" />
 
-          <div class="w-full p-2">
+          <div class="w-full p-2 sm:px-0">
             <router-link to="/checkins/create" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Checkin</router-link>
           </div>
         </div>
@@ -37,6 +39,7 @@ import { analytics } from '@/lib/firebase'
 import LoginButton from '@/components/LoginButton'
 import CheckinsList from '@/components/CheckinsList'
 import { formatDateLong } from '@/lib/date'
+import { eachDayOfInterval, subDays, format } from 'date-fns'
 
 export default {
   components: {
@@ -48,21 +51,41 @@ export default {
     title: 'Checkins'
   },
 
+  data () {
+    return {
+      selectedDate: format(new Date(), 'yyyyMMdd')
+    }
+  },
+
   computed: mapGetters({
     user: 'auth/user'
   }),
 
   mounted () {
-    this.fetchItems()
+    this.fetchItems(format(new Date(), 'yyyyMMdd'))
 
     analytics.logEvent('checkins_list_view')
   },
 
   methods: {
+    format,
     formatDateLong,
 
-    async fetchItems () {
-      await this.$store.dispatch('checkins-list/fetchItems')
+    getListDate () {
+      const maxPrevious = subDays(new Date(), 30)
+
+      return eachDayOfInterval({
+        start: maxPrevious,
+        end: new Date()
+      })
+    },
+
+    changeDate () {
+      this.fetchItems(this.selectedDate)
+    },
+
+    async fetchItems (date) {
+      await this.$store.dispatch('checkins-list/fetchItems', { date: date })
     }
   }
 }
