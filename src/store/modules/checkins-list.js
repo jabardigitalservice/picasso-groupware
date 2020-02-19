@@ -28,8 +28,12 @@ export const mutations = {
 
 // actions
 export const actions = {
-  async fetchItems ({ commit }, { date }) {
+  async fetchItems ({ commit }, { date } = {}) {
     commit(types.CHECKINS_INIT)
+
+    if (typeof date === 'undefined') {
+      date = format(new Date(), 'yyyyMMdd')
+    }
 
     const currentDate = parseISO(date)
     const dbCurrentDate = format(currentDate, 'yyyyMMdd')

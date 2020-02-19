@@ -62,7 +62,7 @@ export default {
   }),
 
   mounted () {
-    this.fetchItems(format(new Date(), 'yyyyMMdd'))
+    // this.fetchItems()
 
     analytics.logEvent('checkins_list_view')
   },
