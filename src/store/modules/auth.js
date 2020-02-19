@@ -1,6 +1,6 @@
 import * as types from '../mutation-types'
 import * as firebase from 'firebase'
-import { db, FieldValue } from '@/lib/firebase'
+import { db, Timestamp } from '@/lib/firebase'
 
 // state
 export const state = {
@@ -42,8 +42,8 @@ export const actions = {
       'name': user.displayName,
       'email': user.email,
       'photo': user.photoURL,
-      'created_at': FieldValue.serverTimestamp(),
-      'last_seen_at': FieldValue.serverTimestamp()
+      'created_at': Timestamp.now(),
+      'last_seen_at': Timestamp.now()
     })
 
     commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL, id: user.uid } })

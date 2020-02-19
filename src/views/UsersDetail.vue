@@ -2,33 +2,41 @@
   <div class="messages">
     <div class="container mx-auto">
       <template v-if="!loading">
-        <div class="bg-white m-0 sm:rounded shadow">
-          <div class="text-center p-6  border-b">
-            <a :href="item['photo']">
-              <img class="h-40 w-40 rounded-full mx-auto" :src="item['photo']" :alt="item['name']" />
-            </a>
+        <template v-if="!error">
+          <div class="bg-white m-0 sm:rounded shadow">
+            <div class="text-center p-6  border-b">
+              <a :href="item['photo']">
+                <img class="h-40 w-40 rounded-full mx-auto" :src="item['photo']" :alt="item['name']" />
+              </a>
 
-            <p class="pt-4 text-lg font-semibold">
-              {{ item['name'] }}
-            </p>
-            <p class="text-gray-600">
-              {{ item['email'] }}
-            </p>
+              <p class="pt-4 text-lg font-semibold">
+                {{ item['name'] }}
+              </p>
+              <p class="text-gray-600">
+                {{ item['email'] }}
+              </p>
+            </div>
+            <div class="border-b">
+              <!-- First list item -->
+              <a href="#" class="px-2 py-3 hover:bg-gray-200 flex">
+                <div class="pl-3">
+                  <p class="font-semibold">
+                    Last Online
+                  </p>
+                  <p class="text-gray-600">
+                    {{ formatDateTimeShort(item['last_seen_at'].toDate()) }}
+                  </p>
+                </div>
+              </a>
+            </div>
           </div>
-          <div class="border-b">
-            <!-- First list item -->
-            <a href="#" class="px-2 py-3 hover:bg-gray-200 flex">
-              <div class="pl-3">
-                <p class="font-semibold">
-                  Last Online
-                </p>
-                <p class="text-gray-600">
-                  {{ formatDateTimeShort(item['last_seen_at'].toDate()) }}
-                </p>
-              </div>
-            </a>
+        </template>
+        <template v-else>
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Holy smokes! </strong>
+            <span class="block sm:inline">Something seriously bad happened.</span>
           </div>
-        </div>
+        </template>
       </template>
       <template v-else>
         <div class="bg-white shadow p-4">
@@ -62,8 +70,10 @@ export default {
   },
 
   computed: mapGetters({
+    user: 'auth/user',
     loading: 'users-detail/loading',
-    item: 'users-detail/item'
+    item: 'users-detail/item',
+    error: 'users-detail/error'
   }),
 
   mounted () {
