@@ -1,5 +1,6 @@
 import * as types from '../mutation-types'
 import * as firebase from 'firebase'
+import { db, FieldValue } from '@/lib/firebase'
 
 // state
 export const state = {
@@ -36,6 +37,14 @@ export const mutations = {
 // actions
 export const actions = {
   async login ({ dispatch, commit }, { user }) {
+    await db.collection('users').doc(user.uid).set({
+      'id': user.uid,
+      'name': user.displayName,
+      'email': user.email,
+      'photo': user.photoURL,
+      'created_at': FieldValue.serverTimestamp()
+    })
+
     commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL, id: user.uid } })
   },
 
