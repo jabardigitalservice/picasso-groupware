@@ -62,7 +62,6 @@ export default {
     this.$store.dispatch('messages-list/fetchItems')
     this.$store.dispatch('events-list/fetchItems')
     this.$store.dispatch('thankyou-list/fetchItems')
-    this.$store.dispatch('checkins-list/fetchItems')
   },
 
   methods: {

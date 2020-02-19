@@ -53,7 +53,7 @@ export default {
 
   data () {
     return {
-      selectedDate: format(new Date(), 'yyyyMMdd')
+      selectedDate: null
     }
   },
 
@@ -61,8 +61,10 @@ export default {
     user: 'auth/user'
   }),
 
-  mounted () {
-    // this.fetchItems()
+  created () {
+    this.selectedDate = this.$route.query.date ? this.$route.query.date : format(new Date(), 'yyyyMMdd')
+
+    this.fetchItems(this.selectedDate)
 
     analytics.logEvent('checkins_list_view')
   },
@@ -81,6 +83,8 @@ export default {
     },
 
     changeDate () {
+      this.$router.push({ query: { date: this.selectedDate } })
+
       this.fetchItems(this.selectedDate)
     },
 
