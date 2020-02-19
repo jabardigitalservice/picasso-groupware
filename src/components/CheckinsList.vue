@@ -5,9 +5,16 @@
         <template v-if="items.length > 0">
           <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6">
             <div class="flex items-center">
-              <img class="w-10 h-10 rounded-full mr-4" :src="item['user_photo']" />
+              <router-link :to="`/users/${item['user_id']}`">
+                <img class="w-10 h-10 rounded-full mr-4" :src="item['user_photo']" />
+              </router-link>
+
               <div class="flex-auto text-sm">
-                <p class="text-gray-900 font-bold">{{ item['user_name'] }}</p>
+                <p class="text-gray-900 font-bold">
+                  <router-link :to="`/users/${item['user_id']}`">
+                    {{ item['user_name'] }}
+                  </router-link>
+                </p>
                 <p v-if="item['type']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['type'])">{{ getStatusLabel(item['type']) }}</span></p>
                 <p class="text-gray-900">{{ item['message'] }}</p>
                 <p class="text-gray-600">{{ formatTime(item['checkin_at'].toDate()) }}</p>

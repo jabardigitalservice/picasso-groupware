@@ -42,7 +42,8 @@ export const actions = {
       'name': user.displayName,
       'email': user.email,
       'photo': user.photoURL,
-      'created_at': FieldValue.serverTimestamp()
+      'created_at': FieldValue.serverTimestamp(),
+      'last_seen_at': FieldValue.serverTimestamp()
     })
 
     commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL, id: user.uid } })

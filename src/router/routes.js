@@ -14,5 +14,6 @@ export default [
   { path: '/checkins', name: 'checkins', component: page('Checkins.vue') },
   { path: '/checkins/create', name: 'checkins.create', component: page('CheckinsCreate.vue') },
   { path: '/feedback/create', name: 'feedback.create', component: page('FeedbackCreate.vue') },
+  { path: '/users/:id', name: 'users.detail', component: page('UsersDetail.vue') },
   { path: '*', component: page('errors/404.vue') }
 ]
