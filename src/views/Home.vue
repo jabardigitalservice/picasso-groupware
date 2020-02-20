@@ -46,10 +46,10 @@
             </div>
 
             <div class="w-1/3">
-              <router-link to="/underconstruction">
+              <router-link to="/booking">
                 <div class="h-full p-3 py-4  text-center text-gray-700">
                   <i class="far fa-building text-2xl" />
-                  <p class="text-xs mt-1">Booking Ruangan</p>
+                  <p class="text-xs mt-1">Reservasi Ruangan</p>
                 </div>
               </router-link>
             </div>
