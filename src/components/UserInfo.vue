@@ -3,7 +3,7 @@
     <template v-if="user">
       <div class="p-4">
         <div class="flex items-center">
-          <router-link :to="`/users/${user['id']}`">
+          <router-link :to="`/profile`">
             <img class="w-10 h-10 rounded-full mr-4" :src="user.photo" />
           </router-link>
           <div class="flex-auto text-sm">

@@ -117,8 +117,10 @@ export default {
   },
 
   watch: {
-    user: function (newValue, oldValue) {
-      this.fetchItem()
+    user: function (newValue) {
+      if (newValue !== null) {
+        this.fetchItem()
+      }
     }
   },
 
