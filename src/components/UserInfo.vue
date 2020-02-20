@@ -8,7 +8,7 @@
           </router-link>
           <div class="flex-auto text-sm">
             <p class="text-gray-900 leading-none">
-              <router-link :to="`/users/${user['id']}`">{{ user.name }}</router-link>
+              <router-link :to="`/profile`">{{ user.name }}</router-link>
             </p>
             <p class="text-gray-600">Super Hero</p>
           </div>
