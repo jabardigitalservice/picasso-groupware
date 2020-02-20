@@ -19,7 +19,7 @@
             </div>
             <div class="border-b">
               <div class="px-4 py-4 text-center">
-                <button class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded" type="button">
+                <button @click="submit" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded" type="button">
                   Simpan
                 </button>
               </div>
@@ -53,6 +53,7 @@
 import { mapGetters } from 'vuex'
 import { ContentLoader } from 'vue-content-loader'
 import { formatDateTimeShort, formatDateLong } from '@/lib/date'
+import { db } from '@/lib/firebase'
 // import { analytics } from '@/lib/firebase'
 
 export default {
@@ -68,6 +69,7 @@ export default {
 
   data () {
     return {
+      id: null,
       job_title: null,
       phone: null
     }
@@ -86,8 +88,11 @@ export default {
 
   watch: {
     item (newValue) {
-      this.job_title = newValue['job_title']
-      this.phone = newValue['phone']
+      if (newValue) {
+        this.id = newValue['id']
+        this.job_title = newValue['job_title']
+        this.phone = newValue['phone']
+      }
     }
   },
 
@@ -97,6 +102,15 @@ export default {
 
     async fetchItem () {
       await this.$store.dispatch('profile-detail/fetchItem')
+    },
+
+    async submit () {
+      await db.collection('users').doc(this.id).update({
+        'job_title': this.job_title,
+        'phone': this.phone
+      })
+
+      await this.$router.push('/profile')
     }
   }
 }
