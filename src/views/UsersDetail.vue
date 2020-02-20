@@ -12,12 +12,41 @@
               <p class="pt-4 text-lg font-semibold">
                 {{ item['name'] }}
               </p>
-              <p class="text-gray-600">
-                {{ item['email'] }}
+              <p v-if="item['job_title']" class="text-gray-600">
+                {{ item['job_title'] }}
               </p>
             </div>
             <div class="border-b">
-              <!-- First list item -->
+              <a href="#" class="px-2 py-3 hover:bg-gray-200 flex">
+                <div class="pl-3">
+                  <p class="font-semibold">
+                    Email
+                  </p>
+                  <p class="text-gray-600">
+                    {{ item['email'] ? item['email'] : '-' }}
+                  </p>
+                </div>
+              </a>
+              <a href="#" class="px-2 py-3 hover:bg-gray-200 flex">
+                <div class="pl-3">
+                  <p class="font-semibold">
+                    Phone
+                  </p>
+                  <p class="text-gray-600">
+                    {{ item['phone'] ? item['phone'] : '-' }}
+                  </p>
+                </div>
+              </a>
+              <a href="#" class="px-2 py-3 hover:bg-gray-200 flex">
+                <div class="pl-3">
+                  <p class="font-semibold">
+                    Birth Date
+                  </p>
+                  <p class="text-gray-600">
+                    {{ item['birthdate'] ? formatDateLong(item['birthdate'].toDate()) : '-' }}
+                  </p>
+                </div>
+              </a>
               <a href="#" class="px-2 py-3 hover:bg-gray-200 flex">
                 <div class="pl-3">
                   <p class="font-semibold">
@@ -32,7 +61,7 @@
           </div>
         </template>
         <template v-else>
-          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <div class="bg-red-100 border border-red-400 text-red-700 mx-2 sm:mx-0 px-4 py-3 rounded relative" role="alert">
             <strong class="font-bold">Holy smokes! </strong>
             <span class="block sm:inline">Something seriously bad happened.</span>
           </div>
@@ -57,7 +86,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { ContentLoader } from 'vue-content-loader'
-import { formatDateTimeShort } from '@/lib/date'
+import { formatDateTimeShort, formatDateLong } from '@/lib/date'
 import { analytics } from '@/lib/firebase'
 
 export default {
@@ -82,6 +111,7 @@ export default {
 
   methods: {
     formatDateTimeShort,
+    formatDateLong,
 
     async fetchItem (id) {
       await this.$store.dispatch('users-detail/fetchItem', { id: id })

@@ -37,14 +37,26 @@ export const mutations = {
 // actions
 export const actions = {
   async login ({ dispatch, commit }, { user }) {
-    await db.collection('users').doc(user.uid).set({
-      'id': user.uid,
-      'name': user.displayName,
-      'email': user.email,
-      'photo': user.photoURL,
-      'created_at': Timestamp.now(),
-      'last_seen_at': Timestamp.now()
-    })
+    const querySnapshot = db.collection('users').doc(user.uid)
+    const doc = await querySnapshot.get()
+
+    if (doc.exists) {
+      await db.collection('users').doc(user.uid).update({
+        'name': user.displayName,
+        'email': user.email,
+        'photo': user.photoURL,
+        'last_seen_at': Timestamp.now()
+      })
+    } else {
+      await db.collection('users').doc(user.uid).set({
+        'id': user.uid,
+        'name': user.displayName,
+        'email': user.email,
+        'photo': user.photoURL,
+        'created_at': Timestamp.now(),
+        'last_seen_at': Timestamp.now()
+      })
+    }
 
     commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL, id: user.uid } })
   },
