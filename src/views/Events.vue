@@ -23,6 +23,8 @@ import EventsList from '@/components/EventsList'
 import { analytics } from '@/lib/firebase'
 
 export default {
+  middleware: 'auth',
+
   components: {
     EventsList
   },

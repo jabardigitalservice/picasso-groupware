@@ -15,15 +15,9 @@
           </router-link>
         </div>
         <div v-if="user" class="text-center px-2 py-1">
-          <router-link class="no-underline text-gray-700 block" to="/events">
-            <i class="far fa-calendar text-lg" />
-            <p class="text-xs">Events</p>
-          </router-link>
-        </div>
-        <div v-if="user" class="text-center px-2 py-1">
-          <router-link class="no-underline text-gray-700 block" to="/thankyou">
-            <i class="far fa-heart text-lg" />
-            <p class="text-xs">Thank You</p>
+          <router-link class="no-underline text-gray-700 block" to="/profile">
+            <i class="far fa-user text-lg" />
+            <p class="text-xs">Account</p>
           </router-link>
         </div>
       </div>

@@ -18,6 +18,33 @@
               </router-link>
             </div>
 
+            <div v-if="user" class="w-1/3">
+              <router-link to="/events">
+                <div class="h-full p-3 py-4  text-center text-gray-700">
+                  <i class="far fa-calendar text-2xl" />
+                  <p class="text-xs mt-1">Events</p>
+                </div>
+              </router-link>
+            </div>
+
+            <div v-if="user" class="w-1/3">
+              <router-link to="/thankyou">
+                <div class="h-full p-3 py-4 text-center text-gray-700">
+                  <i class="far fa-heart text-2xl" />
+                  <p class="text-xs mt-1">Thank You</p>
+                </div>
+              </router-link>
+            </div>
+
+            <div v-if="user" class="w-1/3">
+              <router-link to="/profile">
+                <div class="h-full p-3 py-4 text-center text-gray-700">
+                  <i class="far fa-user text-2xl" />
+                  <p class="text-xs mt-1">Account</p>
+                </div>
+              </router-link>
+            </div>
+
             <div class="w-1/3">
               <router-link to="/underconstruction">
                 <div class="h-full p-3 py-4  text-center text-gray-700">
@@ -38,10 +65,6 @@
           </div>
         </div>
         <div class="w-full md:w-2/3">
-          <div class="px-4 mt-4">
-            <p class="text-leading text-grey-darker">Articles</p>
-          </div>
-
           <home-article-list class="mt-2" />
         </div>
       </div>
@@ -68,7 +91,8 @@ export default {
   },
 
   computed: mapGetters({
-    // authLoading: 'auth/loading'
+    // authLoading: 'auth/loading',
+    user: 'auth/user'
   })
 }
 </script>

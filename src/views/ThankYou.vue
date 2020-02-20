@@ -17,6 +17,8 @@ import ThankYouList from '@/components/ThankYouList'
 import { analytics } from '@/lib/firebase'
 
 export default {
+  middleware: 'auth',
+
   components: {
     ThankYouList
   },
