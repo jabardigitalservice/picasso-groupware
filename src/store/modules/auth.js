@@ -30,6 +30,7 @@ export const mutations = {
   },
 
   [types.UNAUTHENTICATED] (state) {
+    state.loading = false
     state.user = null
   }
 }
@@ -37,6 +38,8 @@ export const mutations = {
 // actions
 export const actions = {
   async login ({ dispatch, commit }, { user }) {
+    commit(types.AUTH_LOADING)
+
     const querySnapshot = db.collection('users').doc(user.uid)
     const doc = await querySnapshot.get()
 
@@ -59,6 +62,7 @@ export const actions = {
     }
 
     commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL, id: user.uid } })
+    commit(types.AUTH_INITIALIZED)
   },
 
   async logout ({ commit }) {

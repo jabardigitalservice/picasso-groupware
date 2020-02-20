@@ -97,6 +97,8 @@ import { formatDateTimeShort, formatDateLong } from '@/lib/date'
 import { analytics } from '@/lib/firebase'
 
 export default {
+  middleware: 'auth',
+
   components: {
     ContentLoader
   },
@@ -113,15 +115,7 @@ export default {
   }),
 
   mounted () {
-    //
-  },
-
-  watch: {
-    user: function (newValue) {
-      if (newValue !== null) {
-        this.fetchItem()
-      }
-    }
+    this.fetchItem()
   },
 
   methods: {

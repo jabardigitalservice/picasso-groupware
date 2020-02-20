@@ -9,6 +9,10 @@ body {
   padding-bottom: 60px;
 }
 
+body.loading {
+  background: #399F4F;
+}
+
 .no-pull-refresh {
   overscroll-behavior-y: none;
 }

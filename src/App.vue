@@ -14,17 +14,27 @@
       </div>
     </div>
 
-    <transition name="page" mode="out-in">
-      <component :is="layout" v-if="layout" />
-    </transition>
+    <template v-if="loading">
+      <div class="container mx-auto">
+        <div class="bg-white mt-4 mx-2 sm:mx-0 p-4 text-center rounded border">
+          <h1>Loading...</h1>
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <transition name="page" mode="out-in">
+        <component :is="layout" v-if="layout" />
+      </transition>
+    </template>
   </div>
 </template>
 
 <script>
 // import Loading from './components/Loading'
-import firebase from 'firebase'
 
 // Load layout components dynamically.
+import { mapGetters } from 'vuex'
+
 const requireContext = require.context('@/layouts', false, /.*\.vue$/)
 
 const layouts = requireContext.keys()
@@ -65,19 +75,12 @@ export default {
     })
   },
 
+  computed: mapGetters({
+    loading: 'auth/loading'
+  }),
+
   mounted () {
     // this.$loading = this.$refs.loading
-
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // console.log(user)
-        this.$store.dispatch('auth/login', { user: user })
-      } else {
-        // console.log('not signed in')
-      }
-
-      // this.$store.commit('auth/AUTH_INITIALIZED')
-    })
   },
 
   methods: {

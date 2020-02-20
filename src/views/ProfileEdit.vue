@@ -56,6 +56,8 @@ import { formatDateTimeShort, formatDateLong } from '@/lib/date'
 // import { analytics } from '@/lib/firebase'
 
 export default {
+  middleware: 'auth',
+
   components: {
     ContentLoader
   },
@@ -79,14 +81,10 @@ export default {
   }),
 
   mounted () {
-    //
+    this.fetchItem()
   },
 
   watch: {
-    user (newValue) {
-      this.fetchItem()
-    },
-
     item (newValue) {
       this.job_title = newValue['job_title']
       this.phone = newValue['phone']
