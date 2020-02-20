@@ -18,5 +18,6 @@ export default [
   { path: '/profile', name: 'profile.detail', component: page('ProfileDetail.vue') },
   { path: '/profile/edit', name: 'profile.edit', component: page('ProfileEdit.vue') },
   { path: '/booking', name: 'booking', component: page('Booking.vue') },
+  { path: '/teams', name: 'teams', component: page('Team.vue') },
   { path: '*', component: page('errors/404.vue') }
 ]

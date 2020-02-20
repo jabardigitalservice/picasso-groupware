@@ -37,10 +37,10 @@
             </div>
 
             <div v-if="user" class="w-1/3">
-              <router-link to="/profile">
+              <router-link to="/teams">
                 <div class="h-full p-3 py-4 text-center text-gray-700">
-                  <i class="far fa-user text-2xl" />
-                  <p class="text-xs mt-1">Account</p>
+                  <i class="fas fa-user-friends text-2xl" />
+                  <p class="text-xs mt-1">Teams</p>
                 </div>
               </router-link>
             </div>
