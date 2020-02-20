@@ -43,7 +43,11 @@ export const actions = {
     const querySnapshot = db.collection('users').doc(user.uid)
     const doc = await querySnapshot.get()
 
+    let existingData
+
     if (doc.exists) {
+      existingData = doc.data()
+
       await db.collection('users').doc(user.uid).update({
         'name': user.displayName,
         'email': user.email,
@@ -61,7 +65,7 @@ export const actions = {
       })
     }
 
-    commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL, id: user.uid } })
+    commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL, id: user.uid, job_title: existingData.job_title } })
     commit(types.AUTH_INITIALIZED)
   },
 
