@@ -2,7 +2,7 @@
   <div class="home-banner-list">
     <template v-if="!loading">
       <div class="flex flex-wrap">
-        <div v-for="item in items" :key="item.id" class="w-full bg-white rounded-lg shadow mx-2 mb-2 p-4">
+        <div v-for="item in items" :key="item.id" class="w-full bg-white sm:rounded-lg shadow sm:mx-2 sm:mb-2 p-4">
           <router-link :to="`/articles/${item.id}`">
             <div class="flex">
               <div class="flex items-center block mx-auto mr-4">
