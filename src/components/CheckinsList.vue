@@ -101,19 +101,19 @@ export default {
         return 'bg-white'
       }
 
-      const checkinTime = item['checkin_at'].toDate()
-      const yellowLine = set(new Date(), { hours: 8, minutes: 0, seconds: 0 })
-      const redLine = set(new Date(), { hours: 9, minutes: 0, seconds: 0 })
+      const checkinDateTime = item['checkin_at'].toDate()
+      const yellowLine = set(checkinDateTime, { hours: 8, minutes: 0, seconds: 0 })
+      const redLine = set(checkinDateTime, { hours: 9, minutes: 0, seconds: 0 })
 
-      if (isAfter(checkinTime, redLine)) {
+      if (isAfter(checkinDateTime, redLine)) {
         return 'bg-red-200'
       }
 
-      if (isAfter(checkinTime, yellowLine)) {
+      if (isAfter(checkinDateTime, yellowLine)) {
         return 'bg-yellow-200'
       }
 
-      if (isBefore(checkinTime, yellowLine)) {
+      if (isBefore(checkinDateTime, yellowLine)) {
         return 'bg-green-200'
       }
 
