@@ -3,7 +3,7 @@
     <template v-if="!loading">
       <div class="flex flex-wrap">
         <template v-if="items.length > 0">
-          <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6">
+          <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6" :class="getRowClass(item)">
             <router-link :to="`/users/${item['user_id']}`">
               <div class="flex items-center">
                 <img class="w-10 h-10 rounded-full mr-4" :src="item['user_photo']" />
@@ -49,6 +49,7 @@
 import { ContentLoader } from 'vue-content-loader'
 import { mapGetters } from 'vuex'
 import { formatTime } from '@/lib/date'
+import { isBefore, isAfter, set } from 'date-fns'
 
 export default {
   components: {
@@ -93,6 +94,30 @@ export default {
       }
 
       return 'bg-gray-800'
+    },
+
+    getRowClass (item) {
+      if (item['type'] !== 'HADIR') {
+        return 'bg-white'
+      }
+
+      const checkinTime = item['checkin_at'].toDate()
+      const yellowLine = set(new Date(), { hours: 8, minutes: 0, seconds: 0 })
+      const redLine = set(new Date(), { hours: 9, minutes: 0, seconds: 0 })
+
+      if (isAfter(checkinTime, redLine)) {
+        return 'bg-red-200'
+      }
+
+      if (isAfter(checkinTime, yellowLine)) {
+        return 'bg-yellow-200'
+      }
+
+      if (isBefore(checkinTime, yellowLine)) {
+        return 'bg-green-200'
+      }
+
+      return 'bg-white'
     }
   }
 }
