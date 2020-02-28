@@ -5,9 +5,9 @@
       <div class="container mx-auto">
         <div class="flex px-6 py-4">
           <div class="text-sm w-full">
-            Ada Update Versi Terbaru
+            Ada update versi terbaru.
             <button @click="refreshApp" class="ml-2 bg-brand-blue text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-              Refresh
+              Update
             </button>
           </div>
         </div>
@@ -15,10 +15,8 @@
     </div>
 
     <template v-if="loading">
-      <div class="container mx-auto">
-        <div class="bg-white mt-4 mx-2 sm:mx-0 p-4 text-center rounded border">
-          <h1>Loading...</h1>
-        </div>
+      <div class="flex content-center flex-wrap mt-32">
+        <img class="block h-32 mx-auto" src="@/assets/android-chrome-512x512.png" alt>
       </div>
     </template>
     <template v-else>
@@ -64,6 +62,8 @@ export default {
   },
 
   created () {
+    document.body.classList.add('loading')
+
     // Listen for swUpdated event and display refresh snackbar as required.
     document.addEventListener('swUpdated', this.showRefreshUI, { once: true })
 
@@ -81,6 +81,14 @@ export default {
 
   mounted () {
     // this.$loading = this.$refs.loading
+  },
+
+  watch: {
+    loading (value) {
+      if (value === false) {
+        document.body.classList.remove('loading')
+      }
+    }
   },
 
   methods: {
