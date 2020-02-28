@@ -1,6 +1,7 @@
 import * as types from '../mutation-types'
 import * as firebase from 'firebase'
 import { db, Timestamp } from '@/lib/firebase'
+import { appConfig } from '@/config'
 
 // state
 export const state = {
@@ -52,6 +53,7 @@ export const actions = {
         'name': user.displayName,
         'email': user.email,
         'photo': user.photoURL,
+        'app_version': appConfig.version,
         'last_seen_at': Timestamp.now()
       })
     } else {
@@ -60,6 +62,7 @@ export const actions = {
         'name': user.displayName,
         'email': user.email,
         'photo': user.photoURL,
+        'app_version': appConfig.version,
         'created_at': Timestamp.now(),
         'last_seen_at': Timestamp.now()
       })
