@@ -1,9 +1,9 @@
 .form-input {
   &__title {
-    @apply relative inline-block mb-4
+    @apply relative inline-block mb-2
     font-bold 
-    text-gray-600 text-sm
-    uppercase 
+    text-gray-600 text-base
+     
     tracking-wide;
 
     &.is-required {
@@ -17,10 +17,10 @@
     }
   }
   &__title + &__subtitle {
-    @apply -mt-4;
+    @apply -mt-1;
   }
   &__subtitle {
-    @apply block mb-4 font-normal text-gray-700 text-xs;
+    @apply block mb-2 font-normal text-gray-700 text-sm;
   }
 }
 
@@ -116,7 +116,7 @@
 }
 
 .form-input-container {
-  @apply mb-8;
+  @apply mb-10;
 
   &.is-card {
     @apply p-4 bg-white rounded-lg shadow;
