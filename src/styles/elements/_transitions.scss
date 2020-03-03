@@ -15,3 +15,18 @@
 .fade-leave-to {
   opacity: 0
 }
+
+.slide-y-fade-transition {
+  &-enter-active,
+  &-leave-active {
+    transition-property: opacity, transform;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-out;
+  }
+
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+}
