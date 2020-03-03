@@ -28,26 +28,16 @@
           </div>
         </template>
         <template #default>
-          <div class="lg:flex lg:flex-row lg:justify-start lg:items-start">
-            <div class="rounded-lg bg-white shadow"
-                style="flex: 1 1 30%;">
-              <ProfileSectionList :sections="profileSections.map(x => x.name)"
-                                  :active="activeProfileSectionName"
-                                  @click="setActiveSection"/>
-            </div>
-            <i class="inline-block h-6" style="flex: 0 0 1.5rem;"></i>
-            <transition name="slide-y-fade-transition" mode="out-in">
-              <div class="p-8 rounded-lg bg-white shadow"
-                  style="flex: 1 1 60%;"
-                  :key="activeProfileSectionName">
-                <h3 class="mb-8 md:p-4 font-black text-2xl md:text-4xl text-brand-green text-center tracking-tight">
-                  {{activeProfileSectionName}}
-                </h3>
-                <component :is="sectionComponent"
-                            :data="userData"
-                            class="md:p-4"/>
-              </div>
-            </transition>
+          <div class="overflow-visible lg:overflow-hidden max-w-5xl mx-auto rounded-none lg:rounded-lg lg:shadow lg:flex lg:flex-row lg:justify-start lg:items-stretch">
+            <ProfileSectionList :sections="profileSections"
+                                :active="activeProfileSectionName"
+                                class="rounded-lg lg:rounded-none border-r border-solid border-gray-200 bg-gray-100 shadow lg:shadow-none"
+                                style="flex: 1 1 25%;"
+                                @click="setActiveSection"/>
+            <br class="lg:hidden">
+            <ProfileSectionDetail :name="activeProfileSectionName"
+                                  class="overflow-hidden rounded-lg lg:rounded-none bg-white shadow lg:shadow-none"
+                                  style="flex: 1 1 60%;"/>
           </div>
         </template>
       </DataLoader>
@@ -67,13 +57,8 @@ export default {
   components: {
     DataLoader,
     ContentLoader,
-    EditPersonal: () => import('../components/Profile/Edit/Personal'),
-    EditEducation: () => import('../components/Profile/Edit/Education'),
-    EditExperience: () => import('../components/Profile/Edit/Experience'),
-    EditBankAccount: () => import('../components/Profile/Edit/BankAccount'),
-    EditEmergencyContact: () => import('../components/Profile/Edit/EmergencyContact'),
-    EditEnneagram: () => import('../components/Profile/Edit/Enneagram'),
-    ProfileSectionList: () => import('../components/Profile/Edit/ProfileSectionList')
+    ProfileSectionList: () => import('../components/Profile/Edit/ProfileSectionList'),
+    ProfileSectionDetail: () => import('../components/Profile/Edit/ProfileSectionDetail')
   },
 
   metaInfo: {
@@ -83,30 +68,12 @@ export default {
   data () {
     return {
       profileSections: [
-        {
-          name: 'Personal',
-          component: () => import('../components/Profile/Edit/Personal')
-        },
-        {
-          name: 'Education',
-          component: () => import('../components/Profile/Edit/Education')
-        },
-        {
-          name: 'Experience',
-          component: () => import('../components/Profile/Edit/Experience')
-        },
-        {
-          name: 'Bank Account',
-          component: () => import('../components/Profile/Edit/BankAccount')
-        },
-        {
-          name: 'Emergency Contact',
-          component: () => import('../components/Profile/Edit/EmergencyContact')
-        },
-        {
-          name: 'Enneagram',
-          component: () => import('../components/Profile/Edit/Enneagram')
-        }
+        'Personal',
+        'Education',
+        'Experience',
+        'Bank Account',
+        'Emergency Contact',
+        'Enneagram'
       ],
       activeProfileSectionName: 'Personal',
       fetchUserData: null,
@@ -117,14 +84,7 @@ export default {
   computed: {
     ...mapState('auth', {
       id: state => state.user ? state.user.id : null
-    }),
-    sectionComponent () {
-      if (this.activeProfileSectionName) {
-        const { component } = this.profileSections.find(x => x.name === this.activeProfileSectionName) || {}
-        return component
-      }
-      return null
-    }
+    })
   },
 
   watch: {
@@ -133,11 +93,12 @@ export default {
       handler: function (v) {
         this.fetchUserData = null
         if (v) {
-          this.fetchUserData = this.$store.dispatch('profile-detail/fetchItem')
-            .then(userData => {
-              this.userData = userData ? JSON.parse(JSON.stringify(userData)) : {}
-              return userData
-            })
+          this.fetchUserData = this.$store.dispatch('profile-detail/fetchItem', {
+            id: v
+          }).then(userData => {
+            this.userData = userData ? JSON.parse(JSON.stringify(userData)) : {}
+            return userData
+          })
         }
       }
     }
