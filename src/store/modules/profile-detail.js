@@ -38,18 +38,35 @@ export const mutations = {
 
 // actions
 export const actions = {
-  async fetchItem ({ commit, rootGetters }) {
-    commit(types.PROFILE_DETAIL_INIT)
-
-    const { id } = rootGetters['auth/user']
-
-    const querySnapshot = await db.collection('users').doc(id)
-    const doc = await querySnapshot.get()
-
-    if (doc.exists) {
-      return commit(types.PROFILE_DETAIL_LOADED, { item: doc.data() })
+  fetchItem ({ commit, rootGetters }, { fresh = true } = {}) {
+    if (!state.item || fresh) {
+      commit(types.PROFILE_DETAIL_INIT)
+      const { id } = rootGetters['auth/user']
+      const querySnapshot = db.collection('users').doc(id)
+      return querySnapshot.get()
+        .then(doc => {
+          if (doc.exists) {
+            commit(types.PROFILE_DETAIL_LOADED, { item: doc.data() })
+          }
+          return state.item
+        }).catch(e => {
+          commit(types.PROFILE_DETAIL_FAILED)
+          throw e
+        })
+    } else {
+      return Promise.resolve(state.item)
     }
+    // commit(types.PROFILE_DETAIL_INIT)
 
-    return commit(types.PROFILE_DETAIL_FAILED)
+    // const { id } = rootGetters['auth/user']
+
+    // const querySnapshot = await db.collection('users').doc(id)
+    // const doc = await querySnapshot.get()
+
+    // if (doc.exists) {
+    //   return commit(types.PROFILE_DETAIL_LOADED, { item: doc.data() })
+    // }
+
+    // return commit(types.PROFILE_DETAIL_FAILED)
   }
 }
