@@ -39,6 +39,7 @@
     <div class="form-input-container">
       <FormInputFile name="document_ktp"
                       title="Upload KTP"
+                      subtitle="File dalam format JPEG/PNG/PDF"
                       rules="required|mimes:image/*,.pdf"
                       :custom-messages="{required: 'KTP harus di-upload dalam format JPEG/PNG/PDF', mimes: 'File harus dalam format JPEG/PNG/PDF'}"
                       accept="image/*,.pdf"
@@ -47,6 +48,7 @@
     <div class="form-input-container">
       <FormInputFile name="document_kk"
                       title="Upload KK"
+                      subtitle="File dalam format JPEG/PNG/PDF"
                       rules="required|mimes:image/*,.pdf"
                       :custom-messages="{required: 'KK harus di-upload dalam format JPEG/PNG/PDF', mimes: 'File harus dalam format JPEG/PNG/PDF'}"
                       accept="image/*,.pdf"
@@ -82,6 +84,7 @@
     <div class="form-input-container">
       <FormInputFile name="document_npwp"
                       title="Upload NPWP"
+                      subtitle="File dalam format JPEG/PNG/PDF"
                       rules="required|mimes:image/*,.pdf"
                       :custom-messages="{required: 'NPWP harus di-upload dalam format JPEG/PNG/PDF', mimes: 'File harus dalam format JPEG/PNG/PDF'}"
                       accept="image/*,.pdf"
