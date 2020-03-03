@@ -28,6 +28,53 @@
                   v-model="mData.birth_date" />
     </div>
     <div class="form-input-container">
+      <FormSelect name="religion"
+                  title="Agama"
+                  :options="choices.religions"
+                  rules="required"
+                  prompt="Pilih salah satu opsi di bawah ini"
+                  :custom-messages="{required: 'Agama harus diisi'}"
+                  v-model="mData.religion" />
+    </div>
+    <hr class="-mx-8 mb-8">
+    <div class="form-input-container">
+      <FormTextarea name="ktp_address"
+                    title="Alamat sesuai KTP"
+                    placeholder="Masukkan alamat yang tertera di KTP"
+                    rules="required"
+                    rows="4"
+                    :custom-messages="{required: 'Alamat harus diisi'}"
+                    v-model="mData.ktp_address" />
+    </div>
+    <div class="form-input-container">
+      <FormTextarea name="current_addresss"
+                    title="Alamat saat ini"
+                    placeholder="Masukkan alamat saat ini"
+                    rules="required"
+                    rows="4"
+                    :custom-messages="{required: 'Alamat harus diisi'}"
+                    v-model="mData.current_address" />
+    </div>
+    <div class="form-input-container">
+      <FormInput type="text"
+                  name="phone_number"
+                  title="Nomor Telepon (seluler)"
+                  placeholder="Masukkan nomor telepon seluler"
+                  rules="required|min:10|max:20"
+                  :custom-messages="{required: 'Nomor telepon harus diisi', min: 'Nomor telepon minimal terdiri dari 10 angka', max: 'Nomor telepon maksimal terdiri dari 20 angka'}"
+                  v-model="mData.phone_number" />
+    </div>
+    <div class="form-input-container">
+      <FormInput type="email"
+                  name="email"
+                  title="Email"
+                  placeholder="Masukkan alamat email"
+                  rules="required|email"
+                  :custom-messages="{required: 'Alamat email harus diisi', email: 'Alamat email tidak valid'}"
+                  v-model="mData.email" />
+    </div>
+    <hr class="-mx-8 mb-8">
+    <div class="form-input-container">
       <FormInput type="text"
                   name="ktp_number"
                   title="Nomor KTP"
@@ -55,24 +102,6 @@
                       v-model="mData.document_kk" />
     </div>
     <div class="form-input-container">
-      <FormTextarea name="ktp_address"
-                    title="Alamat sesuai KTP"
-                    placeholder="Masukkan alamat yang tertera di KTP"
-                    rules="required"
-                    rows="4"
-                    :custom-messages="{required: 'Alamat harus diisi'}"
-                    v-model="mData.ktp_address" />
-    </div>
-    <div class="form-input-container">
-      <FormTextarea name="current_addresss"
-                    title="Alamat saat ini"
-                    placeholder="Masukkan alamat saat ini"
-                    rules="required"
-                    rows="4"
-                    :custom-messages="{required: 'Alamat harus diisi'}"
-                    v-model="mData.current_address" />
-    </div>
-    <div class="form-input-container">
       <FormInput type="text"
                   name="npwp_number"
                   title="Nomor NPWP"
@@ -90,33 +119,7 @@
                       accept="image/*,.pdf"
                       v-model="mData.document_npwp" />
     </div>
-    <div class="form-input-container">
-      <FormInput type="text"
-                  name="phone_number"
-                  title="Nomor Telepon (seluler)"
-                  placeholder="Masukkan nomor telepon seluler"
-                  rules="required|min:10|max:20"
-                  :custom-messages="{required: 'Nomor telepon harus diisi', min: 'Nomor telepon minimal terdiri dari 10 angka', max: 'Nomor telepon maksimal terdiri dari 20 angka'}"
-                  v-model="mData.phone_number" />
-    </div>
-    <div class="form-input-container">
-      <FormInput type="email"
-                  name="email"
-                  title="Email"
-                  placeholder="Masukkan alamat email"
-                  rules="required|email"
-                  :custom-messages="{required: 'Alamat email harus diisi', email: 'Alamat email tidak valid'}"
-                  v-model="mData.email" />
-    </div>
-    <div class="form-input-container">
-      <FormSelect name="religion"
-                  title="Agama"
-                  :options="choices.religions"
-                  rules="required"
-                  prompt="Pilih salah satu opsi di bawah ini"
-                  :custom-messages="{required: 'Agama harus diisi'}"
-                  v-model="mData.religion" />
-    </div>
+    <hr class="-mx-8 mb-8">
     <div class="form-input-container">
       <FormSelect name="job"
                   title="Posisi saat ini"
@@ -194,5 +197,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
+hr {
+  @apply border-gray-500;
+}
 </style>
