@@ -1,15 +1,17 @@
 <template>
   <div class="">
-    <ul class="py-8">
+    <h3 class="p-8 font-black text-gray-900 text-2xl bg-white lg:bg-transparent">
+      Lengkapi Profil
+    </h3>
+    <ul class="profile-section-list">
       <li v-for="(sect, index) in sections"
           :key="index"
-          class="cursor-pointer px-8 py-4 border-b border-solid border-gray-200 hover:bg-gray-100"
+          :class="['profile-section-list__item', isSectionActive(sect) && 'is-active']"
           @click.capture="$emit('click', sect)">
-        <!-- <i :class="['align-middle icon font-black text-lg mr-4', `text-brand-${getRandomBrandColor()}`]"
-          style="font-style: normal;">
-          {{s.title.substring(0, 1)}}
-        </i> -->
-        <span :class="['align-middle uppercase tracking-widest font-bold text-sm', sect === active ? 'text-brand-blue' : 'text-gray-500']">
+        <i v-if="isSectionActive(sect)"
+           class="inline-block align-baseline w-3 h-3 mr-2 rounded-full bg-brand-yellow-darkest"></i>
+        <span class="inline align-baseline font-bold"
+              style="color: currentColor">
           {{sect}}
         </span>
       </li>
@@ -29,6 +31,9 @@ export default {
     }
   },
   methods: {
+    isSectionActive (name) {
+      return name === this.active
+    },
     getRandomBrandColor () {
       const colors = ['blue', 'green', 'yellow']
       const index = Math.floor(Math.random() * colors.length)
@@ -39,4 +44,54 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.profile-section-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 5rem;
+
+  &__item {
+    outline: 1px solid #eee;
+    @apply cursor-pointer
+    px-8 py-4
+    flex flex-row justify-center items-center
+    text-center text-gray-500;
+    &:hover {
+      @apply bg-white;
+    }
+    > i {
+      @apply hidden;
+    }
+    &.is-active {
+      @apply bg-brand-blue text-white;
+    }
+  }
+}
+
+@screen sm {
+  .profile-section-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@screen lg {
+  .profile-section-list {
+    display: block;
+    &__item {
+      outline: none;
+      @apply cursor-pointer
+      block px-8 py-4
+      text-left;
+      &.is-active {
+        @apply bg-white text-brand-blue;
+      }
+      &:hover {
+        @apply bg-white;
+      }
+      > i {
+        @apply inline-block;
+      }
+    }
+
+  }
+}
 </style>
