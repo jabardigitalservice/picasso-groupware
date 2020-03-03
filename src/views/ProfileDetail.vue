@@ -123,7 +123,9 @@ export default {
     formatDateLong,
 
     async fetchItem () {
-      await this.$store.dispatch('profile-detail/fetchItem')
+      await this.$store.dispatch('profile-detail/fetchItem', {
+        id: this.user.id
+      })
 
       analytics.logEvent('profile_detail_view')
     }

@@ -38,10 +38,12 @@ export const mutations = {
 
 // actions
 export const actions = {
-  fetchItem ({ commit, rootGetters }, { fresh = true } = {}) {
+  fetchItem ({ commit }, { id, fresh = true } = {}) {
+    if (!id) {
+      return Promise.reject(new ReferenceError('Vuex:profile-detail:fetchItem : id must be supplied'))
+    }
     if (!state.item || fresh) {
       commit(types.PROFILE_DETAIL_INIT)
-      const { id } = rootGetters['auth/user']
       const querySnapshot = db.collection('users').doc(id)
       return querySnapshot.get()
         .then(doc => {
