@@ -1,0 +1,124 @@
+.form-input {
+  &__title {
+    @apply relative inline-block mb-4
+    font-bold 
+    text-gray-600 text-sm
+    uppercase 
+    tracking-wide;
+
+    &.is-required {
+      &::after {
+        content: '*';
+        display: inline;
+        left: calc(100% + #{0.5ch});
+        top: -2px;
+        @apply absolute text-red-500 text-lg;
+      }
+    }
+  }
+  &__title + &__subtitle {
+    @apply -mt-4;
+  }
+  &__subtitle {
+    @apply block mb-4 font-normal text-gray-700 text-xs;
+  }
+}
+
+.form-input {
+  &__input,
+  &__textarea,
+  &__select {
+    @apply
+    block w-full py-3 px-4 mb-3 
+    rounded border border-gray-200 
+    bg-gray-200 
+    text-gray-700 
+    leading-tight;
+
+    &:focus:not(.is-invalid) {
+      @apply border-brand-blue
+      bg-white 
+      outline-none;
+    }
+
+    &.is-invalid {
+      @apply border-red-500
+      bg-red-100;
+    }
+    
+    &.is-invalid::placeholder {
+      @apply text-red-500; 
+    }
+  }
+}
+
+.form-input {
+  &__file {
+    @apply w-full flex flex-row justify-start items-stretch;
+    > button {
+      @apply order-2 w-24
+      inline-block py-2 px-4 
+      rounded-tr
+      rounded-br
+      shadow-md
+      text-sm text-white font-bold 
+      uppercase tracking-wider;
+
+      &[role="add"] {
+        @apply bg-gray-600;
+        &:hover {
+          @apply bg-gray-700;
+        }
+      }
+
+      &[role="remove"] {
+        @apply bg-red-700;
+        &:hover {
+          @apply bg-red-500;
+        }
+      }
+    }
+
+    > a {
+      text-overflow: ellipsis;
+      @apply flex-auto order-1
+      flex flex-row justify-start items-center 
+      px-4
+      overflow-hidden
+      bg-gray-200;
+
+      &[href] {
+        @apply text-brand-blue font-bold cursor-pointer;
+
+        &:hover {
+          @apply underline;
+        }
+      }
+    }
+  }
+}
+
+.form-input {
+  &__hint {
+    @apply text-xs text-gray-700;
+  }
+  &__error-hint {
+    @apply text-sm font-bold text-red-500;
+
+    &::before {
+      content: '\2757';
+      display: inline;
+      vertical-align: baseline;
+      color: currentColor;
+      font-size: 0.85em;
+    }
+  }
+}
+
+.form-input-container {
+  @apply mb-8;
+
+  &.is-card {
+    @apply p-4 bg-white rounded-lg shadow;
+  }
+}
