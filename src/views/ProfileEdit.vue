@@ -1,66 +1,79 @@
 <template>
   <div class="messages">
-    <div class="container mx-auto">
-      <template v-if="user && !loading">
-        <template v-if="!error">
-          <div class="bg-white m-0 sm:rounded shadow">
-            <div class="border-b">
-              <div class="w-full px-4 py-4 mt-4">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-job_title">
-                  Job Title
-                </label>
-                <input v-model="job_title" type="text" id="input-job_title" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"/>
-
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-phone">
-                  Phone
-                </label>
-                <input v-model="phone" type="text" id="input-phone" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"/>
-              </div>
-            </div>
-            <div class="border-b">
-              <div class="px-4 py-4 text-center">
-                <button @click="submit" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded" type="button">
-                  Simpan
-                </button>
-              </div>
-            </div>
+    <div class="container mx-auto p-4">
+      <DataLoader :promise="fetchUserData">
+        <template #pending>
+          <div class="max-w-xl mx-auto p-4 pt-8 rounded-lg bg-white shadow">
+            <content-loader :speed="2"
+                            primaryColor="#f3f3f3"
+                            secondaryColor="#ecebeb">
+              <rect x="0"
+                    y="15"
+                    rx="0"
+                    ry="0"
+                    width="100%"
+                    height="15" />
+              <rect x="0"
+                    y="45"
+                    rx="0"
+                    ry="0"
+                    width="100%"
+                    height="75" />
+            </content-loader>
           </div>
         </template>
-        <template v-else>
-          <div class="bg-red-100 border border-red-400 text-red-700 mx-2 sm:mx-0 px-4 py-3 relative" role="alert">
-            <strong class="font-bold">Holy smokes! </strong>
-            <span class="block sm:inline">Something seriously bad happened.</span>
+        <template #error="{error}">
+          <div>
+            {{error}}
           </div>
         </template>
-      </template>
-      <template v-else>
-        <div class="bg-white shadow p-4">
-          <content-loader
-            :speed="2"
-            primaryColor="#f3f3f3"
-            secondaryColor="#ecebeb"
-          >
-            <rect x="0" y="15" rx="0" ry="0" width="100%" height="15" />
-            <rect x="0" y="45" rx="0" ry="0" width="100%" height="75" />
-          </content-loader>
-        </div>
-      </template>
+        <template #default>
+          <div class="lg:flex lg:flex-row lg:justify-start lg:items-start">
+            <div class="rounded-lg bg-white shadow"
+                style="flex: 1 1 30%;">
+              <ProfileSectionList :sections="profileSections.map(x => x.name)"
+                                  :active="activeProfileSectionName"
+                                  @click="setActiveSection"/>
+            </div>
+            <i class="inline-block h-6" style="flex: 0 0 1.5rem;"></i>
+            <transition name="slide-y-fade-transition" mode="out-in">
+              <div class="p-8 rounded-lg bg-white shadow"
+                  style="flex: 1 1 60%;"
+                  :key="activeProfileSectionName">
+                <h3 class="mb-8 md:p-4 font-black text-2xl md:text-4xl text-brand-green text-center tracking-tight">
+                  {{activeProfileSectionName}}
+                </h3>
+                <component :is="sectionComponent"
+                            :data="userData"
+                            class="md:p-4"/>
+              </div>
+            </transition>
+          </div>
+        </template>
+      </DataLoader>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { ContentLoader } from 'vue-content-loader'
+import { mapState } from 'vuex'
 import { formatDateTimeShort, formatDateLong } from '@/lib/date'
+import { ContentLoader } from 'vue-content-loader'
 import { db } from '@/lib/firebase'
-// import { analytics } from '@/lib/firebase'
+import DataLoader from '../components/DataLoader'
 
 export default {
   middleware: 'auth',
-
   components: {
-    ContentLoader
+    DataLoader,
+    ContentLoader,
+    EditPersonal: () => import('../components/Profile/Edit/Personal'),
+    EditEducation: () => import('../components/Profile/Edit/Education'),
+    EditExperience: () => import('../components/Profile/Edit/Experience'),
+    EditBankAccount: () => import('../components/Profile/Edit/BankAccount'),
+    EditEmergencyContact: () => import('../components/Profile/Edit/EmergencyContact'),
+    EditEnneagram: () => import('../components/Profile/Edit/Enneagram'),
+    ProfileSectionList: () => import('../components/Profile/Edit/ProfileSectionList')
   },
 
   metaInfo: {
@@ -69,29 +82,63 @@ export default {
 
   data () {
     return {
-      id: null,
-      job_title: null,
-      phone: null
+      profileSections: [
+        {
+          name: 'Personal',
+          component: () => import('../components/Profile/Edit/Personal')
+        },
+        {
+          name: 'Education',
+          component: () => import('../components/Profile/Edit/Education')
+        },
+        {
+          name: 'Experience',
+          component: () => import('../components/Profile/Edit/Experience')
+        },
+        {
+          name: 'Bank Account',
+          component: () => import('../components/Profile/Edit/BankAccount')
+        },
+        {
+          name: 'Emergency Contact',
+          component: () => import('../components/Profile/Edit/EmergencyContact')
+        },
+        {
+          name: 'Enneagram',
+          component: () => import('../components/Profile/Edit/Enneagram')
+        }
+      ],
+      activeProfileSectionName: 'Personal',
+      fetchUserData: null,
+      userData: {}
     }
   },
 
-  computed: mapGetters({
-    user: 'auth/user',
-    loading: 'profile-detail/loading',
-    item: 'profile-detail/item',
-    error: 'profile-detail/error'
-  }),
-
-  mounted () {
-    this.fetchItem()
+  computed: {
+    ...mapState('auth', {
+      id: state => state.user ? state.user.id : null
+    }),
+    sectionComponent () {
+      if (this.activeProfileSectionName) {
+        const { component } = this.profileSections.find(x => x.name === this.activeProfileSectionName) || {}
+        return component
+      }
+      return null
+    }
   },
 
   watch: {
-    item (newValue) {
-      if (newValue) {
-        this.id = newValue['id']
-        this.job_title = newValue['job_title']
-        this.phone = newValue['phone']
+    id: {
+      immediate: true,
+      handler: function (v) {
+        this.fetchUserData = null
+        if (v) {
+          this.fetchUserData = this.$store.dispatch('profile-detail/fetchItem')
+            .then(userData => {
+              this.userData = userData ? JSON.parse(JSON.stringify(userData)) : {}
+              return userData
+            })
+        }
       }
     }
   },
@@ -99,19 +146,26 @@ export default {
   methods: {
     formatDateTimeShort,
     formatDateLong,
-
-    async fetchItem () {
-      await this.$store.dispatch('profile-detail/fetchItem')
+    setActiveSection (name) {
+      this.activeProfileSectionName = name
     },
-
     async submit () {
-      await db.collection('users').doc(this.id).update({
-        'job_title': this.job_title,
-        'phone': this.phone
-      })
+      await db
+        .collection('users')
+        .doc(this.id)
+        .update({
+          job_title: this.job_title,
+          phone: this.phone
+        })
 
       await this.$router.push('/profile')
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+hr {
+  @apply mb-8;
+}
+</style>
