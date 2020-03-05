@@ -183,15 +183,17 @@ export function validateAndSave (validator, userId, data) {
     .then(async valid => {
       if (valid) {
         await upsertUserProfileDetail(userId, data)
-        return successAlert()
+        await successAlert()
+        return true
       }
       throw new ReferenceError('validation_failed')
-    }).catch(e => {
+    }).catch(async e => {
       if (e === 'validation_failed') {
-        return invalidDataAlert()
+        await invalidDataAlert()
       } else {
-        return errorAlert(e)
+        await errorAlert(e)
       }
+      return false
     }).finally(() => {
       Swal.close()
     })
