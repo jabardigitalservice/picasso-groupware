@@ -40,6 +40,7 @@
     </div>
     <div class="flex flex-row justify-end items-center">
       <button class="button bg-brand-green text-white"
+              :disabled="$attrs.unsaved"
               @click="onSave">
         Save
       </button>
@@ -49,7 +50,7 @@
 
 <script>
 import { getCurrentYear } from '../../../lib/date'
-import { PROFILE_DETAIL_TYPE, populateProfileDataFields, validateAndSave } from './utils'
+import { PROFILE_DETAIL_TYPE, populateProfileDataFields, watchDataChanges, validateAndSave } from './utils'
 
 export default {
   components: {
@@ -73,6 +74,13 @@ export default {
     }
   },
   created () {
+    watchDataChanges(
+      this,
+      this.data,
+      {
+        [PROFILE_DETAIL_TYPE.EDUCATION]: this.mEducationData
+      }
+    )
     this.$store.dispatch('organizations/fetchEducations')
       .then(educations => {
         this.$set(this.choices, 'educations', JSON.parse(JSON.stringify(educations)))

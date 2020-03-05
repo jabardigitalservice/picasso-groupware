@@ -162,6 +162,7 @@
       </div>
       <div class="flex flex-row justify-end items-center">
         <button class="button bg-brand-green text-white"
+                :disabled="$attrs.unsaved"
                 @click="onSave">
           Simpan
         </button>
@@ -171,8 +172,7 @@
 </template>
 
 <script>
-import toStartCase from 'lodash/startCase'
-import { PROFILE_DETAIL_TYPE, populateProfileDataFields, validateAndSave } from './utils'
+import { PROFILE_DETAIL_TYPE, populateProfileDataFields, watchDataChanges, validateAndSave } from './utils'
 
 export default {
   name: 'EditPersonalData',
@@ -212,13 +212,21 @@ export default {
     }
   },
   created () {
+    watchDataChanges(
+      this,
+      this.data,
+      {
+        [PROFILE_DETAIL_TYPE.PERSONAL]: this.mPersonalData,
+        [PROFILE_DETAIL_TYPE.ASSIGNMENT]: this.mAssignmentData,
+        [PROFILE_DETAIL_TYPE.DOCUMENTS]: this.mDocumentsData
+      }
+    )
     this.$store.dispatch('organizations/fetchJobs')
       .then(jobs => {
         this.$set(this.choices, 'jobs', JSON.parse(JSON.stringify(jobs)))
       })
   },
   methods: {
-    toStartCase,
     onSave () {
       const { PERSONAL, ASSIGNMENT, DOCUMENTS } = PROFILE_DETAIL_TYPE
       return validateAndSave(this.$refs.validator, this.data.id, {

@@ -57,6 +57,7 @@
     </transition>
     <div class="flex flex-row justify-end items-center">
       <button class="button bg-brand-green text-white"
+              :disabled="$attrs.unsaved"
               @click="onSave">
         Save
       </button>
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-import { PROFILE_DETAIL_TYPE, profileObjectReference, populateProfileDataFields, validateAndSave } from './utils'
+import { PROFILE_DETAIL_TYPE, profileObjectReference, populateProfileDataFields, watchDataChanges, validateAndSave } from './utils'
 
 export default {
   components: {
@@ -82,6 +83,15 @@ export default {
       mPreviousJobData: {},
       hasSetRequiredFields: false
     }
+  },
+  created () {
+    watchDataChanges(
+      this,
+      this.data,
+      {
+        [PROFILE_DETAIL_TYPE.PREVIOUS_JOB]: this.mPreviousJobData
+      }
+    )
   },
   computed: {
     isPreviousJobExist () {

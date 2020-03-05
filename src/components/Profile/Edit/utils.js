@@ -2,8 +2,14 @@ import Swal from 'sweetalert2'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _values from 'lodash/values'
+import _debounce from 'lodash/debounce'
+import _isMatch from 'lodash/isMatch'
+import _cloneDeep from 'lodash/cloneDeep'
+// import _debounce from 'lodash/debounce'
+// import _isEqual from 'lodash/isEqual'
 
 import { upsertUserProfileDetail } from '../../../api'
+import { PROFILE_DETAIL_IS_DIRTY } from '../../../store/mutation-types'
 
 /**
  *  @enum {string} - types of profile detail
@@ -95,7 +101,7 @@ export function populateProfileDataFields (datatype, currentData = {}) {
   if (!currentData || typeof currentData !== 'object') throw new TypeError(`populateProfileDataFields: either currentData is null or not typeof object`)
 
   const refs = profileObjectReference[datatype]
-  const mCurrentData = JSON.parse(JSON.stringify(currentData))
+  const mCurrentData = _cloneDeep(currentData)
   refs.forEach(field => {
     const isFieldExist = _get(mCurrentData, field)
     if (!isFieldExist) {
@@ -103,6 +109,19 @@ export function populateProfileDataFields (datatype, currentData = {}) {
     }
   })
   return mCurrentData
+}
+
+export function watchDataChanges (vm, savedData, editedData) {
+  vm.$watch(
+    function () {
+      return editedData
+    },
+    _debounce(function (obj) {
+      const hasUnsavedChanges = !_isMatch(savedData, obj)
+      vm.$store.commit(`profile-detail/${PROFILE_DETAIL_IS_DIRTY}`, hasUnsavedChanges)
+    }, 250),
+    { immediate: false, deep: true }
+  )
 }
 
 /**

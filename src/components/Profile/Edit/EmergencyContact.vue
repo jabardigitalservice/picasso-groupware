@@ -30,6 +30,7 @@
     </div>
     <div class="flex flex-row justify-end items-center">
       <button class="button bg-brand-green text-white"
+              :disabled="$attrs.unsaved"
               @click="onSave">
         Save
       </button>
@@ -38,7 +39,7 @@
 </template>
 
 <script>
-import { PROFILE_DETAIL_TYPE, populateProfileDataFields, validateAndSave } from './utils'
+import { PROFILE_DETAIL_TYPE, populateProfileDataFields, watchDataChanges, validateAndSave } from './utils'
 
 export default {
   components: {
@@ -55,6 +56,15 @@ export default {
       hasSetRequiredFields: false,
       mEmergencyContactData: {}
     }
+  },
+  created () {
+    watchDataChanges(
+      this,
+      this.data,
+      {
+        [PROFILE_DETAIL_TYPE.EMERGENCY_CONTACT]: this.mEmergencyContactData
+      }
+    )
   },
   methods: {
     onSave () {
