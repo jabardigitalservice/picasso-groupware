@@ -6,7 +6,7 @@
                     placeholder="Masukkan nomor kontak"
                     rules="required|mimes:image/*,.pdf"
                     :custom-messages="{required: 'Hasil enneagram harus dilampirkan', mimes: 'File harus dalam format JPEG/PNG/PDF'}"
-                    v-model="mData.document_enneagram">
+                    v-model="mEnneagramData.doc">
         <template #subtitle>
           <p>Masuk ke <a v-bind="anchorProps">{{enneagramTestSiteURL}}</a>,<br>
           lalu screenshot atau unduh hasil test dan lampirkan file tersebut disini.
@@ -24,16 +24,24 @@
 </template>
 
 <script>
-import editMixin from './edit-mixin'
-
+import { populateProfileDataFields } from './utils'
+import { PROFILE_DETAIL_TYPE } from '../../../api'
 export default {
-  mixins: [editMixin],
   components: {
     FormInputFile: () => import('@/components/Form/InputFile')
   },
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
-      enneagramTestSiteURL: `https://www.eclecticenergies.com/enneagram/test`
+      enneagramTestSiteURL: `https://www.eclecticenergies.com/enneagram/test`,
+
+      hasSetRequiredFields: false,
+      mEnneagramData: {}
     }
   },
   computed: {
@@ -47,6 +55,18 @@ export default {
   },
   methods: {
     onSave () {}
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler: function (obj) {
+        if (!this.hasSetRequiredFields) {
+          const { ENNEAGRAM } = PROFILE_DETAIL_TYPE
+          this.mEnneagramData = populateProfileDataFields(ENNEAGRAM, obj[ENNEAGRAM])
+          this.hasSetRequiredFields = true
+        }
+      }
+    }
   }
 }
 </script>
