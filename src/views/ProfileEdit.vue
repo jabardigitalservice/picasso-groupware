@@ -27,7 +27,7 @@
             {{error}}
           </div>
         </template>
-        <template #default="{value: userData}">
+        <template #default>
           <div class="overflow-visible lg:overflow-hidden max-w-5xl mx-auto rounded-none lg:rounded-lg lg:shadow lg:flex lg:flex-row lg:justify-start lg:items-stretch">
             <ProfileSectionList :sections="profileSections"
                                 :active="activeProfileSectionName"
@@ -84,6 +84,9 @@ export default {
   computed: {
     ...mapState('auth', {
       id: state => state.user ? state.user.id : null
+    }),
+    ...mapState('profile-detail', {
+      userData: state => state.item
     })
   },
 
