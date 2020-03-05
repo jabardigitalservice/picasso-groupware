@@ -112,6 +112,7 @@ export function populateProfileDataFields (datatype, currentData = {}) {
 }
 
 export function watchDataChanges (vm, savedData, editedData) {
+  vm.$store.commit(`profile-detail/${PROFILE_DETAIL_IS_DIRTY}`, false)
   vm.$watch(
     function () {
       return editedData
