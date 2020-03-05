@@ -60,7 +60,7 @@
             </div>
             <div class="border-b">
               <div class="px-4 py-4 text-center">
-                <router-link to="/profile/edit" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">
+                <router-link to="/profile/edit/personal" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">
                   Edit Profile
                 </router-link>
               </div>
