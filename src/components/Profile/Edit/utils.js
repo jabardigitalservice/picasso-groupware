@@ -130,7 +130,7 @@ export function watchDataChanges (vm, savedData, editedData) {
 export function invalidDataAlert () {
   return Swal.fire({
     title: 'Oops!',
-    text: 'Pastikan data yang kamu diisikan sudah lengkap dan sesuai',
+    text: 'Pastikan data yang kamu isikan sudah lengkap dan sesuai',
     icon: 'info'
   })
 }
@@ -207,7 +207,7 @@ export function validateAndSave (validator, userId, data) {
       }
       throw new ReferenceError('validation_failed')
     }).catch(async e => {
-      if (e === 'validation_failed') {
+      if (e.message === 'validation_failed') {
         await invalidDataAlert()
       } else {
         await errorAlert(e)
