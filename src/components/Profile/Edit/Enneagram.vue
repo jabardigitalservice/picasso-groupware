@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import { populateProfileDataFields, onDevelopmentAlert } from './utils'
-import { PROFILE_DETAIL_TYPE } from '../../../api'
+import { PROFILE_DETAIL_TYPE, populateProfileDataFields, onDevelopmentAlert } from './utils'
+
 export default {
   components: {
     FormInputFile: () => import('@/components/Form/InputFile')

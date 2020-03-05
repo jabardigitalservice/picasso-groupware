@@ -38,8 +38,7 @@
 </template>
 
 <script>
-import { PROFILE_DETAIL_TYPE, upsertUserProfileDetail } from '../../../api'
-import { populateProfileDataFields, savingAlert, successAlert, errorAlert } from './utils'
+import { PROFILE_DETAIL_TYPE, populateProfileDataFields, validateAndSave } from './utils'
 
 export default {
   components: {
@@ -59,26 +58,9 @@ export default {
   },
   methods: {
     onSave () {
-      savingAlert()
-      this.$refs.validator.validate()
-        .then(valid => {
-          if (valid) {
-            return upsertUserProfileDetail(this.data.id, {
-              [PROFILE_DETAIL_TYPE.EMERGENCY_CONTACT]: this.mEmergencyContactData
-            })
-          }
-          throw new Error('Lengkapi dulu isian yang bertanda bintang')
-        }).then(() => {
-          return this.$store.dispatch('profile-detail/fetchItem', {
-            id: this.data.id,
-            fresh: true,
-            silent: true
-          })
-        }).then(() => {
-          return successAlert()
-        }).catch(e => {
-          return errorAlert(e)
-        })
+      return validateAndSave(this.$refs.validator, this.data.id, {
+        [PROFILE_DETAIL_TYPE.EMERGENCY_CONTACT]: this.mEmergencyContactData
+      })
     }
   },
   watch: {
