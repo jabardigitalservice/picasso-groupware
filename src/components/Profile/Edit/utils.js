@@ -82,9 +82,22 @@ export function populateProfileDataFields (datatype, currentData = {}) {
 }
 
 /**
+ *  Saving alert before save
+ */
+export function savingAlert () {
+  return Swal.fire({
+    title: 'Tunggu sebentar ya',
+    showConfirmButton: false,
+    showCancelButton: false,
+    onBeforeOpen: () => Swal.showLoading()
+  })
+}
+
+/**
  * Success alert on data save
  */
 export function successAlert () {
+  Swal.close()
   return Swal.fire({
     title: 'Behasil',
     text: 'Data kamu berhasil disimpan',
@@ -99,6 +112,7 @@ export function successAlert () {
  * Error alert on data save
  */
 export function errorAlert (e) {
+  Swal.close()
   return Swal.fire({
     title: 'Oops! Terjadi Kesalahan',
     text: 'Data kamu tidak berhasil disimpan',
@@ -106,5 +120,17 @@ export function errorAlert (e) {
     showCancelButton: false,
     showConfirmButton: true,
     confirmButtonText: 'Tutup'
+  })
+}
+
+/**
+ * On development alert
+ */
+export function onDevelopmentAlert () {
+  return Swal.fire({
+    title: 'Fitur ini masih dalam tahap pengembangan',
+    icon: 'info',
+    showConfirmButton: true,
+    confirmButtonText: 'Okay'
   })
 }
