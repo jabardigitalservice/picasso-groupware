@@ -11,7 +11,7 @@
     <transition name="slide-y-fade-transition"
                 mode="out-in">
       <component ref="profileData"
-                 :key="name"
+                 :key="data.updated_at ? data.updated_at.seconds : data.created_at.seconds"
                  :is="sectionComponent"
                  :data="data"
                  :unsaved="!hasUnsavedChanges"
