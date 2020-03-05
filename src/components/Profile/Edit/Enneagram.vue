@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver tag="div">
+  <ValidationObserver tag="div" ref="validator">
     <div class="form-input-container">
       <FormInputFile name="document_enneagram"
                     title="Lampiran Hasil Enneagram (screenshot/file PDF)"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { populateProfileDataFields } from './utils'
+import { populateProfileDataFields, onDevelopmentAlert } from './utils'
 import { PROFILE_DETAIL_TYPE } from '../../../api'
 export default {
   components: {
@@ -54,7 +54,9 @@ export default {
     }
   },
   methods: {
-    onSave () {}
+    onSave () {
+      onDevelopmentAlert()
+    }
   },
   watch: {
     data: {

@@ -172,7 +172,7 @@
 
 <script>
 import toStartCase from 'lodash/startCase'
-import { populateProfileDataFields } from './utils'
+import { populateProfileDataFields, savingAlert, successAlert, errorAlert } from './utils'
 import { PROFILE_DETAIL_TYPE, upsertUserProfileDetail } from '../../../api'
 
 export default {
@@ -221,6 +221,7 @@ export default {
   methods: {
     toStartCase,
     onSave () {
+      savingAlert()
       this.$refs.validator.validate()
         .then(valid => {
           if (valid) {
@@ -232,16 +233,15 @@ export default {
           }
           throw new Error('Lengkapi dulu isian yang bertanda bintang')
         }).then(() => {
-          return this.$swal.fire({
-            title: 'Wow.',
-            icon: 'success'
+          return this.$store.dispatch('profile-detail/fetchItem', {
+            id: this.data.id,
+            fresh: true,
+            silent: true
           })
+        }).then(() => {
+          return successAlert()
         }).catch(e => {
-          return this.$swal.fire({
-            title: 'Hm.',
-            text: e ? e.message : e,
-            icon: 'error'
-          })
+          return errorAlert()
         })
     }
   },

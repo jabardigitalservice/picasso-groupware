@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver tag="div">
+  <ValidationObserver tag="div" ref="validator">
     <div class="form-input-container">
       <FormInput type="text"
                   name="bank_account_name"
@@ -47,8 +47,8 @@
 </template>
 
 <script>
-import { PROFILE_DETAIL_TYPE } from '../../../api'
-import { populateProfileDataFields } from './utils'
+import { PROFILE_DETAIL_TYPE, upsertUserProfileDetail } from '../../../api'
+import { populateProfileDataFields, savingAlert, successAlert, errorAlert } from './utils'
 
 export default {
   components: {
@@ -67,7 +67,28 @@ export default {
     }
   },
   methods: {
-    onSave () {}
+    onSave () {
+      savingAlert()
+      this.$refs.validator.validate()
+        .then(valid => {
+          if (valid) {
+            return upsertUserProfileDetail(this.data.id, {
+              [PROFILE_DETAIL_TYPE.BANK_ACCOUNT]: this.mBankAccountData
+            })
+          }
+          throw new Error('Lengkapi dulu isian yang bertanda bintang')
+        }).then(() => {
+          return this.$store.dispatch('profile-detail/fetchItem', {
+            id: this.data.id,
+            fresh: true,
+            silent: true
+          })
+        }).then(() => {
+          return successAlert()
+        }).catch(e => {
+          return errorAlert(e)
+        })
+    }
   },
   watch: {
     data: {

@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver tag="div">
+  <ValidationObserver tag="div" ref="validator">
     <div class="form-input-container">
       <FormSelect name="latest_education_level"
                   title="Pendidikan Terakhir (Gelar)"
@@ -49,8 +49,8 @@
 
 <script>
 import { getCurrentYear } from '../../../lib/date'
-import { PROFILE_DETAIL_TYPE } from '../../../api'
-import { populateProfileDataFields } from './utils'
+import { PROFILE_DETAIL_TYPE, upsertUserProfileDetail } from '../../../api'
+import { populateProfileDataFields, savingAlert, successAlert, errorAlert } from './utils'
 
 export default {
   components: {
@@ -80,7 +80,28 @@ export default {
       })
   },
   methods: {
-    onSave () {}
+    onSave () {
+      savingAlert()
+      this.$refs.validator.validate()
+        .then(valid => {
+          if (valid) {
+            return upsertUserProfileDetail(this.data.id, {
+              [PROFILE_DETAIL_TYPE.EDUCATION]: this.mEducationData
+            })
+          }
+          throw new Error('Lengkapi dulu isian yang bertanda bintang')
+        }).then(() => {
+          return this.$store.dispatch('profile-detail/fetchItem', {
+            id: this.data.id,
+            fresh: true,
+            silent: true
+          })
+        }).then(() => {
+          return successAlert()
+        }).catch(e => {
+          return errorAlert(e)
+        })
+    }
   },
   watch: {
     data: {
