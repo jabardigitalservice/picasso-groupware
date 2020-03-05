@@ -18,6 +18,10 @@ export const props = {
   customMessages: {
     type: Object,
     default: () => ({})
+  },
+  required: {
+    type: Boolean,
+    default: true
   }
 }
 
@@ -26,5 +30,6 @@ export const components = {
 }
 
 export default {
+  components,
   props
 }
