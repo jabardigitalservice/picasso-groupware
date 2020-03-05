@@ -7,7 +7,7 @@
                   placeholder="Masukkan nama kontak"
                   rules="required"
                   :custom-messages="{required: 'Nama kontak harus diisi'}"
-                  v-model="mData.emergency_contact_name" />
+                  v-model="mEmergencyContactData.name" />
     </div>
     <div class="form-input-container">
       <FormInput type="text"
@@ -17,7 +17,7 @@
                   placeholder="Masukkan hubungan dengan kontak darurat"
                   rules="required"
                   :custom-messages="{required: 'Hubungan dengan kontak darurat harus diisi'}"
-                  v-model="mData.emergency_contact_relation" />
+                  v-model="mEmergencyContactData.relationship" />
     </div>
     <div class="form-input-container">
       <FormInput type="text"
@@ -26,7 +26,7 @@
                   placeholder="Masukkan nomor kontak"
                   rules="required"
                   :custom-messages="{required: 'Nomor kontak harus diisi'}"
-                  v-model="mData.emergency_contact_number" />
+                  v-model="mEmergencyContactData.number" />
     </div>
     <div class="flex flex-row justify-end items-center">
       <button class="button bg-brand-green text-white"
@@ -38,15 +38,39 @@
 </template>
 
 <script>
-import editMixin from './edit-mixin'
+import { PROFILE_DETAIL_TYPE } from '../../../api'
+import { populateProfileDataFields } from './utils'
 
 export default {
-  mixins: [editMixin],
   components: {
     FormInput: () => import('@/components/Form/Input')
   },
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
+  data () {
+    return {
+      hasSetRequiredFields: false,
+      mEmergencyContactData: {}
+    }
+  },
   methods: {
     onSave () {}
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler: function (obj) {
+        if (!this.hasSetRequiredFields) {
+          const { EMERGENCY_CONTACT } = PROFILE_DETAIL_TYPE
+          this.mEmergencyContactData = populateProfileDataFields(EMERGENCY_CONTACT, obj[EMERGENCY_CONTACT])
+          this.hasSetRequiredFields = true
+        }
+      }
+    }
   }
 }
 </script>
