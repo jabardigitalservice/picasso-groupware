@@ -24,3 +24,7 @@ export function formatTime (date, formatStr = 'p') {
     locale: id
   })
 }
+
+export function getCurrentYear () {
+  return new Date().getFullYear()
+}

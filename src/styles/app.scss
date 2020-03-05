@@ -1,8 +1,14 @@
 @import "~tailwindcss/base";
 @import "~tailwindcss/components";
 @import "~tailwindcss/utilities";
+@import "./elements/transitions";
+@import "./elements/form";
+@import "./elements//button";
 
-@import 'elements/transitions';
+html {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
 
 body {
   background-color: #F2F5F7;
@@ -15,6 +21,12 @@ body.loading {
 
 .no-pull-refresh {
   overscroll-behavior-y: none;
+}
+
+button {
+  &:active {
+    outline: none;
+  }
 }
 
 a.router-link-exact-active {

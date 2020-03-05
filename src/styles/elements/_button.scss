@@ -1,0 +1,13 @@
+.button {
+  @apply px-6 py-2 
+  rounded-full  
+  font-bold
+  text-sm 
+  uppercase 
+  tracking-widest 
+  shadow-lg;
+
+  &[disabled] {
+    @apply opacity-50 cursor-not-allowed;
+  }
+}
