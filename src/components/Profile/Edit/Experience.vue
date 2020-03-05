@@ -7,17 +7,17 @@
                   rules="required"
                   prompt="Pilih salah satu opsi di bawah ini"
                   :custom-messages="{required: 'Informasi ini harus diisi'}"
-                  v-model="hasPreviousJob" />
+                  v-model="mPreviousJobData.has_previous_job" />
     </div>
     <transition name="slide-y-fade-transition">
-      <div v-if="hasPreviousJob === 'Ya'">
+      <div v-if="mPreviousJobData.has_previous_job === 'Ya'">
         <div class="form-input-container">
           <FormInput :required="false"
                       type="text"
                       name="latest_job_company"
                       title="Nama Perusahaan Terakhir"
                       placeholder="Masukkan nama perusahaan tempat terakhir bekerja"
-                      v-model="mData.latest_job_company" />
+                      v-model="mPreviousJobData.company" />
         </div>
         <div class="form-input-container">
           <FormInput :required="false"
@@ -25,7 +25,7 @@
                       name="latest_job_position"
                       title="Posisi di Perusahaan Terakhir"
                       placeholder="Masukkan nama posisi"
-                      v-model="mData.latest_job_position" />
+                      v-model="mPreviousJobData.position" />
         </div>
         <div class="form-input-container">
           <FormInput :required="false"
@@ -34,7 +34,7 @@
                       title="Lama Bekerja di Perusahaan Terakhir"
                       subtitle="Contoh: X tahun Y bulan atau Z bulan"
                       placeholder="0 tahun 0 bulan"
-                      v-model="mData.latest_job_length" />
+                      v-model="mPreviousJobData.length" />
         </div>
         <div class="form-input-container">
           <FormInput :required="false"
@@ -42,7 +42,7 @@
                       name="latest_job_salary"
                       title="Gaji di Perusahaan Terakhir"
                       placeholder="Masukkan gaji di perusahaan terakhir"
-                      v-model="mData.latest_job_salary" />
+                      v-model="mPreviousJobData.salary" />
         </div>
       </div>
     </transition>
@@ -56,21 +56,40 @@
 </template>
 
 <script>
-import editMixin from './edit-mixin'
+import { PROFILE_DETAIL_TYPE } from '../../../api'
+import { populateProfileDataFields } from './utils'
 
 export default {
-  mixins: [editMixin],
   components: {
     FormInput: () => import('@/components/Form/Input'),
     FormSelect: () => import('@/components/Form/Select')
   },
+  props: {
+    data: {
+      type: Object
+    }
+  },
   data () {
     return {
-      hasPreviousJob: null
+      mPreviousJobData: {},
+
+      hasSetRequiredFields: false
     }
   },
   methods: {
     onSave () {}
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler: function (obj) {
+        if (!this.hasSetRequiredFields) {
+          const { PREVIOUS_JOB } = PROFILE_DETAIL_TYPE
+          this.mPreviousJobData = populateProfileDataFields(PREVIOUS_JOB, obj[PREVIOUS_JOB])
+          this.hasSetRequiredFields = true
+        }
+      }
+    }
   }
 }
 </script>
