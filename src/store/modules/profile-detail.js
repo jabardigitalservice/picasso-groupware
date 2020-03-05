@@ -38,12 +38,14 @@ export const mutations = {
 
 // actions
 export const actions = {
-  fetchItem ({ state, commit }, { id, fresh = true } = {}) {
+  fetchItem ({ state, commit }, { id, fresh = true, silent = false } = {}) {
     if (!id) {
       return Promise.reject(new ReferenceError('Vuex:profile-detail:fetchItem : id must be supplied'))
     }
     if (!state.item || fresh) {
-      commit(types.PROFILE_DETAIL_INIT)
+      if (!silent) {
+        commit(types.PROFILE_DETAIL_INIT)
+      }
       return getUserById(id)
         .then(data => {
           commit(types.PROFILE_DETAIL_LOADED, { item: data })
