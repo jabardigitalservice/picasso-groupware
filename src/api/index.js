@@ -1,6 +1,6 @@
 import _values from 'lodash/values'
 
-import { db, storage } from '@/lib/firebase'
+import { db, storage, Timestamp } from '@/lib/firebase'
 
 import { PROFILE_DETAIL_TYPE, DOCUMENT_TYPE } from '../components/Profile/Edit/utils'
 
@@ -74,7 +74,10 @@ export function upsertUserProfileDetail (userId, data) {
   return db
     .collection(COLLECTION.USERS)
     .doc(userId)
-    .update(data)
+    .update({
+      updated_at: Timestamp.now(),
+      ...data
+    })
 }
 
 /**
