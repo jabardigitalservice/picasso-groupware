@@ -7,7 +7,7 @@
                   rules="required"
                   prompt="Pilih salah satu opsi di bawah ini"
                   :custom-messages="{required: 'Gelar pendidikan terakhir harus diisi'}"
-                  v-model="mData.latest_education_level" />
+                  v-model="mEducationData.level" />
     </div>
     <div class="form-input-container">
       <FormInput type="text"
@@ -16,7 +16,7 @@
                   placeholder="Masukkan nama institusi pendidikan"
                   rules="required"
                   :custom-messages="{required: 'Nama institusi pendidikan harus diisi'}"
-                  v-model="mData.latest_education_institution" />
+                  v-model="mEducationData.institution" />
     </div>
     <div class="form-input-container">
       <FormInput type="text"
@@ -25,7 +25,7 @@
                   placeholder="Masukkan nama jurusan"
                   rules="required"
                   :custom-messages="{required: 'Nama jurusan harus diisi'}"
-                  v-model="mData.latest_education_major" />
+                  v-model="mEducationData.major" />
     </div>
     <div class="form-input-container">
       <FormInput type="number"
@@ -36,7 +36,7 @@
                   :max="4"
                   :rules="`required|length:4|max_value:${currentYear}`"
                   :custom-messages="{required: 'Tahun lulus harus diisi', length: 'Tahun terdiri dari 4 angka', max_value: 'Tahun lulus tidak dapat melebihi tahun ini'}"
-                  v-model="mData.latest_education_end_date" />
+                  v-model="mEducationData.end_date" />
     </div>
     <div class="flex flex-row justify-end items-center">
       <button class="button bg-brand-green text-white"
@@ -49,19 +49,27 @@
 
 <script>
 import { getCurrentYear } from '../../../lib/date'
-import editMixin from './edit-mixin'
+import { PROFILE_DETAIL_TYPE } from '../../../api'
+import { populateProfileDataFields } from './utils'
 
 export default {
-  mixins: [editMixin],
   components: {
     FormInput: () => import('@/components/Form/Input'),
     FormSelect: () => import('@/components/Form/Select')
+  },
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
   },
   data () {
     return {
       choices: {
         educations: []
       },
+      hasSetRequiredFields: false,
+      mEducationData: {},
       currentYear: getCurrentYear()
     }
   },
@@ -73,6 +81,18 @@ export default {
   },
   methods: {
     onSave () {}
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler: function (obj) {
+        if (!this.hasSetRequiredFields) {
+          const { EDUCATION } = PROFILE_DETAIL_TYPE
+          this.mEducationData = populateProfileDataFields(EDUCATION, obj[EDUCATION])
+          this.hasSetRequiredFields = true
+        }
+      }
+    }
   }
 }
 </script>
