@@ -27,7 +27,7 @@
             {{error}}
           </div>
         </template>
-        <template #default>
+        <template #default="{value: userData}">
           <div class="overflow-visible lg:overflow-hidden max-w-5xl mx-auto rounded-none lg:rounded-lg lg:shadow lg:flex lg:flex-row lg:justify-start lg:items-stretch">
             <ProfileSectionList :sections="profileSections"
                                 :active="activeProfileSectionName"
@@ -35,7 +35,8 @@
                                 style="flex: 1 1 25%;"
                                 @click="setActiveSection"/>
             <br class="lg:hidden">
-            <ProfileSectionDetail :name="activeProfileSectionName"
+            <ProfileSectionDetail :data="userData"
+                                  :name="activeProfileSectionName"
                                   class="overflow-hidden rounded-lg lg:rounded-none bg-white shadow lg:shadow-none"
                                   style="flex: 1 1 60%;"/>
           </div>
@@ -76,8 +77,7 @@ export default {
         'Enneagram'
       ],
       activeProfileSectionName: 'Personal',
-      fetchUserData: null,
-      userData: {}
+      fetchUserData: null
     }
   },
 
@@ -95,9 +95,6 @@ export default {
         if (v) {
           this.fetchUserData = this.$store.dispatch('profile-detail/fetchItem', {
             id: v
-          }).then(userData => {
-            this.userData = userData ? JSON.parse(JSON.stringify(userData)) : {}
-            return userData
           })
         }
       }
