@@ -82,6 +82,8 @@ export default {
     onSave () {
       return validateAndSave(this.$refs.validator, this.data.id, {
         [PROFILE_DETAIL_TYPE.EDUCATION]: this.mEducationData
+      }).then(() => {
+        this.$emit('reload:profile')
       })
     }
   },

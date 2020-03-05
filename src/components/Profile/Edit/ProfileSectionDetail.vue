@@ -13,7 +13,8 @@
       <component :key="name"
                  :is="sectionComponent"
                  :data="data"
-                 class="p-8" />
+                 class="p-8"
+                 @reload:profile="onReloadProfile" />
     </transition>
   </div>
 </template>
@@ -36,6 +37,15 @@ export default {
         return () => import(`./${this.name.replace(' ', '')}.vue`)
       }
       return null
+    }
+  },
+  methods: {
+    onReloadProfile () {
+      this.$store.dispatch('profile-detail/fetchItem', {
+        id: this.data.id,
+        fresh: true,
+        silent: true
+      })
     }
   }
 }

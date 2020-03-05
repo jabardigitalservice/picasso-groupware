@@ -225,6 +225,8 @@ export default {
         [PERSONAL]: this.mPersonalData,
         [ASSIGNMENT]: this.mAssignmentData,
         [DOCUMENTS]: this.mDocumentsData
+      }).then(() => {
+        this.$emit('reload:profile')
       })
     }
   },

@@ -60,6 +60,8 @@ export default {
     onSave () {
       return validateAndSave(this.$refs.validator, this.data.id, {
         [PROFILE_DETAIL_TYPE.EMERGENCY_CONTACT]: this.mEmergencyContactData
+      }).then(() => {
+        this.$emit('reload:profile')
       })
     }
   },

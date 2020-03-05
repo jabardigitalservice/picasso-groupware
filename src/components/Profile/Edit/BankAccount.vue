@@ -69,6 +69,8 @@ export default {
     onSave () {
       return validateAndSave(this.$refs.validator, this.data.id, {
         [PROFILE_DETAIL_TYPE.BANK_ACCOUNT]: this.mBankAccountData
+      }).then(() => {
+        this.$emit('reload:profile')
       })
     }
   },
