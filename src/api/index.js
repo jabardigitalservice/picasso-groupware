@@ -1,22 +1,8 @@
+import _values from 'lodash/values'
+
 import { db, storage } from '@/lib/firebase'
 
-/**
- * Basic handler when userId is not defined as function param
- * @param {string} caller - function name
- * @returns {Promise}
- */
-function handleNoUserId (caller) {
-  return Promise.reject(new ReferenceError(`${caller}: id must be supplied'`))
-}
-
-/**
- * Get employee storage folder
- * @param {string|number} userId
- * @returns {StorageRef}
- */
-function getEmployeeStorageFolder (userId) {
-  return storage.child(`${STORAGE.EMPLOYEE_DOCUMENTS}/${userId}`)
-}
+import { PROFILE_DETAIL_TYPE, DOCUMENT_TYPE } from '../components/Profile/Edit/utils'
 
 /**
  *  @enum {string} - firebase storage folder
@@ -33,38 +19,22 @@ export const COLLECTION = {
 }
 
 /**
- *  @enum {string} - types of profile detail
-*/
-export const PROFILE_DETAIL_TYPE = {
-  PERSONAL: 'personal',
-  DOCUMENTS: 'docs',
-  ASSIGNMENT: 'assignment',
-  EDUCATION: 'education',
-  PREVIOUS_JOB: 'previous_job',
-  BANK_ACCOUNT: 'bank_account',
-  EMERGENCY_CONTACT: 'emergency_contact',
-  ENNEAGRAM: 'enneagram'
-}
-
-/**
- *  @enum {string} - user document type
-*/
-export const DOCUMENT_TYPE = {
-  KTP: 'ktp',
-  NPWP: 'npwp',
-  KARTU_KELUARGA: 'kartu_keluarga'
-}
-
-/**
- * Convert enums to array
- * @param {object} enums
- * @returns {array}
+ * Get employee storage folder
+ * @param {string|number} userId
+ * @returns {StorageRef}
  */
-export function getEnumeratedValues (enums) {
-  if (enums && typeof enums === 'object') {
-    return Object.entries(enums).map(([_, value]) => value)
-  }
-  throw new TypeError(`getEnumeratedValues: either enums is null or not typeof object`)
+function getEmployeeStorageFolder (userId) {
+  return storage.child(`${STORAGE.EMPLOYEE_DOCUMENTS}/${userId}`)
+}
+
+// =================================================================================
+/**
+ * Basic handler when userId is not defined as function param
+ * @param {string} caller - function name
+ * @returns {Promise}
+ */
+function handleNoUserId (caller) {
+  return Promise.reject(new ReferenceError(`${caller}: id must be supplied'`))
 }
 
 /**
@@ -96,8 +66,7 @@ export function upsertUserProfileDetail (userId, data) {
   if (!userId) return handleNoUserId(`updateUserPersonalData`)
   if (!data) return Promise.resolve('noop')
 
-  // prevent overwrite
-  const allowedFields = getEnumeratedValues(PROFILE_DETAIL_TYPE)
+  const allowedFields = _values(PROFILE_DETAIL_TYPE)
   const shouldProceed = Object.keys(data).every(key => allowedFields.includes(key))
   if (!shouldProceed) {
     return Promise.reject(new ReferenceError(`updateUserProfileDetail: updating is only allowed for these keys -> ${allowedFields.join(', ')}`))
@@ -119,7 +88,7 @@ export function upsertUserDocument (userId, documentType, file, onProgress) {
   if (!userId) return handleNoUserId('upsertUserDocument')
   if (!file) return Promise.resolve('noop')
 
-  const allowedTypes = getEnumeratedValues(DOCUMENT_TYPE)
+  const allowedTypes = _values(DOCUMENT_TYPE)
   const shouldProceed = allowedTypes.includes(documentType)
   if (!shouldProceed) {
     return Promise.reject(new ReferenceError(`upsertUserDocument: document type must be one of ${allowedTypes.join(', ')}`))
