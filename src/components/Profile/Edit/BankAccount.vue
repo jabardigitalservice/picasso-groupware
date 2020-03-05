@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver tag="div">
+  <ValidationObserver tag="div" ref="validator">
     <div class="form-input-container">
       <FormInput type="text"
                   name="bank_account_name"
@@ -7,7 +7,7 @@
                   placeholder="Masukkan nama bank"
                   rules="required"
                   :custom-messages="{required: 'Nama bank harus diisi'}"
-                  v-model="mData.bank_account_name" />
+                  v-model="mBankAccountData.bank_name" />
     </div>
     <div class="form-input-container">
       <FormInput type="text"
@@ -16,7 +16,7 @@
                   placeholder="Masukkan nama kantor cabang bank"
                   rules="required"
                   :custom-messages="{required: 'Nama cabang harus diisi'}"
-                  v-model="mData.bank_account_branch" />
+                  v-model="mBankAccountData.bank_branch" />
     </div>
     <div class="form-input-container">
       <FormInput type="number"
@@ -25,7 +25,7 @@
                   placeholder="Masukkan nomor rekening"
                   rules="required|numeric"
                   :custom-messages="{required: 'Nomor rekening harus diisi', numeric: 'Nomor rekening hanya terdiri dari angka'}"
-                  v-model="mData.bank_account_number" />
+                  v-model="mBankAccountData.account_number" />
     </div>
     <div class="form-input-container">
       <FormInput type="text"
@@ -35,7 +35,7 @@
                   placeholder="Masukkan nama pemilik rekening"
                   rules="required"
                   :custom-messages="{required: 'Nama pemilik rekening harus diisi'}"
-                  v-model="mData.bank_account_holder" />
+                  v-model="mBankAccountData.account_holder" />
     </div>
     <div class="flex flex-row justify-end items-center">
       <button class="button bg-brand-green text-white"
@@ -47,15 +47,60 @@
 </template>
 
 <script>
-import editMixin from './edit-mixin'
+import { PROFILE_DETAIL_TYPE, upsertUserProfileDetail } from '../../../api'
+import { populateProfileDataFields, savingAlert, successAlert, errorAlert } from './utils'
 
 export default {
-  mixins: [editMixin],
   components: {
     FormInput: () => import('@/components/Form/Input')
   },
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
+  data () {
+    return {
+      hasSetRequiredFields: false,
+      mBankAccountData: {}
+    }
+  },
   methods: {
-    onSave () {}
+    onSave () {
+      savingAlert()
+      this.$refs.validator.validate()
+        .then(valid => {
+          if (valid) {
+            return upsertUserProfileDetail(this.data.id, {
+              [PROFILE_DETAIL_TYPE.BANK_ACCOUNT]: this.mBankAccountData
+            })
+          }
+          throw new Error('Lengkapi dulu isian yang bertanda bintang')
+        }).then(() => {
+          return this.$store.dispatch('profile-detail/fetchItem', {
+            id: this.data.id,
+            fresh: true,
+            silent: true
+          })
+        }).then(() => {
+          return successAlert()
+        }).catch(e => {
+          return errorAlert(e)
+        })
+    }
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler: function (obj) {
+        if (!this.hasSetRequiredFields) {
+          const { BANK_ACCOUNT } = PROFILE_DETAIL_TYPE
+          this.mBankAccountData = populateProfileDataFields(BANK_ACCOUNT, obj[BANK_ACCOUNT])
+          this.hasSetRequiredFields = true
+        }
+      }
+    }
   }
 }
 </script>

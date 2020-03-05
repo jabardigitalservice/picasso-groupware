@@ -1,3 +1,5 @@
+// TODO: remove this mixin, since only props is needed
+
 export default {
   props: {
     data: {

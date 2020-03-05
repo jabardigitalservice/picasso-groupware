@@ -5,7 +5,8 @@
                       tag="div">
     <FormInputHeader :label-for="name"
                       :title="title"
-                      :subtitle="subtitle">
+                      :subtitle="subtitle"
+                      :required="required">
       <template #title>
         <slot name="title"></slot>
       </template>
@@ -53,7 +54,7 @@ export default {
   },
   methods: {
     onInput (e) {
-      this.$emit('input', e.target.value)
+      this.$emit('input', e.target.value || '')
     }
   }
 }

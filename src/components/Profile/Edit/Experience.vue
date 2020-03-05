@@ -1,43 +1,51 @@
 <template>
-  <ValidationObserver tag="div"
-                      >
+  <ValidationObserver tag="div" ref="validator">
     <div class="form-input-container">
-      <FormInput type="text"
-                  name="latest_job_company"
-                  title="Nama Perusahaan Terakhir"
-                  placeholder="Masukkan nama perusahaan tempat terakhir bekerja"
+      <FormSelect name="has_previous_job"
+                  title="Pernah bekerja sebelumnya?"
+                  :options="['Ya', 'Tidak']"
                   rules="required"
-                  :custom-messages="{required: 'Nama perusahaan harus diisi'}"
-                  v-model="mData.latest_job_company" />
+                  prompt="Pilih salah satu opsi di bawah ini"
+                  :custom-messages="{required: 'Informasi ini harus diisi'}"
+                  v-model="mPreviousJobData.has_previous_job" />
     </div>
-    <div class="form-input-container">
-      <FormInput type="text"
-                  name="latest_job_position"
-                  title="Posisi Terakhir"
-                  placeholder="Masukkan nama posisi"
-                  rules="required"
-                  :custom-messages="{required: 'Nama posisi harus diisi'}"
-                  v-model="mData.latest_job_position" />
-    </div>
-    <div class="form-input-container">
-      <FormInput type="text"
-                  name="latest_job_length"
-                  title="Lama Bekerja di Perusahaan Terakhir"
-                  subtitle="Contoh: X tahun Y bulan atau Z bulan"
-                  placeholder="0 tahun 0 bulan"
-                  rules="required"
-                  :custom-messages="{required: 'Kolom ini harus diisi'}"
-                  v-model="mData.latest_job_length" />
-    </div>
-    <div class="form-input-container">
-      <FormInput type="number"
-                  name="latest_job_salary"
-                  title="Gaji Terakhir"
-                  placeholder="Masukkan gaji terakhir"
-                  rules="required"
-                  :custom-messages="{required: 'Gaji terakhir harus diisi'}"
-                  v-model="mData.latest_job_salary" />
-    </div>
+    <transition name="slide-y-fade-transition">
+      <div v-if="mPreviousJobData.has_previous_job === 'Ya'">
+        <div class="form-input-container">
+          <FormInput :required="false"
+                      type="text"
+                      name="latest_job_company"
+                      title="Nama Perusahaan Terakhir"
+                      placeholder="Masukkan nama perusahaan tempat terakhir bekerja"
+                      v-model="mPreviousJobData.company" />
+        </div>
+        <div class="form-input-container">
+          <FormInput :required="false"
+                      type="text"
+                      name="latest_job_position"
+                      title="Posisi di Perusahaan Terakhir"
+                      placeholder="Masukkan nama posisi"
+                      v-model="mPreviousJobData.position" />
+        </div>
+        <div class="form-input-container">
+          <FormInput :required="false"
+                      type="text"
+                      name="latest_job_length"
+                      title="Lama Bekerja di Perusahaan Terakhir"
+                      subtitle="Contoh: X tahun Y bulan atau Z bulan"
+                      placeholder="0 tahun 0 bulan"
+                      v-model="mPreviousJobData.length" />
+        </div>
+        <div class="form-input-container">
+          <FormInput :required="false"
+                      type="number"
+                      name="latest_job_salary"
+                      title="Gaji di Perusahaan Terakhir"
+                      placeholder="Masukkan gaji di perusahaan terakhir"
+                      v-model="mPreviousJobData.salary" />
+        </div>
+      </div>
+    </transition>
     <div class="flex flex-row justify-end items-center">
       <button class="button bg-brand-green text-white"
               @click="onSave">
@@ -48,15 +56,61 @@
 </template>
 
 <script>
-import editMixin from './edit-mixin'
+import { PROFILE_DETAIL_TYPE, upsertUserProfileDetail } from '../../../api'
+import { populateProfileDataFields, savingAlert, successAlert, errorAlert } from './utils'
 
 export default {
-  mixins: [editMixin],
   components: {
-    FormInput: () => import('@/components/Form/Input')
+    FormInput: () => import('@/components/Form/Input'),
+    FormSelect: () => import('@/components/Form/Select')
+  },
+  props: {
+    data: {
+      type: Object
+    }
+  },
+  data () {
+    return {
+      mPreviousJobData: {},
+
+      hasSetRequiredFields: false
+    }
   },
   methods: {
-    onSave () {}
+    onSave () {
+      savingAlert()
+      this.$refs.validator.validate()
+        .then(valid => {
+          if (valid) {
+            return upsertUserProfileDetail(this.data.id, {
+              [PROFILE_DETAIL_TYPE.PREVIOUS_JOB]: this.mPreviousJobData
+            })
+          }
+          throw new Error('Lengkapi dulu isian yang bertanda bintang')
+        }).then(() => {
+          return this.$store.dispatch('profile-detail/fetchItem', {
+            id: this.data.id,
+            fresh: true,
+            silent: true
+          })
+        }).then(() => {
+          return successAlert()
+        }).catch(e => {
+          return errorAlert(e)
+        })
+    }
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler: function (obj) {
+        if (!this.hasSetRequiredFields) {
+          const { PREVIOUS_JOB } = PROFILE_DETAIL_TYPE
+          this.mPreviousJobData = populateProfileDataFields(PREVIOUS_JOB, obj[PREVIOUS_JOB])
+          this.hasSetRequiredFields = true
+        }
+      }
+    }
   }
 }
 </script>

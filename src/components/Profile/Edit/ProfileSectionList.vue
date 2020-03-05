@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <h3 class="p-8 font-black text-gray-900 text-2xl bg-white lg:bg-transparent">
+    <h3 class="p-8 font-black text-gray-900 text-2xl bg-white rounded-tr-lg rounded-tl-lg lg:bg-transparent">
       Lengkapi Profil
     </h3>
     <ul class="profile-section-list">

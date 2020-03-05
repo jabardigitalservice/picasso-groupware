@@ -5,7 +5,8 @@
                       tag="div">
     <FormInputHeader :label-for="name"
                       :title="title"
-                      :subtitle="subtitle">
+                      :subtitle="subtitle"
+                      :required="required">
       <template #title>
         <slot name="title"></slot>
       </template>
