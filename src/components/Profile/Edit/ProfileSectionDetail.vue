@@ -12,7 +12,7 @@
                 mode="out-in">
       <component :key="name"
                  :is="sectionComponent"
-                 :data="{}"
+                 :data="data"
                  class="p-8" />
     </transition>
   </div>
@@ -23,6 +23,11 @@ export default {
   props: {
     name: {
       type: String
+    },
+    data: {
+      type: Object,
+      required: true,
+      default: () => ({})
     }
   },
   computed: {
