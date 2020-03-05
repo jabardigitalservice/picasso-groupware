@@ -82,17 +82,6 @@ export function populateProfileDataFields (datatype, currentData = {}) {
 }
 
 /**
- * Incomplete data alert before save
- */
-export function incompleteDataAlert () {
-  return Swal.fire({
-    title: 'Oops!',
-    text: 'Ada isian yang belum dilengkapi',
-    icon: 'info'
-  })
-}
-
-/**
  * Success alert on data save
  */
 export function successAlert () {
@@ -109,7 +98,7 @@ export function successAlert () {
 /**
  * Error alert on data save
  */
-export function errorAlert () {
+export function errorAlert (e) {
   return Swal.fire({
     title: 'Oops! Terjadi Kesalahan',
     text: 'Data kamu tidak berhasil disimpan',
