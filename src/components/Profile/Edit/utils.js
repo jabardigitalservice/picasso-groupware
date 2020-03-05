@@ -24,7 +24,7 @@ export const profileObjectReference = {
     'has_previous_job',
     'company',
     'position',
-    'end_date',
+    'length',
     'salary'
   ],
   [PROFILE_DETAIL_TYPE.EDUCATION]: [
