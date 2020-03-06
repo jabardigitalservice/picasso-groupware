@@ -1,3 +1,5 @@
+import FormInputHeader from './InputHeader.vue'
+
 export const props = {
   name: {
     type: String,
@@ -26,7 +28,7 @@ export const props = {
 }
 
 export const components = {
-  FormInputHeader: () => import('./InputHeader.vue')
+  FormInputHeader
 }
 
 export default {
