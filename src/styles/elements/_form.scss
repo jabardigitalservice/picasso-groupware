@@ -62,20 +62,11 @@
       rounded-br
       shadow-md
       text-sm text-white font-bold 
-      uppercase tracking-wider;
+      uppercase tracking-wider
+      bg-gray-600;
 
-      &[role="add"] {
-        @apply bg-gray-600;
-        &:hover {
-          @apply bg-gray-700;
-        }
-      }
-
-      &[role="remove"] {
-        @apply bg-red-700;
-        &:hover {
-          @apply bg-red-500;
-        }
+      &:hover {
+        @apply bg-gray-700;
       }
     }
 
@@ -93,6 +84,39 @@
         &:hover {
           @apply underline;
         }
+      }
+    }
+  }
+}
+
+.form-input {
+  &__file-preview {
+    @apply my-4 flex flex-col justify-start items-start;
+    @screen md {
+      @apply flex-row;
+    }
+    &__image,
+    &__icon {
+      font-style: normal;
+      @apply cursor-pointer
+      inline-block w-32 h-32 rounded-lg 
+      flex flex-row justify-center items-center;
+
+      &:hover {
+        @apply opacity-75;
+      }
+    }
+
+    &__image {
+      @apply object-cover object-left-top;
+    }
+
+    &__icon {
+      @apply border border-solid border-blue-500
+      text-2xl text-blue-500 font-bold
+      bg-blue-100;
+      &:hover {
+        @apply bg-white border-green-500;
       }
     }
   }
