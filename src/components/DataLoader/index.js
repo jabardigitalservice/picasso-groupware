@@ -29,7 +29,7 @@ export default {
         return prms
           .then(v => {
             if (!this.discardValue) {
-              this.value = JSON.parse(JSON.stringify(v))
+              this.value = v
             }
           }).catch(e => {
             this.error = e
