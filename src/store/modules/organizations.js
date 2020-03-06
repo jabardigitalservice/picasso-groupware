@@ -27,7 +27,7 @@ export const actions = {
         setTimeout(() => {
           commit(SET_EDUCATIONS, educations)
           resolve(state.educations)
-        }, 2000)
+        }, 0)
       })
     } else {
       return state.educations
@@ -73,7 +73,7 @@ export const actions = {
         setTimeout(() => {
           commit(SET_ORGANIZATION_JOBS, jobs)
           resolve(state.jobs)
-        }, 2000)
+        }, 0)
       })
     } else {
       return Promise.resolve(state.jobs)

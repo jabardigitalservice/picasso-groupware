@@ -33,11 +33,6 @@ export default {
   methods: {
     isSectionActive (name) {
       return name === this.active
-    },
-    getRandomBrandColor () {
-      const colors = ['blue', 'green', 'yellow']
-      const index = Math.floor(Math.random() * colors.length)
-      return colors[index]
     }
   }
 }

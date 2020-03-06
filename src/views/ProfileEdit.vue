@@ -47,10 +47,13 @@
 </template>
 
 <script>
+import _startCase from 'lodash/startCase'
+import _snakeCase from 'lodash/snakeCase'
 import { mapState } from 'vuex'
 import { formatDateTimeShort, formatDateLong } from '@/lib/date'
 import { ContentLoader } from 'vue-content-loader'
 import { db } from '@/lib/firebase'
+import { PROFILE_DETAIL_IS_DIRTY } from '../store/mutation-types'
 import DataLoader from '../components/DataLoader'
 
 export default {
@@ -76,12 +79,14 @@ export default {
         'Emergency Contact',
         'Enneagram'
       ],
-      activeProfileSectionName: 'Personal',
       fetchUserData: null
     }
   },
 
   computed: {
+    activeProfileSectionName () {
+      return _startCase(this.$route.params.id || '')
+    },
     ...mapState('auth', {
       id: state => state.user ? state.user.id : null
     }),
@@ -108,7 +113,10 @@ export default {
     formatDateTimeShort,
     formatDateLong,
     setActiveSection (name) {
-      this.activeProfileSectionName = name
+      if (name === this.activeProfileSectionName) return
+      this.$router.push({
+        path: `/profile/edit/${_snakeCase(name)}`
+      })
     },
     async submit () {
       await db
@@ -120,6 +128,26 @@ export default {
         })
 
       await this.$router.push('/profile')
+    }
+  },
+
+  beforeRouteUpdate (to, from, next) {
+    if (this.$store.state['profile-detail'].hasUnsavedChanges) {
+      this.$swal.fire({
+        title: 'Apa kamu yakin?',
+        text: 'Ada perubahan data yang belum kamu simpan di bagian ini',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Keluar',
+        confirmButtonText: 'Ya, abaikan perubahan data'
+      }).then(({ value }) => {
+        if (value) {
+          this.$store.commit(`profile-detail/${PROFILE_DETAIL_IS_DIRTY}`, false)
+          next()
+        }
+      })
+    } else {
+      next()
     }
   }
 }

@@ -1,8 +1,38 @@
 import Swal from 'sweetalert2'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
+import _values from 'lodash/values'
+import _debounce from 'lodash/debounce'
+import _isMatch from 'lodash/isMatch'
+import _cloneDeep from 'lodash/cloneDeep'
+// import _debounce from 'lodash/debounce'
+// import _isEqual from 'lodash/isEqual'
 
-import { PROFILE_DETAIL_TYPE, getEnumeratedValues } from '../../../api'
+import { upsertUserProfileDetail } from '../../../api'
+import { PROFILE_DETAIL_IS_DIRTY } from '../../../store/mutation-types'
+
+/**
+ *  @enum {string} - types of profile detail
+*/
+export const PROFILE_DETAIL_TYPE = {
+  PERSONAL: 'personal',
+  DOCUMENTS: 'docs',
+  ASSIGNMENT: 'assignment',
+  EDUCATION: 'education',
+  PREVIOUS_JOB: 'previous_job',
+  BANK_ACCOUNT: 'bank_account',
+  EMERGENCY_CONTACT: 'emergency_contact',
+  ENNEAGRAM: 'enneagram'
+}
+
+/**
+ *  @enum {string} - user document type
+*/
+export const DOCUMENT_TYPE = {
+  KTP: 'ktp',
+  NPWP: 'npwp',
+  KARTU_KELUARGA: 'kartu_keluarga'
+}
 
 /**
  *  Required fields for each profile detail data type.
@@ -65,13 +95,13 @@ export const profileObjectReference = {
  */
 export function populateProfileDataFields (datatype, currentData = {}) {
   if (!datatype) throw new ReferenceError(`populateProfileDataFields: datatype must be supplied`)
-  const allowed = getEnumeratedValues(PROFILE_DETAIL_TYPE)
+  const allowed = _values(PROFILE_DETAIL_TYPE)
   if (!allowed.includes(datatype)) throw new ReferenceError(`populateProfileDataFields: datatype must be one of ${allowed.join(', ')}`)
 
   if (!currentData || typeof currentData !== 'object') throw new TypeError(`populateProfileDataFields: either currentData is null or not typeof object`)
 
   const refs = profileObjectReference[datatype]
-  const mCurrentData = JSON.parse(JSON.stringify(currentData))
+  const mCurrentData = _cloneDeep(currentData)
   refs.forEach(field => {
     const isFieldExist = _get(mCurrentData, field)
     if (!isFieldExist) {
@@ -79,6 +109,31 @@ export function populateProfileDataFields (datatype, currentData = {}) {
     }
   })
   return mCurrentData
+}
+
+export function watchDataChanges (vm, savedData, editedData) {
+  vm.$store.commit(`profile-detail/${PROFILE_DETAIL_IS_DIRTY}`, false)
+  vm.$watch(
+    function () {
+      return editedData
+    },
+    _debounce(function (obj) {
+      const hasUnsavedChanges = !_isMatch(savedData, obj)
+      vm.$store.commit(`profile-detail/${PROFILE_DETAIL_IS_DIRTY}`, hasUnsavedChanges)
+    }, 250),
+    { immediate: false, deep: true }
+  )
+}
+
+/**
+ *  Invalid data alert before save
+ */
+export function invalidDataAlert () {
+  return Swal.fire({
+    title: 'Oops!',
+    text: 'Pastikan data yang kamu isikan sudah lengkap dan sesuai',
+    icon: 'info'
+  })
 }
 
 /**
@@ -97,7 +152,6 @@ export function savingAlert () {
  * Success alert on data save
  */
 export function successAlert () {
-  Swal.close()
   return Swal.fire({
     title: 'Behasil',
     text: 'Data kamu berhasil disimpan',
@@ -112,10 +166,9 @@ export function successAlert () {
  * Error alert on data save
  */
 export function errorAlert (e) {
-  Swal.close()
   return Swal.fire({
     title: 'Oops! Terjadi Kesalahan',
-    text: 'Data kamu tidak berhasil disimpan',
+    text: e || 'Data kamu tidak berhasil disimpan',
     icon: 'error',
     showCancelButton: false,
     showConfirmButton: true,
@@ -133,4 +186,35 @@ export function onDevelopmentAlert () {
     showConfirmButton: true,
     confirmButtonText: 'Okay'
   })
+}
+
+/**
+ * Common save method for all profile data editing
+ * @param {object} validator - instance of VeeValidate.ValidationObserver
+ * @param {string|number} userId
+ * @param {object} data
+ */
+export function validateAndSave (validator, userId, data) {
+  if (!validator || typeof validator.validate !== 'function') {
+    throw new ReferenceError('validateAndSave: validator must be an instance of VeeValidate.ValidationObserver')
+  }
+  savingAlert()
+  return validator.validate()
+    .then(async valid => {
+      if (valid) {
+        await upsertUserProfileDetail(userId, data)
+        await successAlert()
+        return true
+      }
+      throw new ReferenceError('validation_failed')
+    }).catch(async e => {
+      if (e.message === 'validation_failed') {
+        await invalidDataAlert()
+      } else {
+        await errorAlert(e)
+      }
+      return false
+    }).finally(() => {
+      Swal.close()
+    })
 }

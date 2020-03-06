@@ -1,11 +1,15 @@
+import _values from 'lodash/values'
+
 import * as types from '../mutation-types'
 import { getUserById } from '../../api'
+import { PROFILE_DETAIL_TYPE, populateProfileDataFields } from '../../components/Profile/Edit/utils'
 
 // state
 export const state = {
   loading: true,
   item: null,
-  error: false
+  error: false,
+  hasUnsavedChanges: false
 }
 
 // getters
@@ -33,6 +37,10 @@ export const mutations = {
     state.item = null
     state.loading = false
     state.error = true
+  },
+
+  [types.PROFILE_DETAIL_IS_DIRTY] (state, isDirty) {
+    state.hasUnsavedChanges = isDirty
   }
 }
 
@@ -48,6 +56,10 @@ export const actions = {
       }
       return getUserById(id)
         .then(data => {
+          _values(PROFILE_DETAIL_TYPE).forEach(field => {
+            data[field] = data[field] || {}
+            Object.assign(data[field], populateProfileDataFields(field, data[field]))
+          })
           commit(types.PROFILE_DETAIL_LOADED, { item: data })
           return state.item
         })

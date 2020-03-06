@@ -162,6 +162,7 @@
       </div>
       <div class="flex flex-row justify-end items-center">
         <button class="button bg-brand-green text-white"
+                :disabled="$attrs.unsaved"
                 @click="onSave">
           Simpan
         </button>
@@ -171,9 +172,7 @@
 </template>
 
 <script>
-import toStartCase from 'lodash/startCase'
-import { populateProfileDataFields, savingAlert, successAlert, errorAlert } from './utils'
-import { PROFILE_DETAIL_TYPE, upsertUserProfileDetail } from '../../../api'
+import { PROFILE_DETAIL_TYPE, populateProfileDataFields, watchDataChanges, validateAndSave } from './utils'
 
 export default {
   name: 'EditPersonalData',
@@ -213,36 +212,30 @@ export default {
     }
   },
   created () {
+    watchDataChanges(
+      this,
+      this.data,
+      {
+        [PROFILE_DETAIL_TYPE.PERSONAL]: this.mPersonalData,
+        [PROFILE_DETAIL_TYPE.ASSIGNMENT]: this.mAssignmentData,
+        [PROFILE_DETAIL_TYPE.DOCUMENTS]: this.mDocumentsData
+      }
+    )
     this.$store.dispatch('organizations/fetchJobs')
       .then(jobs => {
         this.$set(this.choices, 'jobs', JSON.parse(JSON.stringify(jobs)))
       })
   },
   methods: {
-    toStartCase,
     onSave () {
-      savingAlert()
-      this.$refs.validator.validate()
-        .then(valid => {
-          if (valid) {
-            return upsertUserProfileDetail(this.data.id, {
-              [PROFILE_DETAIL_TYPE.PERSONAL]: this.mPersonalData,
-              [PROFILE_DETAIL_TYPE.ASSIGNMENT]: this.mAssignmentData,
-              [PROFILE_DETAIL_TYPE.DOCUMENTS]: this.mDocumentsData
-            })
-          }
-          throw new Error('Lengkapi dulu isian yang bertanda bintang')
-        }).then(() => {
-          return this.$store.dispatch('profile-detail/fetchItem', {
-            id: this.data.id,
-            fresh: true,
-            silent: true
-          })
-        }).then(() => {
-          return successAlert()
-        }).catch(e => {
-          return errorAlert()
-        })
+      const { PERSONAL, ASSIGNMENT, DOCUMENTS } = PROFILE_DETAIL_TYPE
+      return validateAndSave(this.$refs.validator, this.data.id, {
+        [PERSONAL]: this.mPersonalData,
+        [ASSIGNMENT]: this.mAssignmentData,
+        [DOCUMENTS]: this.mDocumentsData
+      }).then(() => {
+        this.$emit('reload:profile')
+      })
     }
   },
   watch: {

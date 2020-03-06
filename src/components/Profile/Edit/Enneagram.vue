@@ -16,6 +16,7 @@
     </div>
     <div class="flex flex-row justify-end items-center">
       <button class="button bg-brand-green text-white"
+              :disabled="$attrs.unsaved"
               @click="onSave">
         Save
       </button>
@@ -24,8 +25,8 @@
 </template>
 
 <script>
-import { populateProfileDataFields, onDevelopmentAlert } from './utils'
-import { PROFILE_DETAIL_TYPE } from '../../../api'
+import { PROFILE_DETAIL_TYPE, populateProfileDataFields, watchDataChanges, onDevelopmentAlert } from './utils'
+
 export default {
   components: {
     FormInputFile: () => import('@/components/Form/InputFile')
@@ -43,6 +44,15 @@ export default {
       hasSetRequiredFields: false,
       mEnneagramData: {}
     }
+  },
+  created () {
+    watchDataChanges(
+      this,
+      this.data,
+      {
+        [PROFILE_DETAIL_TYPE.ENNEAGRAM]: this.mEnneagramData
+      }
+    )
   },
   computed: {
     anchorProps () {
