@@ -78,6 +78,8 @@ a.router-link-exact-active {
 
 i.app-logo {
   font-size: 6rem;
+  width: 6rem;
+  height: 6rem;
   @apply inline-flex justify-center items-center; 
 
   &::after {
@@ -93,7 +95,7 @@ i.app-logo {
   }
 
   &.is-rounded {
-    @apply relative rounded-full border-2 border-solid border-gray-200;
+    @apply relative rounded-full border-2 border-solid border-gray-200 bg-gray-100;
 
     &::before {
       content: '';
