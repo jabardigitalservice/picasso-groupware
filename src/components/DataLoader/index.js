@@ -32,7 +32,7 @@ export default {
               this.value = v
             }
           }).catch(e => {
-            this.error = e
+            this.error = e ? e.message : e || ''
           }).finally(() => {
             this.pending = false
           })
