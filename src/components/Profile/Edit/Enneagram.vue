@@ -6,9 +6,9 @@
                     placeholder="Masukkan nomor kontak"
                     rules="required|mimes:image/*,.pdf"
                     :custom-messages="{required: 'Hasil enneagram harus dilampirkan', mimes: 'File harus dalam format JPEG/PNG/PDF'}"
-                    :value.sync="mData.enneagram.document_url"
-                    :filename.sync="mData.enneagram.document_name"
-                    :file.sync="mData.enneagram.document_blob">
+                    :value.sync="mData.docs.enneagram.document_url"
+                    :filename.sync="mData.docs.enneagram.document_name"
+                    :file.sync="mData.docs.enneagram.document_blob">
         <template #subtitle>
           <p>Masuk ke <a v-bind="anchorProps">{{enneagramTestSiteURL}}</a>,<br>
           lalu screenshot atau unduh hasil test dan lampirkan file tersebut disini.
