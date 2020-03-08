@@ -2,7 +2,8 @@
   <div>
     <DataLoader :promise="promisedUserData">
       <template #pending>
-        <div class="w-full h-full flex justify-center items-center">
+        <div class="w-full h-full flex justify-center items-center"
+             style="min-height: 200px;">
           <i class="app-logo is-rounded is-beating"></i>
         </div>
       </template>
@@ -111,7 +112,9 @@ export default {
       if (this.userId) {
         this.promisedUserData = new Promise((resolve, reject) => {
           this.$store.dispatch('profile-detail/fetchItem', {
-            id: this.userId
+            id: this.userId,
+            fresh: false,
+            silent: true
           }).then(data => {
             this.existingData = data
             this.editedData = _cloneDeep(data)
@@ -135,12 +138,17 @@ export default {
           savingAlert()
           await this.handleFiles()
           await this.handleData()
-          await this.$store.dispatch('profile-detail/fetchItem', {
-            id: this.existingData.id,
+          this.isPristine = true
+          this.$store.dispatch('profile-detail/fetchItem', {
+            id: this.userId,
             fresh: true,
             silent: true
+          }).then(data => {
+            this.existingData = data
+            this.editedData = _cloneDeep(data)
+          }).catch(e => {
+            this.isPristine = false
           })
-          this.isPristine = true
           return successAlert()
         }
       } catch (e) {
