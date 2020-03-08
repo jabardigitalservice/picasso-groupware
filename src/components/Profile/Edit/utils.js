@@ -1,20 +1,12 @@
-import Swal from 'sweetalert2'
-import _get from 'lodash/get'
+// import _cloneDeep from 'lodash/cloneDeep'
 import _set from 'lodash/set'
-import _values from 'lodash/values'
-import _debounce from 'lodash/debounce'
-import _isMatch from 'lodash/isMatch'
-import _cloneDeep from 'lodash/cloneDeep'
-// import _debounce from 'lodash/debounce'
-// import _isEqual from 'lodash/isEqual'
-
-import { upsertUserProfileDetail } from '../../../api'
-import { PROFILE_DETAIL_IS_DIRTY } from '../../../store/mutation-types'
+import Swal from 'sweetalert2'
 
 /**
+ *  Sub-item of profile detail
  *  @enum {string} - types of profile detail
 */
-export const PROFILE_DETAIL_TYPE = {
+export const PROFILE_DETAIL_TYPE = Object.freeze({
   PERSONAL: 'personal',
   DOCUMENTS: 'docs',
   ASSIGNMENT: 'assignment',
@@ -23,22 +15,43 @@ export const PROFILE_DETAIL_TYPE = {
   BANK_ACCOUNT: 'bank_account',
   EMERGENCY_CONTACT: 'emergency_contact',
   ENNEAGRAM: 'enneagram'
-}
+})
 
 /**
+ *  Types of user documents
  *  @enum {string} - user document type
 */
-export const DOCUMENT_TYPE = {
+export const DOCUMENT_TYPE = Object.freeze({
   KTP: 'ktp',
   NPWP: 'npwp',
-  KARTU_KELUARGA: 'kartu_keluarga'
-}
+  KARTU_KELUARGA: 'kartu_keluarga',
+  ENNEAGRAM: 'enneagram'
+})
+
+/**
+ * Document-related namespace
+ */
+export const DOCUMENT_NAMESPACE = (function () {
+  const obj = Object.entries(DOCUMENT_TYPE).reduce((obj, [key, value]) => {
+    const documentNamespace = PROFILE_DETAIL_TYPE.DOCUMENTS
+    Object.assign(obj, {
+      [value]: {
+        file: `${documentNamespace}.${value}.document_blob`,
+        name: `${documentNamespace}.${value}.document_name`,
+        url: `${documentNamespace}.${value}.document_url`
+      }
+    })
+    return obj
+  }, {})
+  return Object.freeze(obj)
+}())
 
 /**
  *  Required fields for each profile detail data type.
  *  Used to perform deep equal comparison in determining whether saving data should be enabled or not (minimizing firestore read/write)
+ *  NOTE: Do not export this object to prevent unwanted mutation
  */
-export const profileObjectReference = {
+export const PROFILE_DATA_SCHEMA = Object.freeze({
   [PROFILE_DETAIL_TYPE.PERSONAL]: [
     'name',
     'birth_city',
@@ -65,10 +78,13 @@ export const profileObjectReference = {
   ],
   [PROFILE_DETAIL_TYPE.DOCUMENTS]: [
     'ktp.number',
-    'ktp.doc',
-    'kartu_keluarga.doc',
+    'ktp.document_url',
+    'ktp.document_name',
+    'kartu_keluarga.document_url',
+    'kartu_keluarga.document_name',
     'npwp.number',
-    'npwp.doc'
+    'npwp.document_url',
+    'npwp.document_name'
   ],
   [PROFILE_DETAIL_TYPE.ASSIGNMENT]: [
     'job',
@@ -86,43 +102,30 @@ export const profileObjectReference = {
     'bank_branch'
   ],
   [PROFILE_DETAIL_TYPE.ENNEAGRAM]: [
-    'doc'
+    'document_url',
+    'document_name'
   ]
-}
+})
 
 /**
- *  Populate required profile data fields, since a change in schema could result in incomplete data fields
+ *  Default profile data object
  */
-export function populateProfileDataFields (datatype, currentData = {}) {
-  if (!datatype) throw new ReferenceError(`populateProfileDataFields: datatype must be supplied`)
-  const allowed = _values(PROFILE_DETAIL_TYPE)
-  if (!allowed.includes(datatype)) throw new ReferenceError(`populateProfileDataFields: datatype must be one of ${allowed.join(', ')}`)
+export const PROFILE_DATA_DEFAULT = (function () {
+  const obj = Object.entries(PROFILE_DATA_SCHEMA).reduce((obj, [datatype, fields]) => {
+    fields.forEach(field => {
+      _set(obj, `${datatype}.${field}`, null)
+    })
+    return obj
+  }, {})
+  return Object.freeze(obj)
+}())
 
-  if (!currentData || typeof currentData !== 'object') throw new TypeError(`populateProfileDataFields: either currentData is null or not typeof object`)
-
-  const refs = profileObjectReference[datatype]
-  const mCurrentData = _cloneDeep(currentData)
-  refs.forEach(field => {
-    const isFieldExist = _get(mCurrentData, field)
-    if (!isFieldExist) {
-      _set(mCurrentData, field, null)
-    }
-  })
-  return mCurrentData
-}
-
-export function watchDataChanges (vm, savedData, editedData) {
-  vm.$store.commit(`profile-detail/${PROFILE_DETAIL_IS_DIRTY}`, false)
-  vm.$watch(
-    function () {
-      return editedData
-    },
-    _debounce(function (obj) {
-      const hasUnsavedChanges = !_isMatch(savedData, obj)
-      vm.$store.commit(`profile-detail/${PROFILE_DETAIL_IS_DIRTY}`, hasUnsavedChanges)
-    }, 250),
-    { immediate: false, deep: true }
-  )
+/**
+ * Check if file is type of image
+ * @param {string} mimetype
+ */
+export function isMimeTypeImage (mimetype) {
+  return typeof mimetype === 'string' && /(jpe?g)|(gif)|(png)|(bmp)/.test(mimetype)
 }
 
 /**
@@ -144,6 +147,9 @@ export function savingAlert () {
     title: 'Tunggu sebentar ya',
     showConfirmButton: false,
     showCancelButton: false,
+    allowEnterKey: false,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
     onBeforeOpen: () => Swal.showLoading()
   })
 }
@@ -186,35 +192,4 @@ export function onDevelopmentAlert () {
     showConfirmButton: true,
     confirmButtonText: 'Okay'
   })
-}
-
-/**
- * Common save method for all profile data editing
- * @param {object} validator - instance of VeeValidate.ValidationObserver
- * @param {string|number} userId
- * @param {object} data
- */
-export function validateAndSave (validator, userId, data) {
-  if (!validator || typeof validator.validate !== 'function') {
-    throw new ReferenceError('validateAndSave: validator must be an instance of VeeValidate.ValidationObserver')
-  }
-  savingAlert()
-  return validator.validate()
-    .then(async valid => {
-      if (valid) {
-        await upsertUserProfileDetail(userId, data)
-        await successAlert()
-        return true
-      }
-      throw new ReferenceError('validation_failed')
-    }).catch(async e => {
-      if (e.message === 'validation_failed') {
-        await invalidDataAlert()
-      } else {
-        await errorAlert(e)
-      }
-      return false
-    }).finally(() => {
-      Swal.close()
-    })
 }
