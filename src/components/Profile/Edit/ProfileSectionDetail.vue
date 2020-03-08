@@ -2,7 +2,7 @@
   <div>
     <DataLoader :promise="promisedUserData">
       <template #pending>
-        <div class="w-full h-full flex justify-center items-center"
+        <div class="w-full h-full flex justify-center items-center bg-gray-200"
              style="min-height: 200px;">
           <i class="app-logo is-rounded is-beating"></i>
         </div>
@@ -19,7 +19,7 @@
       </template>
       <template #default>
         <div>
-          <h3 class="px-4 py-8 md:px-8 font-bold text-2xl text-white bg-brand-blue">
+          <h3 class="px-4 py-8 sm:px-8 font-bold text-2xl text-white bg-brand-blue">
             <transition name="slide-y-fade-transition"
                         mode="out-in">
               <span :key="name" :class="['profile-section-detail__title', !isPristine && 'has-unsaved-changes']">
@@ -27,7 +27,7 @@
               </span>
             </transition>
           </h3>
-          <ValidationObserver tag="div" class="px-4 py-8 md:px-8" #default="{validate}">
+          <ValidationObserver tag="div" class="px-4 py-8 sm:px-8" #default="{validate}">
             <transition name="slide-y-fade-transition"
                       mode="out-in">
               <component ref="profileData"
