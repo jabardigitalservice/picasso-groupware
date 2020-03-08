@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver tag="div" ref="validator">
+  <ValidationObserver tag="fieldset" ref="validator">
     <div class="form-input-container">
       <FormSelect name="has_previous_job"
                   title="Pernah bekerja sebelumnya?"
@@ -7,11 +7,11 @@
                   rules="required"
                   prompt="Pilih salah satu opsi di bawah ini"
                   :custom-messages="{required: 'Informasi ini harus diisi'}"
-                  :value="mPreviousJobData.has_previous_job"
+                  :value="mData.previous_job.has_previous_job"
                   @change="onChangePreviousJobStatus"/>
     </div>
     <transition name="slide-y-fade-transition">
-      <div v-if="mPreviousJobData.has_previous_job === 'Ya'">
+      <div v-if="mData.previous_job.has_previous_job === 'Ya'">
         <div class="form-input-container">
           <FormInput :required="isPreviousJobExist"
                       :rules="requiredIfPreviousJobExist"
@@ -20,7 +20,7 @@
                       name="latest_job_company"
                       title="Nama Perusahaan Terakhir"
                       placeholder="Masukkan nama perusahaan tempat terakhir bekerja"
-                      v-model="mPreviousJobData.company" />
+                      v-model="mData.previous_job.company" />
         </div>
         <div class="form-input-container">
           <FormInput :required="isPreviousJobExist"
@@ -30,7 +30,7 @@
                       name="latest_job_position"
                       title="Posisi di Perusahaan Terakhir"
                       placeholder="Masukkan nama posisi"
-                      v-model="mPreviousJobData.position" />
+                      v-model="mData.previous_job.position" />
         </div>
         <div class="form-input-container">
           <FormInput :required="isPreviousJobExist"
@@ -41,7 +41,7 @@
                       title="Lama Bekerja di Perusahaan Terakhir"
                       subtitle="Contoh: X tahun Y bulan atau Z bulan"
                       placeholder="0 tahun 0 bulan"
-                      v-model="mPreviousJobData.length" />
+                      v-model="mData.previous_job.length" />
         </div>
         <div class="form-input-container">
           <FormInput :required="isPreviousJobExist"
@@ -51,22 +51,15 @@
                       name="latest_job_salary"
                       title="Gaji di Perusahaan Terakhir"
                       placeholder="Masukkan gaji di perusahaan terakhir"
-                      v-model="mPreviousJobData.salary" />
+                      v-model="mData.previous_job.salary" />
         </div>
       </div>
     </transition>
-    <div class="flex flex-row justify-end items-center">
-      <button class="button bg-brand-green text-white"
-              :disabled="$attrs.unsaved"
-              @click="onSave">
-        Save
-      </button>
-    </div>
   </ValidationObserver>
 </template>
 
 <script>
-import { PROFILE_DETAIL_TYPE, profileObjectReference, populateProfileDataFields, watchDataChanges, validateAndSave } from './utils'
+import { PROFILE_DETAIL_TYPE, PROFILE_DATA_SCHEMA } from './utils'
 
 export default {
   components: {
@@ -78,24 +71,17 @@ export default {
       type: Object
     }
   },
-  data () {
-    return {
-      mPreviousJobData: {},
-      hasSetRequiredFields: false
-    }
-  },
-  created () {
-    watchDataChanges(
-      this,
-      this.data,
-      {
-        [PROFILE_DETAIL_TYPE.PREVIOUS_JOB]: this.mPreviousJobData
-      }
-    )
-  },
   computed: {
+    mData: {
+      get () {
+        return this.data
+      },
+      set (obj) {
+        this.$emit('change:data', obj)
+      }
+    },
     isPreviousJobExist () {
-      return this.mPreviousJobData.has_previous_job === 'Ya'
+      return this.mData.previous_job.has_previous_job === 'Ya'
     },
     requiredIfPreviousJobExist () {
       return {
@@ -105,11 +91,11 @@ export default {
   },
   methods: {
     onChangePreviousJobStatus (newValue) {
-      const oldValue = this.mPreviousJobData.has_previous_job
-      const keys = profileObjectReference[PROFILE_DETAIL_TYPE.PREVIOUS_JOB]
+      const oldValue = this.mData.previous_job.has_previous_job
+      const keys = PROFILE_DATA_SCHEMA[PROFILE_DETAIL_TYPE.PREVIOUS_JOB]
       const hasSomeValues = keys.some(key => {
         if (key === 'has_previous_job') return false
-        return this.mPreviousJobData[key] !== null
+        return this.mData.previous_job[key] !== null
       })
 
       if (newValue === 'Tidak' && oldValue === 'Ya' && hasSomeValues) {
@@ -124,32 +110,13 @@ export default {
           if (value) {
             keys.forEach(key => {
               if (key === 'has_previous_job') return
-              this.$set(this.mPreviousJobData, key, null)
+              this.$set(this.mData.previous_job, key, null)
             })
-            this.$set(this.mPreviousJobData, 'has_previous_job', newValue)
+            this.$set(this.mData.previous_job, 'has_previous_job', newValue)
           }
         })
       } else {
-        this.$set(this.mPreviousJobData, 'has_previous_job', newValue)
-      }
-    },
-    onSave () {
-      return validateAndSave(this.$refs.validator, this.data.id, {
-        [PROFILE_DETAIL_TYPE.PREVIOUS_JOB]: this.mPreviousJobData
-      }).then(() => {
-        this.$emit('reload:profile')
-      })
-    }
-  },
-  watch: {
-    data: {
-      immediate: true,
-      handler: function (obj) {
-        if (!this.hasSetRequiredFields) {
-          const { PREVIOUS_JOB } = PROFILE_DETAIL_TYPE
-          this.mPreviousJobData = populateProfileDataFields(PREVIOUS_JOB, obj[PREVIOUS_JOB])
-          this.hasSetRequiredFields = true
-        }
+        this.$set(this.mData.previous_job, 'has_previous_job', newValue)
       }
     }
   }
