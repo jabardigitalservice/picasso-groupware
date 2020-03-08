@@ -2,7 +2,7 @@ import _values from 'lodash/values'
 
 import { db, storage, Timestamp } from '@/lib/firebase'
 
-import { PROFILE_DETAIL_TYPE, DOCUMENT_TYPE } from '../components/Profile/Edit/utils'
+import { DOCUMENT_TYPE } from '../components/Profile/Edit/utils'
 
 /**
  *  @enum {string} - firebase storage folder
@@ -18,15 +18,6 @@ export const COLLECTION = {
   USERS: 'users'
 }
 
-/**
- * Get employee storage folder
- * @param {string|number} userId
- * @returns {StorageRef}
- */
-function getEmployeeStorageFolder (userId) {
-  return storage.child(`${STORAGE.EMPLOYEE_DOCUMENTS}/${userId}`)
-}
-
 // =================================================================================
 /**
  * Basic handler when userId is not defined as function param
@@ -35,6 +26,15 @@ function getEmployeeStorageFolder (userId) {
  */
 function handleNoUserId (caller) {
   return Promise.reject(new ReferenceError(`${caller}: id must be supplied'`))
+}
+
+/**
+ * Get stored file metadata
+ * @param {string} publicURL - public URL of stored file in Firebase Storage, the one that starts with https:// instead of gs://
+ * @returns {Promise} a promise that resolves metadata in typeof object
+ */
+export function getStoredFileMetadata (publicURL) {
+  return storage.refFromURL(publicURL).getMetadata()
 }
 
 /**
@@ -66,11 +66,6 @@ export function upsertUserProfileDetail (userId, data) {
   if (!userId) return handleNoUserId(`updateUserPersonalData`)
   if (!data) return Promise.resolve('noop')
 
-  const allowedFields = _values(PROFILE_DETAIL_TYPE)
-  const shouldProceed = Object.keys(data).every(key => allowedFields.includes(key))
-  if (!shouldProceed) {
-    return Promise.reject(new ReferenceError(`updateUserProfileDetail: updating is only allowed for these keys -> ${allowedFields.join(', ')}`))
-  }
   return db
     .collection(COLLECTION.USERS)
     .doc(userId)
@@ -86,6 +81,7 @@ export function upsertUserProfileDetail (userId, data) {
  * @param {string} documentType
  * @param {File} file
  * @param {Function} onProgress - a function that receives (progress: number, snapshot: UploadTask.snapshot) as arguments
+ * @returns {Promise>} the resolved URL of stored file
  */
 export function upsertUserDocument (userId, documentType, file, onProgress) {
   if (!userId) return handleNoUserId('upsertUserDocument')
@@ -97,13 +93,12 @@ export function upsertUserDocument (userId, documentType, file, onProgress) {
     return Promise.reject(new ReferenceError(`upsertUserDocument: document type must be one of ${allowedTypes.join(', ')}`))
   }
 
-  const folder = getEmployeeStorageFolder(userId)
-  const ext = file.name.substring(file.name.lastIndexOf('.'))
-  const path = folder.child(`${documentType}-${userId}.${ext}`)
-  const uploadTask = path.put(file)
+  const ext = file.name.substring(file.name.lastIndexOf('.') + 1)
+  const storageRef = storage.ref().child(`${STORAGE.EMPLOYEE_DOCUMENTS}/${userId}/${documentType}-${userId}.${ext}`)
+  const uploadTask = storageRef.put(file)
   if (typeof onProgress === 'function') {
     uploadTask.on('state_changed', (snapshot) => {
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      const progress = Math.ceil((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
       onProgress(progress, snapshot)
     })
   }
@@ -111,4 +106,12 @@ export function upsertUserDocument (userId, documentType, file, onProgress) {
     .then(snapshot => {
       return snapshot.ref.getDownloadURL()
     })
+}
+
+export function deleteUserDocument (userId, filePublicURL) {
+  if (!userId) return handleNoUserId('deleteUserDocument')
+  if (!filePublicURL) return Promise.reject(new ReferenceError('deleteUserDocument: filePublicURL must be supplied'))
+
+  const storageRef = storage.refFromURL(filePublicURL)
+  return storageRef.delete()
 }
