@@ -1,16 +1,16 @@
 <template>
   <div class="messages">
-    <div class="container mx-auto md:p-4">
+    <div class="container mx-auto py-8 md:px-4">
       <div class="overflow-visible lg:overflow-hidden max-w-5xl mx-auto rounded-none lg:rounded-lg lg:shadow lg:flex lg:flex-row lg:justify-start lg:items-stretch">
         <ProfileSectionList :sections="profileSections"
                             :active="activeProfileSectionName"
-                            class="rounded-lg lg:rounded-none border-r border-solid border-gray-200 bg-gray-100 shadow lg:shadow-none"
+                            class="rounded-none sm:rounded-lg lg:rounded-none border-r border-solid border-gray-200 bg-gray-100 shadow lg:shadow-none"
                             style="flex: 1 1 25%;"
                             @click="setActiveSection"/>
         <br class="lg:hidden">
         <ProfileSectionDetail ref="profileDetail"
                               :name="activeProfileSectionName"
-                              class="overflow-hidden rounded-lg lg:rounded-none bg-white shadow lg:shadow-none"
+                              class="overflow-hidden rounded-none sm:rounded-lg lg:rounded-none bg-white shadow lg:shadow-none"
                               style="flex: 1 1 60%;"/>
       </div>
     </div>
