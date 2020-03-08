@@ -159,7 +159,7 @@ export function savingAlert () {
  */
 export function successAlert () {
   return Swal.fire({
-    title: 'Behasil',
+    title: 'Berhasil',
     text: 'Data kamu berhasil disimpan',
     icon: 'success',
     showCancelButton: false,
