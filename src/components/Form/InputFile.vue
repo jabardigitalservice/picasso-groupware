@@ -1,5 +1,6 @@
 <template>
   <ValidationProvider :rules="rules"
+                      :disabled="shouldDisableValidation"
                       :custom-messages="customMessages"
                       #default="{failed, errors}"
                       tag="div"
@@ -57,6 +58,7 @@
             :name="name"
             :rules="rules"
             type="file"
+            :multiple="false"
             v-bind="$attrs"
             @change="onChange($event)">
     </template>
@@ -116,7 +118,6 @@ export default {
             this.mFile = file
             if (typeof this.mFileURL === 'string' && this.mFileURL.startsWith('http')) {
               this.promisedMetadata = this.getFileMetadata(this.mFileURL)
-              this.$refs.validator.syncValue('')
             } else if (this.mFile instanceof File) {
               this.promisedMetadata = new Promise(resolve => resolve(this.mFile))
             }
@@ -134,6 +135,9 @@ export default {
     },
     shouldRenderPreview () {
       return isMimeTypeImage(this.fileExtension)
+    },
+    shouldDisableValidation () {
+      return typeof this.value === 'string' && this.value.startsWith('https://')
     }
   },
   methods: {
@@ -181,8 +185,7 @@ export default {
           this.emitChange(null, null, null)
           return this.$nextTick()
         }).then(() => {
-          this.$refs.validator.syncValue(undefined)
-          this.$refs.validator.reset()
+          this.$refs.validator.validate()
         })
     },
     onFilenameChanged (name) {
