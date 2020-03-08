@@ -92,29 +92,35 @@ export default {
   methods: {
     onChangePreviousJobStatus (newValue) {
       const oldValue = this.mData.previous_job.has_previous_job
-      const keys = PROFILE_DATA_SCHEMA[PROFILE_DETAIL_TYPE.PREVIOUS_JOB]
-      const hasSomeValues = keys.some(key => {
-        if (key === 'has_previous_job') return false
-        return this.mData.previous_job[key] !== null
-      })
-
-      if (newValue === 'Tidak' && oldValue === 'Ya' && hasSomeValues) {
-        this.$swal.fire({
-          title: 'Apa kamu yakin?',
-          text: 'Mengganti opsi ini akan menghapus data yang sudah kamu isikan sebelumnya',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Ya, hapus saja datanya',
-          cancelButtonText: 'Keluar'
-        }).then(({ value }) => {
-          if (value) {
-            keys.forEach(key => {
-              if (key === 'has_previous_job') return
-              this.$set(this.mData.previous_job, key, null)
-            })
-            this.$set(this.mData.previous_job, 'has_previous_job', newValue)
-          }
+      if (newValue === 'Tidak') {
+        const keys = PROFILE_DATA_SCHEMA[PROFILE_DETAIL_TYPE.PREVIOUS_JOB]
+        const hasSomeValues = keys.some(key => {
+          if (key === 'has_previous_job') return false
+          return this.mData.previous_job[key] !== null
         })
+        if (oldValue === 'Ya' && hasSomeValues) {
+          this.$swal.fire({
+            title: 'Apa kamu yakin?',
+            text: 'Mengganti opsi ini akan menghapus data yang sudah kamu isikan sebelumnya',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus saja datanya',
+            cancelButtonText: 'Keluar'
+          }).then(({ value }) => {
+            if (value) {
+              keys.forEach(key => {
+                if (key === 'has_previous_job') return
+                this.$set(this.mData.previous_job, key, '')
+              })
+              this.$set(this.mData.previous_job, 'has_previous_job', newValue)
+            }
+          })
+        } else {
+          this.$set(this.mData.previous_job, 'has_previous_job', newValue);
+          ['company', 'salary', 'length', 'position'].forEach(key => {
+            this.$set(this.mData.previous_job, key, '')
+          })
+        }
       } else {
         this.$set(this.mData.previous_job, 'has_previous_job', newValue)
       }
