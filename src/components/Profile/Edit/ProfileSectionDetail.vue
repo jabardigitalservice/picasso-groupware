@@ -169,7 +169,7 @@ export default {
           } else if (savedURL && !newURL) {
             await deleteUserDocument(savedURL)
           } else if (newFile) {
-            await upsertUserDocument(this.editedData.id, documentType, newFile)
+            await upsertUserDocument(this.userId, documentType, newFile)
               .then(url => {
                 _unset(this.editedData, ns.file)
                 _set(this.editedData, ns.url, url)
@@ -182,7 +182,7 @@ export default {
       }
     },
     async handleData () {
-      return upsertUserProfileDetail(this.editedData.id, this.editedData)
+      return upsertUserProfileDetail(this.userId, this.editedData)
     },
     async onCancel () {
       this.editedData = _cloneDeep(this.existingData)
