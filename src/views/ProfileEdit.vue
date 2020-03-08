@@ -21,7 +21,6 @@
 import _startCase from 'lodash/startCase'
 import _snakeCase from 'lodash/snakeCase'
 import { mapState } from 'vuex'
-import { formatDateTimeShort, formatDateLong } from '@/lib/date'
 import { PROFILE_DETAIL_IS_PRISTINE } from '../store/mutation-types'
 
 export default {
@@ -58,8 +57,6 @@ export default {
   },
 
   methods: {
-    formatDateTimeShort,
-    formatDateLong,
     setActiveSection (name) {
       if (name === this.activeProfileSectionName) return
       this.$router.push({
