@@ -21,14 +21,15 @@
       <template #pending>
         <ContentLoader  class="max-w-xs"
                         :width="320"
-                        :height="234"
+                        :height="128"
                         :speed="2"
                         primary-color="#eceff1"
                         secondary-color="#fafafa">
           <rect x="0" y="0" rx="8" ry="8" width="128" height="128"></rect>
-          <rect x="0" y="144" rx="8" ry="8" width="25%" height="16"></rect>
-          <rect x="0" y="176" rx="8" ry="8" width="100%" height="16"></rect>
-          <rect x="0" y="208" rx="8" ry="8" width="75%" height="16"></rect>
+          <rect x="144" y="0" rx="8" ry="8" width="100" height="16"></rect>
+          <rect x="144" y="32" rx="8" ry="8" width="176" height="16"></rect>
+          <rect x="144" y="64" rx="8" ry="8" width="176" height="16"></rect>
+          <rect x="144" y="96" rx="8" ry="8" width="64" height="16"></rect>
         </ContentLoader>
       </template>
       <template #default="{value: metadata}">
