@@ -30,25 +30,26 @@
           <ValidationObserver tag="div" class="px-4 py-8 sm:px-8" #default="{validate}">
             <transition name="slide-y-fade-transition"
                       mode="out-in">
-              <component ref="profileData"
-                        :key="existingData.updated_at ? existingData.updated_at.seconds : existingData.created_at.seconds"
-                        :is="sectionComponent"
-                        :data="editedData"
-                        @change:data="onDataChanged"/>
+              <div :key="name">
+                <component ref="profileData"
+                          :key="existingData.updated_at ? existingData.updated_at.seconds : existingData.created_at.seconds"
+                          :is="sectionComponent"
+                          :data="editedData"
+                          @change:data="onDataChanged"/>
+                <div class="flex flex-row justify-end items-center">
+                  <button class="button bg-brand-green text-white mr-4"
+                          :disabled="isPristine"
+                          @click="onSave(validate)">
+                    Simpan
+                  </button>
+                    <button class="button bg-gray-500 text-white"
+                          :disabled="isPristine"
+                          @click="onCancel">
+                    Batal
+                  </button>
+                </div>
+              </div>
             </transition>
-            <div  v-if="sectionComponent"
-                  class="flex flex-row justify-end items-center">
-              <button class="button bg-brand-green text-white mr-4"
-                      :disabled="isPristine"
-                      @click="onSave(validate)">
-                Simpan
-              </button>
-                <button class="button bg-gray-500 text-white"
-                      :disabled="isPristine"
-                      @click="onCancel">
-                Batal
-              </button>
-            </div>
           </ValidationObserver>
         </div>
       </template>
