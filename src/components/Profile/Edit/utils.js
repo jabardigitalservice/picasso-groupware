@@ -13,8 +13,7 @@ export const PROFILE_DETAIL_TYPE = Object.freeze({
   EDUCATION: 'education',
   PREVIOUS_JOB: 'previous_job',
   BANK_ACCOUNT: 'bank_account',
-  EMERGENCY_CONTACT: 'emergency_contact',
-  ENNEAGRAM: 'enneagram'
+  EMERGENCY_CONTACT: 'emergency_contact'
 })
 
 /**
@@ -33,12 +32,12 @@ export const DOCUMENT_TYPE = Object.freeze({
  */
 export const DOCUMENT_NAMESPACE = (function () {
   const obj = Object.entries(DOCUMENT_TYPE).reduce((obj, [key, value]) => {
-    const documentNamespace = PROFILE_DETAIL_TYPE.DOCUMENTS
+    const { DOCUMENTS } = PROFILE_DETAIL_TYPE
     Object.assign(obj, {
       [value]: {
-        file: `${documentNamespace}.${value}.document_blob`,
-        name: `${documentNamespace}.${value}.document_name`,
-        url: `${documentNamespace}.${value}.document_url`
+        file: `${DOCUMENTS}.${value}.document_blob`,
+        name: `${DOCUMENTS}.${value}.document_name`,
+        url: `${DOCUMENTS}.${value}.document_url`
       }
     })
     return obj
@@ -84,7 +83,9 @@ export const PROFILE_DATA_SCHEMA = Object.freeze({
     'kartu_keluarga.document_name',
     'npwp.number',
     'npwp.document_url',
-    'npwp.document_name'
+    'npwp.document_name',
+    'enneagram.document_url',
+    'enneagram.document_name'
   ],
   [PROFILE_DETAIL_TYPE.ASSIGNMENT]: [
     'job',
@@ -100,10 +101,6 @@ export const PROFILE_DATA_SCHEMA = Object.freeze({
     'account_number',
     'bank_name',
     'bank_branch'
-  ],
-  [PROFILE_DETAIL_TYPE.ENNEAGRAM]: [
-    'document_url',
-    'document_name'
   ]
 })
 
