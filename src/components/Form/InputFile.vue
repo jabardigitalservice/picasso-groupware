@@ -75,7 +75,6 @@
 import { ContentLoader } from 'vue-content-loader'
 import { getStoredFileMetadata } from '../../api'
 import { props, components } from './input-mixin'
-import { isMimeTypeImage } from '../Profile/Edit/utils'
 
 export default {
   inheritAttrs: false,
@@ -127,15 +126,6 @@ export default {
       })
   },
   computed: {
-    fileExtension () {
-      if (!this.mFile) {
-        return ''
-      }
-      return this.mFile.name.substring(this.mFile.name.lastIndexOf('.'))
-    },
-    shouldRenderPreview () {
-      return isMimeTypeImage(this.fileExtension)
-    },
     shouldDisableValidation () {
       return typeof this.value === 'string' && this.value.startsWith('https://')
     }
