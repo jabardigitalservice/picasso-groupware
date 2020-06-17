@@ -1,12 +1,16 @@
 <template>
-  <ValidationProvider :rules="rules"
-                      :custom-messages="customMessages"
-                      #default="{failed, errors}"
-                      tag="div">
-    <FormInputHeader :label-for="name"
-                      :title="title"
-                      :subtitle="subtitle"
-                      :required="required">
+  <ValidationProvider
+    :rules="rules"
+    :custom-messages="customMessages"
+    #default="{failed, errors}"
+    tag="div"
+  >
+    <FormInputHeader
+      :label-for="name"
+      :title="title"
+      :subtitle="subtitle"
+      :required="required"
+    >
       <template #title>
         <slot name="title"></slot>
       </template>
@@ -14,14 +18,18 @@
         <slot name="subtitle"></slot>
       </template>
     </FormInputHeader>
-    <textarea :name="name"
-              :value="value"
-              :class="{'form-input__textarea': true, 'is-invalid': failed}"
-              v-bind="$attrs"
-              @input="onInput">
+    <textarea
+      :name="name"
+      :value="value"
+      :class="{'form-input__textarea': true, 'is-invalid': failed}"
+      v-bind="$attrs"
+      @input="onInput"
+    >
     </textarea>
-    <p v-if="errors.length"
-       class="form-input__error-hint">
+    <p
+      v-if="errors.length"
+      class="form-input__error-hint"
+    >
       <slot name="error">
         {{errors[0]}}
       </slot>

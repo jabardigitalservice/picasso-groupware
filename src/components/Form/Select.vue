@@ -1,12 +1,16 @@
 <template>
-  <ValidationProvider :rules="rules"
-                      :custom-messages="customMessages"
-                      #default="{errors}"
-                      tag="div">
-    <FormInputHeader :label-for="name"
-                      :title="title"
-                      :subtitle="subtitle"
-                      :required="required">
+  <ValidationProvider
+    :rules="rules"
+    :custom-messages="customMessages"
+    #default="{errors}"
+    tag="div"
+  >
+    <FormInputHeader
+      :label-for="name"
+      :title="title"
+      :subtitle="subtitle"
+      :required="required"
+    >
       <template #title>
         <slot name="title"></slot>
       </template>
@@ -14,23 +18,31 @@
         <slot name="subtitle"></slot>
       </template>
     </FormInputHeader>
-    <select class="form-input__select"
-            :value="value"
-            @change="onChange">
-      <option selected
-              :value="null"
-              disabled>
+    <select
+      class="form-input__select"
+      :value="value"
+      @change="onChange"
+    >
+      <option
+        selected
+        :value="null"
+        disabled
+      >
         {{prompt}}
       </option>
-      <option v-for="opt in options"
-              :key="opt"
-              :selected="opt === value"
-              :value="opt">
+      <option
+        v-for="opt in options"
+        :key="opt"
+        :selected="opt === value"
+        :value="opt"
+      >
         {{opt}}
       </option>
     </select>
-    <p v-if="errors.length"
-       class="form-input__error-hint">
+    <p
+      v-if="errors.length"
+      class="form-input__error-hint"
+    >
       <slot name="error">
         {{errors[0]}}
       </slot>

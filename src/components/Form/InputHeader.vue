@@ -1,14 +1,18 @@
 <template>
   <div class="form-input__header">
     <slot name="title">
-      <label v-if="title"
-             :for="labelFor"
-             :class="['form-input__title', required && 'is-required']">
+      <label
+        v-if="title"
+        :for="labelFor"
+        :class="['form-input__title', required && 'is-required']"
+      >
         {{title}}
       </label>
     </slot>
-    <div v-if="subtitle || $slots.subtitle"
-          class="form-input__subtitle">
+    <div
+      v-if="subtitle || $slots.subtitle"
+      class="form-input__subtitle"
+    >
       <slot name="subtitle">
         <p>
           {{subtitle}}

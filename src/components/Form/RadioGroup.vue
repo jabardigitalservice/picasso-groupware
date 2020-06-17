@@ -1,9 +1,11 @@
 <template>
   <div>
-    <FormInputHeader :label-for="name"
-                     :title="title"
-                     :subtitle="subtitle"
-                     :required="required">
+    <FormInputHeader
+      :label-for="name"
+      :title="title"
+      :subtitle="subtitle"
+      :required="required"
+    >
       <template #title>
         <slot name="title"></slot>
       </template>
@@ -11,41 +13,51 @@
         <slot name="subtitle"></slot>
       </template>
     </FormInputHeader>
-    <div v-for="(opt, index) in options"
-         :key="index"
-         class="mb-2 flex flex-row justify-start items-baseline">
+    <div
+      v-for="(opt, index) in options"
+      :key="index"
+      class="mb-2 flex flex-row justify-start items-baseline"
+    >
       <template v-if="index === 0">
-        <ValidationProvider :rules="rules"
-                            :custom-messages="customMessages"
-                            ref="validator"
-                            tag="div"
-                            @hook:mounted="onValidatorMounted">
-          <input type="radio"
-                 :value="opt"
-                 :checked="opt === value"
-                 :name="name"
-                 class="mr-2"
-                 @change="onChange(opt, $event)">
+        <ValidationProvider
+          :rules="rules"
+          :custom-messages="customMessages"
+          ref="validator"
+          tag="div"
+          @hook:mounted="onValidatorMounted"
+        >
+          <input
+            type="radio"
+            :value="opt"
+            :checked="opt === value"
+            :name="name"
+            class="mr-2"
+            @change="onChange(opt, $event)"
+          >
         </ValidationProvider>
       </template>
       <template v-else>
-        <input type="radio"
-               :value="opt"
-               :checked="opt === value"
-               :name="name"
-               class="mr-2"
-               @change="onChange(opt, $event)">
+        <input
+          type="radio"
+          :value="opt"
+          :checked="opt === value"
+          :name="name"
+          class="mr-2"
+          @change="onChange(opt, $event)"
+        >
       </template>
       <label :for="opt">
         {{opt}}
       </label>
     </div>
-    <!-- <p v-if="errors.length"
-       class="form-input__error-hint">
+    <p
+      v-if="errors.length"
+      class="form-input__error-hint"
+    >
       <slot name="error">
         {{errors[0]}}
       </slot>
-    </p> -->
+    </p>
   </div>
 </template>
 
