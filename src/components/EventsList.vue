@@ -4,9 +4,6 @@
       <div class="flex flex-wrap">
         <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6">
           <div class="flex">
-<!--            <div class="flex items-center block mx-auto mr-4">-->
-<!--              <i class="far fa-calendar text-brand-green text-lg" />-->
-<!--            </div>-->
             <div class="text-left flex-grow">
               <p class="text-sm leading-normal">{{ item['title'] }}</p>
               <p class="text-sm text-gray-600">{{ getDateTime(item) }}</p>

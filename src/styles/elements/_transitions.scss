@@ -15,3 +15,44 @@
 .fade-leave-to {
   opacity: 0
 }
+
+.slide-y-fade-transition {
+  &-enter-active,
+  &-leave-active {
+    transition-property: opacity, transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+  }
+
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+}
+
+.slide-x-fade-transition,
+.slide-x-reverse-fade-transition {
+  &-enter-active,
+  &-leave-active {
+    transition-property: opacity, transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+  }
+}
+
+.slide-x-fade-transition {
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+}
+
+.slide-x-reverse-fade-transition {
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+}
