@@ -10,12 +10,10 @@ Vue.config.productionTip = false
  * prevent chunk to be included on entry point
  */
 function importLib () {
-  const fortAwesome = import(
-    /* webpackChunkName: "fort-awesome" */
-    /* webpackMode: "lazy" */
-    '@fortawesome/fontawesome-free/js/all'
-  )
-  return Promise.all([fortAwesome])
+  return Promise.all([
+    import(/* webpackChunkName: "js-fort-awesome" */'@fortawesome/fontawesome-free/js/all'),
+    import(/* webpackChunkName: "css-sweetalert" */'sweetalert2/src/sweetalert2.scss')
+  ])
 }
 
 function importPlugins () {

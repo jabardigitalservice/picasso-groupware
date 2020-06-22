@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import 'firebase/storage'
 import 'firebase/messaging'
 import 'firebase/analytics'
 
@@ -14,6 +15,7 @@ firebase.firestore().enablePersistence().catch(() => {
 })
 
 export const db = firebase.firestore()
+export const storage = firebase.storage()
 
 // Export types that exists in Firestore
 // This is not always necessary, but it's used in other examples

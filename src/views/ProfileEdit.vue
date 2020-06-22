@@ -1,66 +1,68 @@
 <template>
   <div class="messages">
-    <div class="container mx-auto">
-      <template v-if="user && !loading">
-        <template v-if="!error">
-          <div class="bg-white m-0 sm:rounded shadow">
-            <div class="border-b">
-              <div class="w-full px-4 py-4 mt-4">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-job_title">
-                  Job Title
-                </label>
-                <input v-model="job_title" type="text" id="input-job_title" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"/>
-
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-phone">
-                  Phone
-                </label>
-                <input v-model="phone" type="text" id="input-phone" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"/>
-              </div>
-            </div>
-            <div class="border-b">
-              <div class="px-4 py-4 text-center">
-                <button @click="submit" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded" type="button">
-                  Simpan
-                </button>
-              </div>
-            </div>
+    <div class="container mx-auto p-4">
+      <DataLoader :promise="fetchUserData">
+        <template #pending>
+          <div class="max-w-xl mx-auto p-4 pt-8 rounded-lg bg-white shadow">
+            <content-loader :speed="2"
+                            primaryColor="#f3f3f3"
+                            secondaryColor="#ecebeb">
+              <rect x="0"
+                    y="15"
+                    rx="0"
+                    ry="0"
+                    width="100%"
+                    height="15" />
+              <rect x="0"
+                    y="45"
+                    rx="0"
+                    ry="0"
+                    width="100%"
+                    height="75" />
+            </content-loader>
           </div>
         </template>
-        <template v-else>
-          <div class="bg-red-100 border border-red-400 text-red-700 mx-2 sm:mx-0 px-4 py-3 relative" role="alert">
-            <strong class="font-bold">Holy smokes! </strong>
-            <span class="block sm:inline">Something seriously bad happened.</span>
+        <template #error="{error}">
+          <div>
+            {{error}}
           </div>
         </template>
-      </template>
-      <template v-else>
-        <div class="bg-white shadow p-4">
-          <content-loader
-            :speed="2"
-            primaryColor="#f3f3f3"
-            secondaryColor="#ecebeb"
-          >
-            <rect x="0" y="15" rx="0" ry="0" width="100%" height="15" />
-            <rect x="0" y="45" rx="0" ry="0" width="100%" height="75" />
-          </content-loader>
-        </div>
-      </template>
+        <template #default>
+          <div class="overflow-visible lg:overflow-hidden max-w-5xl mx-auto rounded-none lg:rounded-lg lg:shadow lg:flex lg:flex-row lg:justify-start lg:items-stretch">
+            <ProfileSectionList :sections="profileSections"
+                                :active="activeProfileSectionName"
+                                class="rounded-lg lg:rounded-none border-r border-solid border-gray-200 bg-gray-100 shadow lg:shadow-none"
+                                style="flex: 1 1 25%;"
+                                @click="setActiveSection"/>
+            <br class="lg:hidden">
+            <ProfileSectionDetail :data="userData"
+                                  :name="activeProfileSectionName"
+                                  class="overflow-hidden rounded-lg lg:rounded-none bg-white shadow lg:shadow-none"
+                                  style="flex: 1 1 60%;"/>
+          </div>
+        </template>
+      </DataLoader>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { ContentLoader } from 'vue-content-loader'
+import _startCase from 'lodash/startCase'
+import _snakeCase from 'lodash/snakeCase'
+import { mapState } from 'vuex'
 import { formatDateTimeShort, formatDateLong } from '@/lib/date'
+import { ContentLoader } from 'vue-content-loader'
 import { db } from '@/lib/firebase'
-// import { analytics } from '@/lib/firebase'
+import { PROFILE_DETAIL_IS_DIRTY } from '../store/mutation-types'
+import DataLoader from '../components/DataLoader'
 
 export default {
   middleware: 'auth',
-
   components: {
-    ContentLoader
+    DataLoader,
+    ContentLoader,
+    ProfileSectionList: () => import('../components/Profile/Edit/ProfileSectionList'),
+    ProfileSectionDetail: () => import('../components/Profile/Edit/ProfileSectionDetail')
   },
 
   metaInfo: {
@@ -69,29 +71,40 @@ export default {
 
   data () {
     return {
-      id: null,
-      job_title: null,
-      phone: null
+      profileSections: [
+        'Personal',
+        'Education',
+        'Experience',
+        'Bank Account',
+        'Emergency Contact',
+        'Enneagram'
+      ],
+      fetchUserData: null
     }
   },
 
-  computed: mapGetters({
-    user: 'auth/user',
-    loading: 'profile-detail/loading',
-    item: 'profile-detail/item',
-    error: 'profile-detail/error'
-  }),
-
-  mounted () {
-    this.fetchItem()
+  computed: {
+    activeProfileSectionName () {
+      return _startCase(this.$route.params.id || '')
+    },
+    ...mapState('auth', {
+      id: state => state.user ? state.user.id : null
+    }),
+    ...mapState('profile-detail', {
+      userData: state => state.item
+    })
   },
 
   watch: {
-    item (newValue) {
-      if (newValue) {
-        this.id = newValue['id']
-        this.job_title = newValue['job_title']
-        this.phone = newValue['phone']
+    id: {
+      immediate: true,
+      handler: function (v) {
+        this.fetchUserData = null
+        if (v) {
+          this.fetchUserData = this.$store.dispatch('profile-detail/fetchItem', {
+            id: v
+          })
+        }
       }
     }
   },
@@ -99,19 +112,49 @@ export default {
   methods: {
     formatDateTimeShort,
     formatDateLong,
-
-    async fetchItem () {
-      await this.$store.dispatch('profile-detail/fetchItem')
-    },
-
-    async submit () {
-      await db.collection('users').doc(this.id).update({
-        'job_title': this.job_title,
-        'phone': this.phone
+    setActiveSection (name) {
+      if (name === this.activeProfileSectionName) return
+      this.$router.push({
+        path: `/profile/edit/${_snakeCase(name)}`
       })
+    },
+    async submit () {
+      await db
+        .collection('users')
+        .doc(this.id)
+        .update({
+          job_title: this.job_title,
+          phone: this.phone
+        })
 
       await this.$router.push('/profile')
+    }
+  },
+
+  beforeRouteUpdate (to, from, next) {
+    if (this.$store.state['profile-detail'].hasUnsavedChanges) {
+      this.$swal.fire({
+        title: 'Apa kamu yakin?',
+        text: 'Ada perubahan data yang belum kamu simpan di bagian ini',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Keluar',
+        confirmButtonText: 'Ya, abaikan perubahan data'
+      }).then(({ value }) => {
+        if (value) {
+          this.$store.commit(`profile-detail/${PROFILE_DETAIL_IS_DIRTY}`, false)
+          next()
+        }
+      })
+    } else {
+      next()
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+hr {
+  @apply mb-8;
+}
+</style>
