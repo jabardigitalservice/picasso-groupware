@@ -7,15 +7,19 @@ import store from './store'
 Vue.config.productionTip = false
 
 /**
- * prevent chunk to be included on entry point
+ * prevent lib chunk to be included on entry point
  */
 function importLib () {
   return Promise.all([
+    import(/* webpackChunkName: "css-vue-datetime" */'vue-datetime/dist/vue-datetime.css'),
     import(/* webpackChunkName: "js-fort-awesome" */'@fortawesome/fontawesome-free/js/all'),
     import(/* webpackChunkName: "css-sweetalert" */'sweetalert2/src/sweetalert2.scss')
   ])
 }
 
+/**
+ * prevent plugins chunk to be included on entry point
+ */
 function importPlugins () {
   const ctx = require.context('./plugins/', false, /\.js$/, 'lazy')
   const plugins = ctx.keys().map(key => {
