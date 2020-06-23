@@ -1,5 +1,6 @@
 import { SET_PROJECT_LIST, SET_ORGANIZATION_JOBS, SET_EDUCATIONS } from '../mutation-types'
 import { GroupwareAPI } from '../../lib/axios'
+import _orderBy from 'lodash/orderBy'
 
 export const state = () => ({
   projects: [],
@@ -9,10 +10,11 @@ export const state = () => ({
 
 export const getters = {
   listOfProjects (state) {
-    return Array.isArray(state.projects) ? state.projects.map(p => ({
+    const arr = Array.isArray(state.projects) ? state.projects.map(p => ({
       name: p.projectName,
       id: p._id
     })) : []
+    return _orderBy(arr, ['name'], ['asc'])
   }
 }
 

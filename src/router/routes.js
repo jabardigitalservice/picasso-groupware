@@ -78,8 +78,13 @@ export default [
   },
   {
     path: '/report',
-    name: 'report',
-    component: page('LogBookCreate.vue')
+    name: 'report.list',
+    component: page('Logbook/List.vue')
+  },
+  {
+    path: '/report/:action',
+    name: 'report.action',
+    component: page('Logbook/Action.vue')
   },
   {
     path: '/teams',
