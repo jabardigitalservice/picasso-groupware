@@ -39,7 +39,7 @@ export const actions = {
           commit(SET_PROJECT_LIST, projects)
         })
         .catch(e => {
-          console.error(e)
+          commit(SET_PROJECT_LIST, [])
         })
     }
     return state.projects

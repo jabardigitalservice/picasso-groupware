@@ -326,7 +326,6 @@ export default {
         }
         return this.onSuccess('Berhasil menyimpan data')
       } catch (e) {
-        console.error(e)
         return this.onError('Gagal menyimpan data')
       }
     }
