@@ -31,12 +31,12 @@
         {{prompt}}
       </option>
       <option
-        v-for="opt in options"
-        :key="opt"
-        :selected="opt === value"
-        :value="opt"
+        v-for="(opt, index) in options"
+        :key="index"
+        :selected="getOptionValue(opt) === value"
+        :value="getOptionValue(opt)"
       >
-        {{opt}}
+        {{getOptionLabel(opt)}}
       </option>
     </select>
     <p
@@ -71,20 +71,47 @@ export default {
       type: Array,
       default: () => []
     },
-    idKey: {
-      type: String
-    },
     valueKey: {
-      type: String
+      type: String,
+      default: 'value'
+    },
+    labelKey: {
+      type: String,
+      default: 'label'
     },
     prompt: {
       type: String,
       default: 'Select one of these options'
     }
   },
+  computed: {
+    hasObjectAsOptions () {
+      return Array.isArray(this.options) && this.options.every(x => x && typeof x === 'object')
+    }
+  },
   methods: {
     onChange (event) {
-      this.$emit('change', event.target.value)
+      const v = event.target.value
+      if (this.hasObjectAsOptions) {
+        const opt = this.options.find(x => this.getOptionValue(x) === v)
+        if (opt) {
+          this.$emit('change', opt)
+        }
+      } else {
+        this.$emit('change', event.target.value)
+      }
+    },
+    getOptionLabel (option) {
+      if (option && typeof option === 'object') {
+        return option[this.labelKey]
+      }
+      return option
+    },
+    getOptionValue (option) {
+      if (option && typeof option === 'object') {
+        return option[this.valueKey]
+      }
+      return option
     }
   }
 }
