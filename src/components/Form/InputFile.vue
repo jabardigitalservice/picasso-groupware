@@ -76,6 +76,12 @@
 import { ContentLoader } from 'vue-content-loader'
 import { getStoredFileMetadata } from '../../api'
 import { props, components } from './input-mixin'
+// import {GroupwareAPI} from '../../lib/axios'
+
+const STORAGE = {
+  FIREBASE: 'firebase',
+  GROUPWARE_SERVICE: 'groupware-service'
+}
 
 export default {
   inheritAttrs: false,
@@ -95,6 +101,13 @@ export default {
     },
     filename: {
       type: String
+    },
+    source: {
+      type: String,
+      default: STORAGE.FIREBASE,
+      validator (v) {
+        return [STORAGE.FIREBASE, STORAGE.GROUPWARE_SERVICE].includes(v)
+      }
     }
   },
   data () {
@@ -133,19 +146,24 @@ export default {
   },
   methods: {
     getFileMetadata (url) {
-      return new Promise((resolve, reject) => {
-        getStoredFileMetadata(url)
-          .then((metadata = {}) => {
-            resolve({
-              name: metadata.name,
-              type: metadata.contentType,
-              size: metadata.size
+      if (this.source === STORAGE.FIREBASE) {
+        return new Promise((resolve, reject) => {
+          getStoredFileMetadata(url)
+            .then((metadata = {}) => {
+              resolve({
+                name: metadata.name,
+                type: metadata.contentType,
+                size: metadata.size
+              })
             })
-          })
-          .catch(e => {
-            reject(e)
-          })
-      })
+            .catch(e => {
+              reject(e)
+            })
+        })
+      }
+      if (this.source === STORAGE.GROUPWARE_SERVICE) {
+        return Promise.resolve({})
+      }
     },
     resetInputElement () {
       if (this.$refs.input) {
