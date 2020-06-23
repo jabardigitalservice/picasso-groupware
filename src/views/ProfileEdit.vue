@@ -28,7 +28,7 @@ import { mapState } from 'vuex'
 import { PROFILE_DETAIL_IS_PRISTINE } from '../store/mutation-types'
 
 export default {
-  middleware: 'auth',
+  middleware: 'check-auth',
   components: {
     ProfileSectionList: () => import('../components/Profile/Edit/ProfileSectionList'),
     ProfileSectionDetail: () => import('../components/Profile/Edit/ProfileSectionDetail')

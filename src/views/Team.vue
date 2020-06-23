@@ -13,7 +13,7 @@ import { analytics } from '@/lib/firebase'
 import TeamsList from '@/components/TeamsList'
 
 export default {
-  middleware: 'auth',
+  middleware: 'check-auth',
 
   components: {
     TeamsList

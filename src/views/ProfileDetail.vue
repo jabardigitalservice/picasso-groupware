@@ -99,7 +99,7 @@ import { formatDateTimeShort, formatDateLong } from '@/lib/date'
 import { analytics } from '@/lib/firebase'
 
 export default {
-  middleware: 'auth',
+  middleware: 'check-auth',
 
   components: {
     ContentLoader,
