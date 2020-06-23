@@ -1,7 +1,6 @@
 import * as types from '../mutation-types'
-import * as firebase from 'firebase'
-import { db, Timestamp } from '@/lib/firebase'
-import { appConfig } from '@/config'
+import { GroupwareAPI, setToken } from '../../lib/axios'
+import { setTokenInCookie } from '../../lib/js-cookie'
 
 // state
 export const state = {
@@ -36,49 +35,55 @@ export const mutations = {
   }
 }
 
-// actions
 export const actions = {
-  async login ({ dispatch, commit }, { user }) {
-    commit(types.AUTH_LOADING)
-
-    const querySnapshot = db.collection('users').doc(user.uid)
-    const doc = await querySnapshot.get()
-
-    let existingData
-
-    if (doc.exists) {
-      existingData = doc.data()
-
-      await db.collection('users').doc(user.uid).update({
-        'name': user.displayName,
-        'email': user.email,
-        'photo': user.photoURL,
-        'app_version': appConfig.version,
-        'last_seen_at': Timestamp.now()
-      })
-    } else {
-      await db.collection('users').doc(user.uid).set({
-        'id': user.uid,
-        'name': user.displayName,
-        'email': user.email,
-        'photo': user.photoURL,
-        'app_version': appConfig.version,
-        'created_at': Timestamp.now(),
-        'last_seen_at': Timestamp.now()
-      })
+  async login ({ commit, dispatch }) {
+    if (!window.GAuth) {
+      return
     }
-
-    commit(types.SET_USER, { user: { name: user.displayName, photo: user.photoURL, id: user.uid, job_title: existingData.job_title } })
-    commit(types.AUTH_INITIALIZED)
-  },
-
-  async logout ({ commit }) {
-    commit(types.AUTH_LOADING)
-
     try {
-      await firebase.auth().signOut()
-    } catch (e) { }
+      commit(types.AUTH_LOADING)
+      const authCode = await window.GAuth.getAuthCode()
+      // eslint-disable-next-line camelcase
+      const res = await GroupwareAPI.post(`social/google-oauth2/`,
+        {
+          access_token: authCode
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(r => r.data)
+      if (res && res.auth_token) {
+        setToken(res.auth_token)
+        setTokenInCookie(res.auth_token)
+        await dispatch('getUserProfile')
+      } else {
+        setToken(null)
+        setTokenInCookie(null)
+        commit(types.UNAUTHENTICATED)
+      }
+    } catch (e) {
+      commit(types.UNAUTHENTICATED)
+    } finally {
+      commit(types.AUTH_INITIALIZED)
+    }
+  },
+  getUserProfile ({ commit }) {
+    return GroupwareAPI.get('/user/info')
+      .then(r => r.data.data)
+      .then(profile => {
+        commit(types.SET_USER, {
+          user: {
+            name: profile.nama_lengkap,
+            email: profile.email,
+            photo: profile.foto
+          }
+        })
+      })
+  },
+  logout () {
+    if (!window.GAuth) {
 
-    commit(types.UNAUTHENTICATED)
+    }
   }
 }

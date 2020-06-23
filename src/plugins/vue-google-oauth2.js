@@ -9,5 +9,8 @@ const opts = {
 export default {
   install (Vue) {
     Vue.use(GAuth, opts)
+    if (window) {
+      window.GAuth = Object.create(Vue.prototype.$gAuth)
+    }
   }
 }
