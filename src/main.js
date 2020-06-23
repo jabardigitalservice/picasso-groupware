@@ -3,25 +3,51 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
-import './lib/firebase'
-
-import '@fortawesome/fontawesome-free/js/all'
-import 'sweetalert2/src/sweetalert2.scss'
-
-// plugins
-import VeeValidate from './plugins/vee-validate'
-import SweetAlert2 from './plugins/sweet-alert2'
-
-;[
-  VeeValidate,
-  SweetAlert2
-].forEach(plugin => Vue.use(plugin))
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
-new Vue({
-  router,
-  store,
-  ...App
-})
+/**
+ * prevent lib chunk to be included on entry point
+ */
+function importLib () {
+  return Promise.all([
+    import(/* webpackChunkName: "css-vue-datetime" */'vue-datetime/dist/vue-datetime.css'),
+    import(/* webpackChunkName: "js-fort-awesome" */'@fortawesome/fontawesome-free/js/all'),
+    import(/* webpackChunkName: "css-sweetalert" */'sweetalert2/src/sweetalert2.scss')
+  ])
+}
+
+/**
+ * prevent plugins chunk to be included on entry point
+ */
+function importPlugins () {
+  const ctx = require.context('./plugins/', false, /\.js$/, 'lazy')
+  const plugins = ctx.keys().map(key => {
+    return ctx(key)
+  })
+  return Promise.all(plugins)
+}
+
+/**
+ * asynchronously load all extraneous chunks before Vue initialization
+ */
+async function init () {
+  await importLib()
+  await importPlugins()
+    .then(plugins => {
+      for (let { default: p } of plugins) {
+        if (!p || typeof p.install !== 'function') {
+          continue
+        }
+        Vue.use(p)
+      }
+    })
+  /* eslint-disable no-new */
+  new Vue({
+    router,
+    store,
+    ...App
+  })
+}
+
+init()

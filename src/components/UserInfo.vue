@@ -20,17 +20,26 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { UNAUTHENTICATED } from '../store/mutation-types'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   computed: mapGetters({
     // authLoading: 'auth/loading'
     user: 'auth/user'
   }),
-
   methods: {
-    signOut () {
-      this.$store.dispatch('auth/logout')
+    ...mapMutations('auth', [
+      UNAUTHENTICATED
+    ]),
+    async signOut () {
+      try {
+        await this.$store.dispatch('auth/logout')
+      } catch (e) {
+        //
+      } finally {
+        this[UNAUTHENTICATED]()
+      }
     }
   }
 }

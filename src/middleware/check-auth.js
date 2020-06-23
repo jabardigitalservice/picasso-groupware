@@ -1,20 +1,18 @@
 import store from '@/store'
-import firebase from 'firebase'
+import { getTokenFromCookie } from '../lib/js-cookie'
+import { setToken } from '../lib/axios'
 
 export default async (to, from, next) => {
-  // if not already logged in
-  if (!store.getters['auth/check']) {
-    firebase.auth().onAuthStateChanged(async (user) => {
-      if (user) {
-        await store.dispatch('auth/login', { user: user })
-        next()
-      } else {
-        store.commit('auth/AUTH_INITIALIZED')
-        next()
-      }
-    })
+  const t = getTokenFromCookie()
+  if (t) {
+    setToken(t)
+    await store.dispatch('auth/getUserProfile')
   }
 
-  // if already logged in
+  store.commit('auth/AUTH_INITIALIZED')
+  if (!store.state.auth.user && to.path !== '/') {
+    next('/')
+    return
+  }
   next()
 }

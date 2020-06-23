@@ -1,11 +1,27 @@
-import { SET_ORGANIZATION_JOBS, SET_EDUCATIONS } from '../mutation-types'
+import { SET_PROJECT_LIST, SET_ORGANIZATION_JOBS, SET_EDUCATIONS } from '../mutation-types'
+import { GroupwareAPI } from '../../lib/axios'
+import _orderBy from 'lodash/orderBy'
 
 export const state = () => ({
+  projects: [],
   jobs: [],
   educations: []
 })
 
+export const getters = {
+  listOfProjects (state) {
+    const arr = Array.isArray(state.projects) ? state.projects.map(p => ({
+      name: p.projectName,
+      id: p._id
+    })) : []
+    return _orderBy(arr, ['name'], ['asc'])
+  }
+}
+
 export const mutations = {
+  [SET_PROJECT_LIST] (state, projects) {
+    state.projects = projects
+  },
   [SET_ORGANIZATION_JOBS] (state, jobs) {
     state.jobs = jobs
   },
@@ -15,6 +31,19 @@ export const mutations = {
 }
 
 export const actions = {
+  fetchProjects ({ state, commit }) {
+    if (!Array.isArray(state.projects) || !state.projects.length) {
+      return GroupwareAPI.get('/project/')
+        .then(r => r.data.results)
+        .then(projects => {
+          commit(SET_PROJECT_LIST, projects)
+        })
+        .catch(e => {
+          console.error(e)
+        })
+    }
+    return state.projects
+  },
   fetchEducations ({ state, commit }, { fresh = false } = {}) {
     const educations = [
       'Diploma',

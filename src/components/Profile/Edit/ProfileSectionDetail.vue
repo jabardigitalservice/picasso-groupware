@@ -1,36 +1,90 @@
 <template>
   <div>
-    <h3 class="p-8 font-bold text-2xl text-white bg-brand-blue">
-      <transition name="slide-y-fade-transition"
-                  mode="out-in">
-        <span :key="name" :class="['profile-section-detail__title', hasUnsavedChanges && 'has-unsaved-changes']">
-          {{name}}
-        </span>
-      </transition>
-    </h3>
-    <transition name="slide-y-fade-transition"
-                mode="out-in">
-      <component ref="profileData"
-                 :key="data.updated_at ? data.updated_at.seconds : data.created_at.seconds"
-                 :is="sectionComponent"
-                 :data="data"
-                 :unsaved="!hasUnsavedChanges"
-                 class="p-8"
-                 @reload:profile="onReloadProfile" />
-    </transition>
+    <DataLoader :promise="promisedUserData">
+      <template #pending>
+        <div class="w-full h-full flex justify-center items-center bg-gray-200"
+             style="min-height: 200px;">
+          <i class="app-logo is-rounded is-beating"></i>
+        </div>
+      </template>
+      <template #error="{error}">
+        <div class="w-full h-full flex flex-col justify-center items-center">
+          <h5 class="text-2xl text-gray-500 font-bold">Oops! Terjadi Kesalahan</h5>
+          <p class="text-red-500">
+            <code>
+              {{error}}
+            </code>
+          </p>
+        </div>
+      </template>
+      <template #default>
+        <div>
+          <h3 class="px-4 py-8 sm:px-8 font-bold text-2xl text-white bg-brand-blue">
+            <transition name="slide-y-fade-transition"
+                        mode="out-in">
+              <span :key="name" :class="['profile-section-detail__title', !isPristine && 'has-unsaved-changes']">
+                {{name}}
+              </span>
+            </transition>
+          </h3>
+          <ValidationObserver tag="div" class="px-4 py-8 sm:px-8" #default="{validate}">
+            <transition name="slide-y-fade-transition"
+                      mode="out-in">
+              <div :key="name">
+                <component ref="profileData"
+                          :key="existingData.updated_at ? existingData.updated_at.seconds : existingData.created_at.seconds"
+                          :is="sectionComponent"
+                          :data="editedData"
+                          @change:data="onDataChanged"/>
+                <div class="flex flex-row justify-end items-center">
+                  <button class="button bg-brand-green text-white mr-4"
+                          :disabled="isPristine"
+                          @click="onSave(validate)">
+                    Simpan
+                  </button>
+                    <button class="button bg-gray-500 text-white"
+                          :disabled="isPristine"
+                          @click="onCancel">
+                    Batal
+                  </button>
+                </div>
+              </div>
+            </transition>
+          </ValidationObserver>
+        </div>
+      </template>
+    </DataLoader>
   </div>
 </template>
 
 <script>
+import _cloneDeep from 'lodash/cloneDeep'
+import _get from 'lodash/get'
+import _set from 'lodash/set'
+import _unset from 'lodash/unset'
+import _debounce from 'lodash/debounce'
+import _isMatch from 'lodash/isMatch'
+
+import DataLoader from '../../DataLoader'
+
+import { upsertUserDocument, deleteUserDocument, upsertUserProfileDetail } from '../../../api'
+import { PROFILE_DETAIL_IS_PRISTINE } from '../../../store/mutation-types'
+import { DOCUMENT_NAMESPACE, invalidDataAlert, savingAlert, successAlert, errorAlert } from './utils'
+
 export default {
+  components: {
+    DataLoader
+  },
   props: {
     name: {
       type: String
-    },
-    data: {
-      type: Object,
-      required: true,
-      default: () => ({})
+    }
+  },
+  data () {
+    return {
+      promisedUserData: null,
+      existingData: {},
+      editedData: {}
     }
   },
   computed: {
@@ -40,17 +94,113 @@ export default {
       }
       return null
     },
-    hasUnsavedChanges () {
-      return this.$store.state['profile-detail'].hasUnsavedChanges
+    userId () {
+      const { user } = this.$store.state.auth
+      return user ? user.id : null
+    },
+    isPristine: {
+      get () {
+        return this.$store.state['profile-detail'].isPristine
+      },
+      set (truthy) {
+        this.$store.commit(`profile-detail/${PROFILE_DETAIL_IS_PRISTINE}`, !!truthy)
+      }
     }
   },
   methods: {
-    onReloadProfile () {
-      this.$store.dispatch('profile-detail/fetchItem', {
-        id: this.data.id,
-        fresh: true,
-        silent: true
-      })
+    async loadUserData () {
+      this.promisedUserData = null
+      if (this.userId) {
+        this.promisedUserData = new Promise((resolve, reject) => {
+          this.$store.dispatch('profile-detail/fetchItem', {
+            id: this.userId,
+            fresh: false,
+            silent: true
+          }).then(data => {
+            this.existingData = data
+            this.editedData = _cloneDeep(data)
+            setTimeout(() => {
+              resolve()
+            }, 2000)
+          })
+        })
+      }
+      return this.promisedUserData
+    },
+    onDataChanged (editedData) {
+      this.editedData = editedData
+    },
+    async onSave (validateFn) {
+      try {
+        const isValid = await validateFn()
+        if (!isValid) {
+          return invalidDataAlert()
+        } else {
+          savingAlert()
+          await this.handleFiles()
+          await this.handleData()
+          this.isPristine = true
+          this.$store.dispatch('profile-detail/fetchItem', {
+            id: this.userId,
+            fresh: true,
+            silent: true
+          }).then(data => {
+            this.existingData = data
+            this.editedData = _cloneDeep(data)
+          }).catch(e => {
+            this.isPristine = false
+          })
+          return successAlert()
+        }
+      } catch (e) {
+        return errorAlert(e)
+      }
+    },
+    async handleFiles () {
+      const namespaces = Object.entries(DOCUMENT_NAMESPACE)
+      try {
+        // eslint-disable-next-line
+        for (let [documentType, ns] of namespaces) {
+          const savedURL = _get(this.existingData, ns.url)
+          const newURL = _get(this.editedData, ns.url)
+          const newFile = _get(this.editedData, ns.file)
+
+          if (savedURL === newURL) {
+            continue
+          } else if (savedURL && !newURL) {
+            await deleteUserDocument(savedURL)
+          } else if (newFile) {
+            await upsertUserDocument(this.userId, documentType, newFile)
+              .then(url => {
+                _unset(this.editedData, ns.file)
+                _set(this.editedData, ns.url, url)
+              })
+          }
+        }
+        return Promise.resolve()
+      } catch (e) {
+        return Promise.reject(e)
+      }
+    },
+    async handleData () {
+      return upsertUserProfileDetail(this.userId, this.editedData)
+    },
+    async onCancel () {
+      this.editedData = _cloneDeep(this.existingData)
+      return this.$nextTick()
+    }
+  },
+  watch: {
+    userId: {
+      immediate: true,
+      handler: 'loadUserData'
+    },
+    editedData: {
+      immediate: true,
+      deep: true,
+      handler: _debounce(function (editedData) {
+        this.isPristine = _isMatch(this.existingData, editedData)
+      }, 300)
     }
   }
 }

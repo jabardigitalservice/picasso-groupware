@@ -1,16 +1,14 @@
 <template>
-  <ValidationProvider
-    :rules="rules"
-    :custom-messages="customMessages"
-    #default="{failed, errors, validate}"
-    tag="div"
-  >
-    <FormInputHeader
-      :label-for="name"
-      :title="title"
-      :subtitle="subtitle"
-      :required="required"
-    >
+  <ValidationProvider :rules="rules"
+                      :disabled="shouldDisableValidation"
+                      :custom-messages="customMessages"
+                      #default="{failed, errors}"
+                      tag="div"
+                      ref="validator">
+    <FormInputHeader :label-for="name"
+                      :title="title"
+                      :subtitle="subtitle"
+                      :required="required">
       <template #title>
         <slot name="title"></slot>
       </template>
@@ -18,43 +16,53 @@
         <slot name="subtitle"></slot>
       </template>
     </FormInputHeader>
-    <div
-      v-if="value"
-      class="document-icon"
-    />
-    <div
-      :class="{'form-input__file mb-2': true, 'is-invalid': failed}"
-    >
-      <button
-        v-if="!file"
-        role="add"
-        @click="onChooseFile"
-      >
-        Pilih
-      </button>
-      <button
-        v-else
-        role="remove"
-        @click="onRemoveFile"
-      >
-        Hapus
-      </button>
-      <a
-        :href="objectURL || false"
-        target="_blank"
-        @click.prevent="onPreviewDocument"
-      >
-        {{file ? file.name : ''}}
-      </a>
-    </div>
-    <input
-      v-show="false"
-      ref="input"
-      :name="name"
-      type="file"
-      v-bind="$attrs"
-      @change="onChange(validate, $event)"
-    >
+    <DataLoader v-if="promisedMetadata"
+                :promise="promisedMetadata">
+      <template #pending>
+        <ContentLoader  class="max-w-xs"
+                        :width="320"
+                        :height="128"
+                        :speed="2"
+                        primary-color="#eceff1"
+                        secondary-color="#fafafa">
+          <rect x="0" y="0" rx="8" ry="8" width="128" height="128"></rect>
+          <rect x="144" y="0" rx="8" ry="8" width="100" height="16"></rect>
+          <rect x="144" y="32" rx="8" ry="8" width="176" height="16"></rect>
+          <rect x="144" y="64" rx="8" ry="8" width="176" height="16"></rect>
+          <rect x="144" y="96" rx="8" ry="8" width="64" height="16"></rect>
+        </ContentLoader>
+      </template>
+      <template #default="{value: metadata}">
+        <FilePreview  v-if="metadata"
+                      :name="filename"
+                      :size="metadata.size"
+                      :type="metadata.type"
+                      :url="mFileURL"
+                      @view="onPreviewDocument"
+                      @update:name="onFilenameChanged"
+                      @delete="onRemoveFile"/>
+      </template>
+    </DataLoader>
+    <template v-else>
+      <div :class="{'form-input__file mb-2': true, 'is-invalid': failed}">
+        <button @click="onChooseFile">
+          Pilih
+        </button>
+        <a :href="mFileURL || false"
+            target="_blank"
+            @click.prevent="onPreviewDocument">
+          {{(mFile && mFile.name) || mFileURL}}
+        </a>
+      </div>
+      <input v-show="false"
+            ref="input"
+            :name="name"
+            :rules="rules"
+            type="file"
+            :multiple="false"
+            v-bind="$attrs"
+            @change="onChange($event)">
+    </template>
     <p v-if="errors.length"
        class="form-input__error-hint">
       <slot name="error">
@@ -65,60 +73,151 @@
 </template>
 
 <script>
+import { ContentLoader } from 'vue-content-loader'
+import { getStoredFileMetadata } from '../../api'
 import { props, components } from './input-mixin'
+// import {GroupwareAPI} from '../../lib/axios'
+
+const STORAGE = {
+  FIREBASE: 'firebase',
+  GROUPWARE_SERVICE: 'groupware-service'
+}
 
 export default {
   inheritAttrs: false,
   components: {
-    ...components
-  },
-  model: {
-    prop: 'value',
-    event: 'change'
+    ...components,
+    ContentLoader,
+    DataLoader: () => import('../DataLoader'),
+    FilePreview: () => import('./FilePreview')
   },
   props: {
     ...props,
     value: {
+      type: String
+    },
+    file: {
       type: File
+    },
+    filename: {
+      type: String
+    },
+    source: {
+      type: String,
+      default: STORAGE.FIREBASE,
+      validator (v) {
+        return [STORAGE.FIREBASE, STORAGE.GROUPWARE_SERVICE].includes(v)
+      }
     }
   },
   data () {
     return {
-      file: null,
-      objectURL: null
+      mFile: null,
+      mFileURL: null,
+
+      promisedMetadata: null
+    }
+  },
+  mounted () {
+    this.$nextTick()
+      .then(() => {
+        this.$watch(
+          function () {
+            return [this.value, this.file]
+          },
+          function (arr) {
+            const [value, file] = arr
+            this.mFileURL = value
+            this.mFile = file
+            if (typeof this.mFileURL === 'string' && this.mFileURL.startsWith('http')) {
+              this.promisedMetadata = this.getFileMetadata(this.mFileURL)
+            } else if (this.mFile instanceof File) {
+              this.promisedMetadata = new Promise(resolve => resolve(this.mFile))
+            }
+          },
+          { immediate: true, deep: true }
+        )
+      })
+  },
+  computed: {
+    shouldDisableValidation () {
+      return typeof this.value === 'string' && this.value.startsWith('https://')
     }
   },
   methods: {
-    onChooseFile () {
-      this.file = null
-      this.objectURL = null
-      if (this.$refs.input) {
-        this.$refs.input.setAttribute('type', '')
-        this.$nextTick(() => {
-          this.$refs.input.setAttribute('type', 'file')
-          this.$refs.input.click()
+    getFileMetadata (url) {
+      if (this.source === STORAGE.FIREBASE) {
+        return new Promise((resolve, reject) => {
+          getStoredFileMetadata(url)
+            .then((metadata = {}) => {
+              resolve({
+                name: metadata.name,
+                type: metadata.contentType,
+                size: metadata.size
+              })
+            })
+            .catch(e => {
+              reject(e)
+            })
         })
       }
+      if (this.source === STORAGE.GROUPWARE_SERVICE) {
+        return Promise.resolve({})
+      }
+    },
+    resetInputElement () {
+      if (this.$refs.input) {
+        this.$refs.input.type = ''
+        this.$refs.input.setAttribute('type', '')
+        return this.$nextTick()
+          .then(() => {
+            this.$refs.input.type = 'file'
+            this.$refs.input.setAttribute('type', 'file')
+          })
+      }
+      return Promise.resolve()
+    },
+    onChooseFile () {
+      this.mFile = null
+      this.mFileURL = null
+      this.resetInputElement()
+        .then(() => {
+          this.$refs.input.click()
+        })
     },
     onRemoveFile () {
-      this.file = null
-      this.objectURL = null
+      this.promisedMetadata = null
+      this.resetInputElement()
+        .then(() => {
+          this.mFile = null
+          this.mFileURL = null
+          this.emitChange(null, null, null)
+          return this.$nextTick()
+        }).then(() => {
+          this.$refs.validator.validate()
+        })
     },
-    onChange (validator, e) {
-      if (typeof validator === 'function') {
-        validator(e)
-      }
+    onFilenameChanged (name) {
+      this.$emit('update:filename', name)
+    },
+    onChange (e) {
       if (e.target.files) {
-        this.file = e.target.files.length ? e.target.files[0] : null
-        this.objectURL = window.URL.createObjectURL(this.file)
-        this.$emit('change', this.file)
+        this.mFile = e.target.files.length ? e.target.files[0] : null
+        this.mFileURL = window.URL.createObjectURL(this.mFile)
+        this.emitChange(this.mFileURL, this.mFile.name, this.mFile)
       }
+      this.$nextTick()
+        .then(() => {
+          this.$refs.validator.validate(e)
+        })
     },
-    onPreviewDocument (e) {
-      if (!e.target.href) {
-        return
-      }
-      window.open(e.target.href, '_blank')
+    emitChange (url, filename, file) {
+      this.$emit('update:value', url)
+      this.$emit('update:filename', filename)
+      this.$emit('update:file', file)
+    },
+    onPreviewDocument () {
+      this.mFileURL && window.open(this.mFileURL, '_blank')
     }
   }
 }
