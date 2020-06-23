@@ -81,9 +81,13 @@ export const actions = {
         })
       })
   },
-  logout () {
+  async logout () {
     if (!window.GAuth) {
-
+      return
     }
+    await window.GAuth.signOut()
+    setToken(null)
+    setTokenInCookie(null)
+    window.location.reload()
   }
 }

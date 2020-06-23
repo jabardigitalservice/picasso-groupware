@@ -34,9 +34,7 @@ export default {
     ]),
     async signOut () {
       try {
-        await this.$gAuth.signOut()
-        window.location.reload()
-        return
+        await this.$store.dispatch('auth/logout')
       } catch (e) {
         //
       } finally {
