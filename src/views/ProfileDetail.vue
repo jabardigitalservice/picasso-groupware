@@ -1,6 +1,8 @@
 <template>
   <div class="messages">
-    <div class="container mx-auto">
+    <div class="container max-w-5xl mx-auto">
+      <DataCompletionStatus mode="redirect"
+                            class="w-full md:mb-8 mx-auto bg-transparent md:bg-gray-300"/>
       <template v-if="user && !loading">
         <template v-if="!error">
           <div class="bg-white m-0 sm:rounded shadow">
@@ -100,7 +102,8 @@ export default {
   middleware: 'auth',
 
   components: {
-    ContentLoader
+    ContentLoader,
+    DataCompletionStatus: () => import('../components/Profile/Edit/DataCompletionStatus')
   },
 
   metaInfo: {

@@ -61,7 +61,7 @@ export default {
     }
   },
 
-  created () {
+  mounted () {
     document.body.classList.add('loading')
 
     // Listen for swUpdated event and display refresh snackbar as required.
@@ -78,10 +78,6 @@ export default {
   computed: mapGetters({
     loading: 'auth/loading'
   }),
-
-  mounted () {
-    // this.$loading = this.$refs.loading
-  },
 
   watch: {
     loading (value) {
