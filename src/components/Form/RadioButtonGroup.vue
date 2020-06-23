@@ -84,7 +84,7 @@ export default {
     onValidatorMounted () {
       this.$watch(
         function () {
-          return this.$refs.validator.length ? this.$refs.validator[0].errors : []
+          return this.$refs.validator.errors || []
         },
         function (errors) {
           this.errors = errors
