@@ -31,8 +31,8 @@ async function init () {
   await importLib()
   await importPlugins()
     .then(plugins => {
-      for (let p of plugins) {
-        if (!p || typeof p !== 'function') {
+      for (let { default: p } of plugins) {
+        if (!p || typeof p.install !== 'function') {
           continue
         }
         Vue.use(p)
