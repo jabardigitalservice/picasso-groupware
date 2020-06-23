@@ -13,7 +13,7 @@
               <div class="w-full pt-4 text-center">
                 <div class="">
                   <i class="far fa-4x fa-check-circle mb-4 text-gray-600" />
-                  <p class="text-sm">Silahkan login untuk melakukan checkin.</p>
+                  <p class="text-sm">Silahkan login terlebih dahulu</p>
                 </div>
                 <div class="mx-2 my-2">
                   <login-button />
@@ -63,7 +63,7 @@ export default {
   data () {
     return {
       menuItems: [
-        { name: 'Checkin', to: '/checkins', icon: 'far fa-check-circle' },
+        // { name: 'Checkin', to: '/checkins', icon: 'far fa-check-circle' },
         { name: 'Laporan', to: '/report', icon: 'fa fa-book ' }
         // { name: 'Events', to: '/events', icon: 'far fa-calendar ' },
         // { name: 'Thank You', to: '/thankyou', icon: 'far fa-heart ' },
