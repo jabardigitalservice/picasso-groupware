@@ -4,19 +4,28 @@ import { setToken } from '../lib/axios'
 
 export default async (to, from, next) => {
   try {
-    const t = getTokenFromCookie()
-    if (t) {
-      setToken(t)
-      await store.dispatch('auth/getUserProfile')
+    if (!store.state.auth.user && !store.state.auth.isInitialized) {
+      const t = getTokenFromCookie()
+      if (t) {
+        setToken(t)
+        await store
+          .dispatch('auth/getUserProfile')
+          .catch(e => {})
+      }
     }
 
     store.commit('auth/AUTH_INITIALIZED')
-    if (!store.state.auth.user && to.path !== '/') {
-      next('/')
-      return
+    if (store.state.auth.user) {
+      next()
+    } else {
+      if (to.path === '/') {
+        next()
+      } else {
+        next('/')
+      }
     }
-    next()
   } catch (e) {
+    store.commit('auth/AUTH_INITIALIZED')
     next('/')
   }
 }

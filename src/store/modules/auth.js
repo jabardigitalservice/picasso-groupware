@@ -12,7 +12,8 @@ export const state = {
 export const getters = {
   loading: state => state.loading,
   user: state => state.user,
-  check: state => state.user !== null
+  check: state => state.user !== null,
+  isInitialized: state => state.loading
 }
 
 // mutations
@@ -68,18 +69,21 @@ export const actions = {
       commit(types.AUTH_INITIALIZED)
     }
   },
-  getUserProfile ({ commit }) {
-    return GroupwareAPI.get('/user/info')
-      .then(r => r.data.data)
-      .then(profile => {
-        commit(types.SET_USER, {
-          user: {
-            name: profile.nama_lengkap,
-            email: profile.email,
-            photo: profile.foto
-          }
+  async getUserProfile ({ state, commit }) {
+    if (!state.user) {
+      await GroupwareAPI.get('/user/info')
+        .then(r => r.data.data)
+        .then(profile => {
+          commit(types.SET_USER, {
+            user: {
+              name: profile.nama_lengkap,
+              email: profile.email,
+              photo: profile.foto
+            }
+          })
         })
-      })
+    }
+    return state.user
   },
   async logout () {
     if (!window.GAuth) {
