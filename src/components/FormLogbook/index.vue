@@ -8,6 +8,11 @@
         label-key="name"
         :options="projectOptions"
         :value="payload.projectId"
+        rules="required"
+        :required="true"
+        :custom-messages="{
+          required: 'Nama proyek harus diisi'
+        }"
         @change="onSelectedProjectChanged"/>
       <br/>
       <FormInput
@@ -25,6 +30,9 @@
         title="Tanggal"
         type="date"
         rules="required"
+        :custom-messages="{
+          required: 'Tanggal harus diisi'
+        }"
         v-model="payload.dateTask"
       />
       <br/>
@@ -33,6 +41,9 @@
         title="Jam Mulai"
         type="time"
         rules="required"
+        :custom-messages="{
+          required: 'Jam mulai harus diisi'
+        }"
         v-model="payload.startTimeTask"
       />
       <br/>
@@ -41,6 +52,9 @@
         title="Jam Selesai"
         type="time"
         rules="required"
+        :custom-messages="{
+          required: 'Jam selesai harus diisi'
+        }"
         v-model="payload.endTimeTask"
       />
       <br/>
@@ -142,7 +156,10 @@
         type="text"
         name="organizerTask"
         title="Penyelenggara"
-        :required="false"
+        rules="required"
+        :custom-messages="{
+          required: 'Penyelenggara harus diisi'
+        }"
         v-model="payload.organizerTask"/>
       <br/>
       <div class="flex justify-end">
