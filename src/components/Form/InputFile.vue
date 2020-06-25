@@ -51,7 +51,7 @@
         <a :href="mFileURL || false"
             target="_blank"
             @click.prevent="onPreviewDocument">
-          {{(mFile && mFile.name) || mFileURL}}
+          {{(mFile && mFile.name) || mFileURL || $attrs.placeholder }}
         </a>
       </div>
       <input v-show="false"
