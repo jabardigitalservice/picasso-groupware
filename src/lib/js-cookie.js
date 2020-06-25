@@ -2,11 +2,11 @@ import jsCookie from 'js-cookie'
 
 const key = 'groupware_token'
 
-export function setTokenInCookie (token) {
+export function setTokenInCookie (token, opts) {
   if (typeof token !== 'string' || !token.length) {
     jsCookie.remove(key)
   } else {
-    jsCookie.set(key, token)
+    jsCookie.set(key, token, opts)
   }
 }
 

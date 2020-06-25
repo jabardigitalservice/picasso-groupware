@@ -8,6 +8,11 @@
         label-key="name"
         :options="projectOptions"
         :value="payload.projectId"
+        rules="required"
+        :required="true"
+        :custom-messages="{
+          required: 'Nama proyek harus diisi'
+        }"
         @change="onSelectedProjectChanged"/>
       <br/>
       <FormInput
@@ -25,6 +30,9 @@
         title="Tanggal"
         type="date"
         rules="required"
+        :custom-messages="{
+          required: 'Tanggal harus diisi'
+        }"
         v-model="payload.dateTask"
       />
       <br/>
@@ -33,6 +41,9 @@
         title="Jam Mulai"
         type="time"
         rules="required"
+        :custom-messages="{
+          required: 'Jam mulai harus diisi'
+        }"
         v-model="payload.startTimeTask"
       />
       <br/>
@@ -41,6 +52,9 @@
         title="Jam Selesai"
         type="time"
         rules="required"
+        :custom-messages="{
+          required: 'Jam selesai harus diisi'
+        }"
         v-model="payload.endTimeTask"
       />
       <br/>
@@ -68,63 +82,85 @@
         </FormRadioButtonGroup>
       </div>
       <br/>
-      <div class="relative">
-        <FormRadioButtonGroup
-          name="urgencyTask"
-          title="Tingkat Kepentingan"
-          :options="[1,2,3,4,5]"
-          rules="required"
-          :custom-messages="{
-            required: 'Tingkat kepentingan harus diisi'
-          }"
-          v-model="payload.urgencyTask"
-        >
-          <template #subtitle>
-            <div class="flex justify-between font-bold text-gray-500">
-              <small>
-                Tidak Penting
-              </small>
-              <small>
-                Penting
-              </small>
-            </div>
-          </template>
-        </FormRadioButtonGroup>
-      </div>
+      <FormRadioButtonGroup
+        class="mb-2"
+        name="isMainTask"
+        title="Jenis Tugas"
+        :block="true"
+        :options="mainTaskOptions"
+        :required="true"
+        v-model="payload.isMainTask"
+      />
       <br/>
       <FormInputFile
         name="evidenceTask"
-        title="Task Evidence"
-        :value.sync="payload.evidenceTask"
-        :file.sync="payload.evidenceTaskFileBlob"
-        :filename.sync="payload.evidenceTaskFilename"
-        rules="required"
+        title="Screenshot / Foto Hasil Kerja"
+        :value.sync="evidenceTaskFileURL"
+        :file.sync="evidenceTaskFileBlob"
+        :filename.sync="evidenceTaskFilename"
+        rules="required|mimes:image/*"
+        accept="image/*"
         :custom-messages="{
           required: 'Evidence harus diisi'
         }"
         />
       <br/>
-      <FormInputFile
-        name="documentTask"
-        title="Task Document"
-        :value.sync="payload.documentTask"
-        :file.sync="payload.documentTaskFileBlob"
-        :filename.sync="payload.documentTaskFilename"
+      <FormRadioButtonGroup
+        class="mb-2"
+        name="selectedDocumentType"
+        title="Dokumen"
+        :block="false"
+        :options="documentTypeOptions"
         :required="false"
-        />
+        :value="selectedDocumentType"
+        @change="onDocumentTypeSelectionChanged"
+      >
+        <template #subtitle>
+          <span class="font-bold text-gray-500">
+            *Pilih salah satu
+          </span>
+        </template>
+      </FormRadioButtonGroup>
+      <FormInputFile
+        v-if="isUsingFileAsDocument"
+        name="documentTask"
+        title="File Dokumen"
+        placeholder="Choose file..."
+        :value.sync="documentTaskFileURL"
+        :file.sync="documentTaskFileBlob"
+        :filename.sync="documentTaskFilename"
+        :required="false"
+      >
+        <template #title>
+          <span></span>
+        </template>
+      </FormInputFile>
+      <FormInput
+        v-if="isUsingLinkAsDocument"
+        type="text"
+        name="documentTask"
+        title="Link Dokumen"
+        placeholder="https://"
+        :rules="{regex: /^https?:\/\//}"
+        :custom-messages="{
+          regex: 'Link harus dalam bentuk URL yang valid'
+        }"
+        :required="false"
+        v-model="documentTaskLink">
+        <template #title>
+          <span></span>
+        </template>
+      </FormInput>
       <br/>
       <FormInput
         type="text"
         name="organizerTask"
-        title="Organizer"
-        :required="false"
+        title="Penyelenggara"
+        rules="required"
+        :custom-messages="{
+          required: 'Penyelenggara harus diisi'
+        }"
         v-model="payload.organizerTask"/>
-      <br/>
-      <FormTextarea
-        name="otherInformation"
-        title="Other Information"
-        :required="false"/>
-      <br/>
       <br/>
       <div class="flex justify-end">
         <button
@@ -149,23 +185,27 @@ import FormSelect from '../Form/Select'
 import FormInput from '../Form/Input'
 import FormInputFile from '../Form/InputFile'
 import FormInputDateTime from '../Form/InputDateTime'
-import FormTextarea from '../Form/Textarea'
 import FormRadioButtonGroup from '../Form/RadioButtonGroup'
 import { GroupwareAPI } from '../../lib/axios'
 
+const DOCUMENT_TYPE = {
+  FILE: 'FILE',
+  LINK: 'LINK'
+}
+
 const modelData = {
   'dateTask': null, // timestamptz '2020-06-11T06:55:24.698Z'
-  'projectId': '5ee3aef4d1beda00113e4337', // ?
-  'projectName': 'Sapawarga', // ?
+  'projectId': null, // ?
+  'projectName': null, // ?
   'nameTask': null, // ?
   'startTimeTask': null, // timestamptz '2020-06-11T06:55:24.698Z'
   'endTimeTask': null, // timestamptz '2020-06-11T06:55:24.698Z'
-  'urgencyTask': null, // number in range of [1,5]
   'difficultyTask': null, // number in range of [1, 5]
   'evidenceTask': null, // URI 'http://'
   'documentTask': null, // URI 'http://'
-  'organizerTask': null, // ?
-  'otherInformation': null // ?
+  'organizerTask': null, // ?,
+  'isMainTask': null,
+  'isDocumentLink': true
 }
 
 export default {
@@ -174,7 +214,6 @@ export default {
     FormInput,
     FormInputFile,
     FormInputDateTime,
-    FormTextarea,
     FormRadioButtonGroup
   },
   props: {
@@ -191,12 +230,47 @@ export default {
   },
   data () {
     return {
-      payload: Object.assign({}, modelData)
+      payload: Object.assign({}, modelData),
+      mainTaskOptions: [
+        {
+          value: true,
+          label: 'Tugas Pokok'
+        },
+        {
+          value: false,
+          label: 'Tugas Tambahan'
+        }
+      ],
+      documentTypeOptions: [
+        {
+          value: DOCUMENT_TYPE.LINK,
+          label: 'Link'
+        },
+        {
+          value: DOCUMENT_TYPE.FILE,
+          label: 'File'
+        }
+      ],
+      selectedDocumentType: DOCUMENT_TYPE.LINK,
+      documentTaskFileURL: null,
+      documentTaskFileBlob: null,
+      documentTaskFilename: null,
+      documentTaskLink: null,
+
+      evidenceTaskFileURL: null,
+      evidenceTaskFileBlob: null,
+      evidenceTaskFilename: null
     }
   },
   computed: {
     projectOptions () {
       return this.$store.getters['organizations/listOfProjects']
+    },
+    isUsingFileAsDocument () {
+      return this.selectedDocumentType === DOCUMENT_TYPE.FILE
+    },
+    isUsingLinkAsDocument () {
+      return this.selectedDocumentType === DOCUMENT_TYPE.LINK
     }
   },
   watch: {
@@ -209,12 +283,10 @@ export default {
         this.getLogbook(id)
           .then(logbook => {
             if (logbook) {
-              const { evidenceTask, documentTask, ...rest } = logbook
-              this.payload = {
-                ...rest,
-                evidenceTask: evidenceTask.fileURL,
-                documentTask: documentTask.fileURL
-              }
+              const { evidenceTask, documentTask } = logbook
+              this.payload = logbook
+              this.evidenceTaskFileURL = evidenceTask.fileURL
+              this.documentTaskFileURL = documentTask.fileURL
             }
           })
       }
@@ -245,6 +317,10 @@ export default {
         this.$set(this.payload, 'projectName', opt.name)
       }
     },
+    onDocumentTypeSelectionChanged (type) {
+      this.selectedDocumentType = type
+      this.$set(this.payload, 'isDocumentLink', type === DOCUMENT_TYPE.LINK)
+    },
     onCancel () {
       this.resetPayload()
     },
@@ -252,10 +328,6 @@ export default {
       const {
         evidenceTask,
         documentTask,
-        evidenceTaskFileBlob,
-        documentTaskFileBlob,
-        evidenceTaskFilename,
-        documentTaskFilename,
         ...rest
       } = this.payload
 
@@ -263,8 +335,12 @@ export default {
       Object.entries(rest).forEach(([key, value]) => {
         formData.append(key, value)
       })
-      formData.append('evidenceTask', evidenceTaskFileBlob)
-      formData.append('documentTask', documentTaskFileBlob)
+      formData.append('evidenceTask', this.evidenceTaskFileBlob)
+      if (this.isUsingFileAsDocument) {
+        formData.append('documentTask', this.documentTaskFileBlob)
+      } else if (this.isUsingLinkAsDocument) {
+        formData.append('documentTask', this.documentTaskLink)
+      }
 
       return formData
     },

@@ -22,20 +22,24 @@
             :checked="value !== null && typeof value !== 'undefined' ? true : false"
             :name="name">
     </ValidationProvider>
-    <div class="mb-2 flex flex-row flex-no-wrap justify-center items-center
-                rounded overflow-hidden
-                border border-solid border-brand-blue">
+    <div
+      :class="{
+        'mb-2 rounded overflow-hidden border border-solid border-brand-blue': true,
+        'flex-row flex-no-wrap justify-center items-center': true,
+        'flex': block,
+        'inline-flex': !block
+      }">
       <button
           v-for="(opt, index) in options"
           :key="index"
           :class="{
             'flex-1 px-6 py-2 border-solid outline-none focus:outline-none': true,
             'border-l': index !== 0,
-            'text-white border-brand-blue bg-brand-blue hover:bg-brand-blue-light': opt === value,
-            'text-gray-500 border-gray-300 hover:bg-gray-300': opt !== value,
+            'text-white border-brand-blue bg-brand-blue hover:bg-brand-blue-light': getOptionValue(opt) === value,
+            'text-gray-500 border-gray-300 hover:bg-gray-300': getOptionValue(opt) !== value,
           }"
           @click="onOptionSelected(opt)">
-        {{opt}}
+        {{ getOptionLabel(opt) }}
       </button>
     </div>
     <p v-if="errors.length"
@@ -60,19 +64,25 @@ export default {
   },
   props: {
     ...props,
+    block: {
+      type: Boolean,
+      default: true
+    },
     value: {
-      type: [String, Number],
+      type: [String, Number, Boolean],
       default: null
     },
     options: {
       type: Array,
       default: () => []
     },
-    idKey: {
-      type: String
+    labelKey: {
+      type: String,
+      default: 'label'
     },
     valueKey: {
-      type: String
+      type: String,
+      default: 'value'
     }
   },
   data () {
@@ -81,6 +91,18 @@ export default {
     }
   },
   methods: {
+    getOptionLabel (opt) {
+      if (opt && typeof opt === 'object') {
+        return opt[this.labelKey]
+      }
+      return opt
+    },
+    getOptionValue (opt) {
+      if (opt && typeof opt === 'object') {
+        return opt[this.valueKey]
+      }
+      return opt
+    },
     onValidatorMounted () {
       this.$watch(
         function () {
@@ -93,7 +115,7 @@ export default {
       )
     },
     onOptionSelected (option) {
-      this.$emit('change', option)
+      this.$emit('change', this.getOptionValue(option))
     }
   }
 }

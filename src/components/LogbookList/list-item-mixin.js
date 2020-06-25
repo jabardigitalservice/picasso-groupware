@@ -64,6 +64,9 @@ export default {
         confirmButtonText: 'Tutup'
       })
     },
+    onOpenLogbookDetail () {
+      alert('on development')
+    },
     onEditLogbook () {
       alert('on development')
     },
