@@ -1,11 +1,11 @@
 <template>
   <div>
     <ValidationProvider
+      ref="validator"
       :rules="rules"
       :custom-messages="customMessages"
-      #default="{failed, errors}"
       tag="div"
-    >
+      @hook:mounted="onValidatorMounted">
       <FormInputHeader
         :label-for="name"
         :title="title"
@@ -20,17 +20,17 @@
         </template>
       </FormInputHeader>
       <input class="hidden" type="date" :value="value">
-      <p v-if="errors.length"
-        class="form-input__error-hint">
-        <slot name="error">
-          {{errors[0]}}
-        </slot>
-      </p>
     </ValidationProvider>
     <DateTime
       v-bind="$attrs"
       v-model="syncValue"
       input-class="form-input__input"/>
+    <p v-if="errors.length"
+      class="form-input__error-hint">
+      <slot name="error">
+        {{errors[0]}}
+      </slot>
+    </p>
   </div>
 </template>
 
@@ -55,6 +55,11 @@ export default {
       default: null
     }
   },
+  data () {
+    return {
+      errors: []
+    }
+  },
   computed: {
     syncValue: {
       get () {
@@ -63,6 +68,19 @@ export default {
       set (value) {
         this.$emit('change', value)
       }
+    }
+  },
+  methods: {
+    onValidatorMounted () {
+      this.$watch(
+        function () {
+          return this.$refs.validator.errors || []
+        },
+        function (errors) {
+          this.errors = errors
+        },
+        { immediate: true, deep: true }
+      )
     }
   }
 }
