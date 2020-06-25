@@ -44,7 +44,6 @@ export const actions = {
     try {
       commit(types.AUTH_LOADING)
       const authCode = await window.GAuth.getAuthCode()
-      // eslint-disable-next-line camelcase
       const res = await GroupwareAPI.post(`social/google-oauth2/`,
         {
           access_token: authCode
@@ -56,7 +55,9 @@ export const actions = {
         }).then(r => r.data)
       if (res && res.auth_token) {
         setToken(res.auth_token)
-        setTokenInCookie(res.auth_token)
+        setTokenInCookie(res.auth_token, {
+          expires: new Date(res.exp)
+        })
         await dispatch('getUserProfile')
       } else {
         setToken(null)
