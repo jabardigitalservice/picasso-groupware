@@ -6,6 +6,14 @@
         <div class="whitespace-no-wrap">
           <p class="text-xs">
             <button
+              class="action-button text-blue-500 border-blue-500 hover:text-white hover:bg-blue-500"
+              @click="onOpenLogbookDetail">
+              <i class="fa fa-eye"></i>
+              <span class="hidden sm:inline-block">
+                Detail
+              </span>
+            </button>
+            <button
               class="action-button text-green-500 border-green-500 hover:text-white hover:bg-green-500"
               @click="onEditLogbook">
               <i class="fa fa-pencil-alt"></i>
@@ -42,47 +50,6 @@
       <p class="logbook-cards__card__task-name">
         {{ logbook.nameTask }}
       </p>
-      <br/>
-      <summary class="logbook-cards__card__info-wrapper">
-        <p
-          class="logbook-cards__card__info is-clickable"
-          @click.prevent="onClickEvidence">
-          <label>
-            Evidence
-          </label>
-          <a
-            :href="logbook.evidenceTask.fileURL"
-            target="_blank"
-            class="document-icon">
-            <i class="fa fa-file"></i>
-          </a>
-        </p>
-        <p
-          class="logbook-cards__card__info is-clickable"
-          @click.prevent="onClickDocument">
-          <label>
-            Dokumen
-          </label>
-          <a
-            :href="logbook.evidenceTask.fileURL"
-            target="_blank"
-            class="document-icon">
-            <i class="fa fa-file"></i>
-          </a>
-        </p>
-        <p class="logbook-cards__card__info">
-          <label>
-            Kesulitan
-          </label>
-          <Rating :max="5" :rating="logbook.difficultyTask"/>
-        </p>
-        <p class="logbook-cards__card__info">
-          <label>
-            Kepentingan
-          </label>
-          <Rating :max="5" :rating="logbook.urgencyTask"/>
-        </p>
-      </summary>
     </div>
   </component>
 </template>
@@ -103,6 +70,9 @@ export default {
       type: String,
       default: 'div'
     }
+  },
+  data () {
+    return {}
   }
 }
 </script>
