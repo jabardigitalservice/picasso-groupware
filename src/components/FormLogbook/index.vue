@@ -178,8 +178,8 @@ const DOCUMENT_TYPE = {
 
 const modelData = {
   'dateTask': null, // timestamptz '2020-06-11T06:55:24.698Z'
-  'projectId': '5ee3aef4d1beda00113e4337', // ?
-  'projectName': 'Sapawarga', // ?
+  'projectId': null, // ?
+  'projectName': null, // ?
   'nameTask': null, // ?
   'startTimeTask': null, // timestamptz '2020-06-11T06:55:24.698Z'
   'endTimeTask': null, // timestamptz '2020-06-11T06:55:24.698Z'
