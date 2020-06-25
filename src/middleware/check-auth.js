@@ -3,16 +3,29 @@ import { getTokenFromCookie } from '../lib/js-cookie'
 import { setToken } from '../lib/axios'
 
 export default async (to, from, next) => {
-  const t = getTokenFromCookie()
-  if (t) {
-    setToken(t)
-    await store.dispatch('auth/getUserProfile')
-  }
+  try {
+    if (!store.state.auth.user && !store.state.auth.isInitialized) {
+      const t = getTokenFromCookie()
+      if (t) {
+        setToken(t)
+        await store
+          .dispatch('auth/getUserProfile')
+          .catch(e => {})
+      }
+    }
 
-  store.commit('auth/AUTH_INITIALIZED')
-  if (!store.state.auth.user && to.path !== '/') {
+    store.commit('auth/AUTH_INITIALIZED')
+    if (store.state.auth.user) {
+      next()
+    } else {
+      if (to.path === '/') {
+        next()
+      } else {
+        next('/')
+      }
+    }
+  } catch (e) {
+    store.commit('auth/AUTH_INITIALIZED')
     next('/')
-    return
   }
-  next()
 }
