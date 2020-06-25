@@ -1,3 +1,4 @@
+import _orderBy from 'lodash/orderBy'
 import { GroupwareAPI } from '../../lib/axios'
 
 const SET_RESULT = 'SET_RESULT'
@@ -57,7 +58,7 @@ export const actions = {
     await GroupwareAPI.get('/logbook/')
       .then(r => r.data)
       .then(data => {
-        commit(SET_RESULT, data.results)
+        commit(SET_RESULT, _orderBy(data.results, ['startTimeTask'], ['desc']))
         commit(SET_META, data._meta)
       }).catch(e => {
         commit(SET_RESULT, e)
