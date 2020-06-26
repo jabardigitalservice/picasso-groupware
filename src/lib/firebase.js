@@ -22,13 +22,7 @@ export const storage = firebase.storage()
 const { Timestamp, GeoPoint, FieldValue } = firebase.firestore
 export { Timestamp, GeoPoint, FieldValue }
 
-let messaging = null
-
-if (firebase.messaging.isSupported()) {
-  messaging = firebase.messaging()
-  messaging.usePublicVapidKey(firebaseConfig.publicVapidKey)
-}
-
+const messaging = null
 export { messaging }
 
 export const analytics = firebase.analytics()
