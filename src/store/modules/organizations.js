@@ -33,7 +33,12 @@ export const mutations = {
 export const actions = {
   fetchProjects ({ state, commit }) {
     if (!Array.isArray(state.projects) || !state.projects.length) {
-      return GroupwareAPI.get('/project/')
+      return GroupwareAPI.get('/project/', {
+        params: {
+          limit: 100,
+          pageSize: 100
+        }
+      })
         .then(r => r.data.results)
         .then(projects => {
           commit(SET_PROJECT_LIST, projects)
