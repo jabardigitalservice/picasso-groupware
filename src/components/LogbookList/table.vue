@@ -26,8 +26,6 @@
             <th>Proyek</th>
             <th>Tanggal dan Jam</th>
             <th>Tugas</th>
-            <th>Tingkat Kesulitan</th>
-            <th>Tingkat Kepentingan</th>
             <th>Evidence</th>
             <th>Dokumen Lainnya</th>
             <th>Actions</th>

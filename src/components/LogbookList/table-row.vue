@@ -18,12 +18,6 @@
       {{ logbook.nameTask }}
     </td>
     <td>
-      {{ logbook.difficultyTask }}
-    </td>
-    <td>
-      {{ logbook.urgencyTask }}
-    </td>
-    <td>
       <template v-if="hasEvidenceFile">
         <a
           :href="logbook.evidenceTask.fileURL"
@@ -100,9 +94,9 @@ export default {
   }
 
   .document-icon {
-    @apply h-8
+    @apply h-8 px-4
     rounded bg-gray-200
-    flex justify-center items-center text-xl text-blue-500;
+    inline-flex justify-center items-center text-xl text-blue-500;
 
     &:hover,
     &:focus {
