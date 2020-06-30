@@ -52,31 +52,6 @@
         v-model="payload.dateTask"
       />
       <br/>
-      <FormInputDateTime
-        name="startTimeTask"
-        title="Jam Mulai"
-        type="time"
-        :disabled="!isEditable"
-        rules="required"
-        :custom-messages="{
-          required: 'Jam mulai harus diisi'
-        }"
-        v-model="payload.startTimeTask"
-      />
-      <br/>
-      <FormInputDateTime
-        name="endTimeTask"
-        title="Jam Selesai"
-        type="time"
-        :disabled="!isEditable"
-        rules="required|date_compare:gt,@startTimeTask"
-        :custom-messages="{
-          required: 'Jam selesai harus diisi',
-          date_compare: 'Jam selesai tidak bisa kurang dari atau sama dengan jam mulai'
-        }"
-        v-model="payload.endTimeTask"
-      />
-      <br/>
       <div class="relative">
         <FormRadioButtonGroup
           name="difficultyTask"
