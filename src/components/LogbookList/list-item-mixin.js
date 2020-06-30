@@ -65,7 +65,9 @@ export default {
       })
     },
     onOpenLogbookDetail () {
-      alert('on development')
+      this.$router.push({
+        path: `/report/detail?id=${this.logbook._id}`
+      })
     },
     onEditLogbook () {
       alert('on development')
