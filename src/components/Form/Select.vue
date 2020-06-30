@@ -18,28 +18,38 @@
         <slot name="subtitle"></slot>
       </template>
     </FormInputHeader>
-    <select
+    <template v-if="disabled">
+      <input
+      type="text"
+      :name="name"
+      :value="selectedOptionLabel"
       :disabled="disabled"
-      class="form-input__select"
-      :value="value"
-      @change="onChange"
+      class="form-input__input"
     >
-      <option
-        selected
-        :value="null"
-        disabled
+    </template>
+    <template v-else>
+      <select
+        class="form-input__select"
+        :value="value"
+        @change="onChange"
       >
-        {{prompt}}
-      </option>
-      <option
-        v-for="(opt, index) in options"
-        :key="index"
-        :selected="getOptionValue(opt) === value"
-        :value="getOptionValue(opt)"
-      >
-        {{getOptionLabel(opt)}}
-      </option>
-    </select>
+        <option
+          selected
+          :value="null"
+          disabled
+        >
+          {{prompt}}
+        </option>
+        <option
+          v-for="(opt, index) in options"
+          :key="index"
+          :selected="getOptionValue(opt) === value"
+          :value="getOptionValue(opt)"
+        >
+          {{getOptionLabel(opt)}}
+        </option>
+      </select>
+    </template>
     <p
       v-if="errors.length"
       class="form-input__error-hint"
@@ -88,6 +98,13 @@ export default {
   computed: {
     hasObjectAsOptions () {
       return Array.isArray(this.options) && this.options.every(x => x && typeof x === 'object')
+    },
+    selectedOptionLabel () {
+      if (Array.isArray(this.options)) {
+        const selectedOpt = this.options.find(opt => this.getOptionValue(opt) === this.value)
+        return selectedOpt ? this.getOptionLabel(selectedOpt) : null
+      }
+      return null
     }
   },
   methods: {
