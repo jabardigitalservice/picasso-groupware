@@ -24,6 +24,10 @@ export const props = {
   required: {
     type: Boolean,
     default: true
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 }
 

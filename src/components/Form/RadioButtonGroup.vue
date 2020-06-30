@@ -18,6 +18,7 @@
                         class="hidden"
                         @hook:mounted="onValidatorMounted">
       <input type="radio"
+            :disabled="disabled"
             :value="value"
             :checked="value !== null && typeof value !== 'undefined' ? true : false"
             :name="name">
@@ -32,11 +33,13 @@
       <button
           v-for="(opt, index) in options"
           :key="index"
+          :disabled="disabled"
           :class="{
             'flex-1 px-6 py-2 border-solid outline-none focus:outline-none': true,
             'border-l': index !== 0,
             'text-white border-brand-blue bg-brand-blue hover:bg-brand-blue-light': getOptionValue(opt) === value,
-            'text-gray-500 border-gray-300 hover:bg-gray-300': getOptionValue(opt) !== value,
+            'text-gray-500 border-gray-300': getOptionValue(opt) !== value,
+            'pointer-events-none': disabled
           }"
           @click="onOptionSelected(opt)">
         {{ getOptionLabel(opt) }}

@@ -19,6 +19,7 @@
       </template>
     </FormInputHeader>
     <select
+      :disabled="disabled"
       class="form-input__select"
       :value="value"
       @change="onChange"

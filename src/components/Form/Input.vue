@@ -23,6 +23,7 @@
       :type="type"
       :name="name"
       :value="value"
+      :disabled="disabled"
       :class="{'form-input__input': true, 'is-invalid': failed}"
       v-bind="$attrs"
       @input="onInput"
