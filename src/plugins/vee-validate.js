@@ -33,16 +33,16 @@ const rules = {
       }
       const compared = compareAsc(dateOfValue, dateOfTarget)
       switch (operator) {
-        case 'lt':
-          return compared === -1
-        case 'lte':
-          return [-1, 0].includes(compared)
-        case 'gt':
-          return compared === 1
-        case 'gte':
-          return [1, 0].includes(compared)
-        case 'equal':
-          return compared === 0
+      case 'lt':
+        return compared === -1
+      case 'lte':
+        return [-1, 0].includes(compared)
+      case 'gt':
+        return compared === 1
+      case 'gte':
+        return [1, 0].includes(compared)
+      case 'equal':
+        return compared === 0
       }
     }
   }
