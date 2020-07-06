@@ -36,13 +36,14 @@
               </label>
               <textarea v-model="message" id="input-message" rows="5" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Contoh: Hadir di Command Center / Maulana Yusuf / Diskominfo / Pantry / Izin Sakit / WFH" />
             </div>
-
-            <button @click="submit" class="w-full bg-brand-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-              Checkin
-            </button>
-            <router-link to="/checkins" class="w-full text-center shadow block bg-white text-gray-700 font-bold py-2 px-4 rounded mt-2">
-              Cancel
-            </router-link>
+            <div class="-mx-2 flex flex-no-wrap">
+              <button @click="submit" class="w-1/2 mx-2 bg-brand-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                Checkin
+              </button>
+              <router-link to="/" class="w-1/2 mx-2 text-center shadow bg-white text-gray-700 font-bold py-2 px-4 rounded mt-2">
+                Cancel
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -52,8 +53,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { analytics, db, FieldValue, Timestamp } from '@/lib/firebase'
-import { format, setHours, setMinutes, setSeconds } from 'date-fns'
+import { setHours, setMinutes, setSeconds } from 'date-fns'
+import { GroupwareAPI } from '../lib/axios'
 
 export default {
   components: {
@@ -77,14 +78,8 @@ export default {
     user: 'auth/user'
   }),
 
-  mounted () {
-    analytics.logEvent('checkins_create_view')
-  },
-
   methods: {
     async submit () {
-      await analytics.logEvent('checkins_click')
-
       const type = this.type
       const message = this.message
       const checkinHour = this.checkinHour
@@ -100,15 +95,6 @@ export default {
         }
       }
 
-      const currentDate = new Date()
-      const dbCurrentDate = format(currentDate, 'yyyyMMdd')
-
-      await db.collection('checkins').doc(dbCurrentDate).set({})
-
-      const collectionRef = await db.collection('checkins')
-        .doc(dbCurrentDate)
-        .collection('records')
-
       let checkinAt = new Date()
 
       if (type === 'HADIR') {
@@ -117,19 +103,14 @@ export default {
         checkinAt = setSeconds(checkinAt, 0)
       }
 
-      await collectionRef.add({
-        type: type,
-        message: message,
-        user_id: this.user.id,
-        user_name: this.user.name,
-        user_photo: this.user.photo,
-        checkin_at: Timestamp.fromDate(checkinAt),
-        created_at: FieldValue.serverTimestamp()
-      })
+      const payload = {
+        date: checkinAt,
+        location: this.message,
+        message: this.type
+      }
 
-      this.type = null
-      this.message = ''
-
+      await GroupwareAPI.post('attendance/checkin', payload)
+      await this.$store.dispatch('checkins-list/getCheckinState')
       await this.$router.push('/checkins')
       await this.$store.dispatch('checkins-list/fetchItems')
     }
