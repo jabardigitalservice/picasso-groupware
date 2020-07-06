@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { GroupwareAPI } from '../lib/axios'
 export default {
   computed: {
     isCheckinState () {
@@ -51,7 +50,7 @@ export default {
       })
     },
     async checkout () {
-      await GroupwareAPI.post('attendance/checkout', {
+      await this.$store.dispatch('checkins-list/checkout', {
         date: new Date()
       })
       await this.$store.dispatch('checkins-list/getCheckinState')
@@ -59,7 +58,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
