@@ -50,5 +50,8 @@ export const actions = {
         })
     }
     return state.isCheckin
+  },
+  checkout (_, payload) {
+    return GroupwareAPI.post('attendance/checkout', payload)
   }
 }
