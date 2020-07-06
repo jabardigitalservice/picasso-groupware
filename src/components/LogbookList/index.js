@@ -42,12 +42,11 @@ export default {
     },
     loadListComponent () {
       switch (this.viewportType) {
-      case VIEWPORT_TYPE.DESKTOP:
-        return import('./table')
-      case VIEWPORT_TYPE.MOBILE:
-        return import('./card-list')
-      default:
-        return Promise.resolve(null)
+        case VIEWPORT_TYPE.DESKTOP: return import('./table')
+        case VIEWPORT_TYPE.MOBILE:
+          return import('./card-list')
+        default:
+          return Promise.resolve(null)
       }
     }
   },
