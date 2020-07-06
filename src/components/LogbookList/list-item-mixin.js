@@ -70,7 +70,9 @@ export default {
       })
     },
     onEditLogbook () {
-      alert('on development')
+      this.$router.push({
+        path: `/report/edit?id=${this.logbook._id}`
+      })
     },
     async beforeDeleteLogbook () {
       const { value: confirm } = await this.$swal.fire({

@@ -29,8 +29,11 @@ export const getters = {
     return state.meta ? state.meta.perPage : null
   },
   startIndex (state, getters) {
-    const { currentPage, perPage } = getters
+    const { logbookListData, currentPage, perPage } = getters
     if (typeof currentPage === 'number' && typeof perPage === 'number') {
+      if (currentPage === 1 && !logbookListData.length) {
+        return -1
+      }
       return (currentPage - 1) * perPage
     }
     return null
@@ -38,6 +41,9 @@ export const getters = {
   endIndex (state, getters) {
     const { startIndex, logbookListData } = getters
     if (typeof startIndex === 'number') {
+      if (startIndex === -1) {
+        return -1
+      }
       return startIndex + logbookListData.length - 1
     }
     return null

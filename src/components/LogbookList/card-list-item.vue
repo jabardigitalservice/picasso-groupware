@@ -39,10 +39,6 @@
             <span>
               {{ formatDateLong(logbook.dateTask) }}
             </span>
-            <b class="inline-block mx-1 opacity-50">|</b>
-            <span class="whitespace-no-wrap">
-              {{ formatTime(logbook.startTimeTask) }}-{{ formatTime(logbook.endTimeTask) }}
-            </span>
           </p>
         </div>
       </div>

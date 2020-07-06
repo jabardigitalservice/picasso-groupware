@@ -10,8 +10,6 @@
     <td>
       <p class="whitespace-no-wrap">
         {{ formatDateLong(logbook.dateTask) }}
-        <br>
-        {{ formatTime(logbook.startTimeTask) }} - {{ formatTime(logbook.endTimeTask) }}
       </p>
     </td>
     <td>
