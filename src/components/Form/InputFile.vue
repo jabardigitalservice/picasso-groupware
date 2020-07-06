@@ -38,6 +38,8 @@
                       :size="metadata.size"
                       :type="metadata.type"
                       :url="mFileURL"
+                      :disabled="disabled"
+                      :renameable="renameable"
                       @view="onPreviewDocument"
                       @update:name="onFilenameChanged"
                       @delete="onRemoveFile"/>
@@ -108,6 +110,10 @@ export default {
       validator (v) {
         return [STORAGE.FIREBASE, STORAGE.GROUPWARE_SERVICE].includes(v)
       }
+    },
+    renameable: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -127,6 +133,7 @@ export default {
           },
           function (arr) {
             const [value, file] = arr
+            this.$refs.validator.syncValue(value)
             this.mFileURL = value
             this.mFile = file
             if (typeof this.mFileURL === 'string' && this.mFileURL.startsWith('http')) {
@@ -141,7 +148,7 @@ export default {
   },
   computed: {
     shouldDisableValidation () {
-      return typeof this.value === 'string' && this.value.startsWith('https://')
+      return typeof this.value === 'string' && ['blob', 'http'].some(str => this.value.startsWith(str))
     }
   },
   methods: {
