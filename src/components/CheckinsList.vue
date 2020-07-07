@@ -48,6 +48,7 @@ import { ContentLoader } from 'vue-content-loader'
 import { mapGetters } from 'vuex'
 import { formatTime } from '@/lib/date'
 import { isBefore, isAfter, set } from 'date-fns'
+import { ATTENDANCE } from '../lib/constants'
 
 export default {
   components: {
@@ -63,15 +64,15 @@ export default {
     formatTime,
 
     getStatusLabel (value) {
-      if (value === 'HADIR') {
+      if (value === ATTENDANCE.PRESENT) {
         return 'Hadir'
       }
 
-      if (value === 'IZIN') {
+      if (value === ATTENDANCE.LEAVE) {
         return 'Izin / Sakit'
       }
 
-      if (value === 'OTHER') {
+      if (value === ATTENDANCE.OTHER) {
         return 'Into the Unknown'
       }
 
@@ -79,15 +80,15 @@ export default {
     },
 
     getStatusColor (value) {
-      if (value === 'HADIR') {
+      if (value === ATTENDANCE.PRESENT) {
         return 'bg-green-500'
       }
 
-      if (value === 'IZIN') {
+      if (value === ATTENDANCE.LEAVE) {
         return 'bg-yellow-500'
       }
 
-      if (value === 'OTHER') {
+      if (value === ATTENDANCE.OTHER) {
         return 'bg-purple-500'
       }
 
@@ -95,7 +96,7 @@ export default {
     },
 
     getRowClass (item) {
-      if (item['message'] !== 'HADIR') {
+      if (item['message'] !== ATTENDANCE.PRESENT) {
         return 'bg-white'
       }
 

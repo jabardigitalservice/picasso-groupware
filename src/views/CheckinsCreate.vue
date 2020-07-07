@@ -9,12 +9,12 @@
             </label>
             <select v-model="type" class="h-12 sm:h-10 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="input-type">
               <option :value="null">Select...</option>
-              <option value="HADIR">Hadir Dong</option>
-              <option value="IZIN">Sakit / Izin</option>
-              <option value="OTHER">Into the Unknown</option>
+              <option :value="ATTENDANCE.PRESENT">Hadir Dong</option>
+              <option :value="ATTENDANCE.LEAVE">Sakit / Izin</option>
+              <option :value="ATTENDANCE.OTHER">Into the Unknown</option>
             </select>
 
-            <div class="my-4" v-if="type === 'HADIR'">
+            <div class="my-4" v-if="type === ATTENDANCE.PRESENT">
               <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-type">
                 Jam Kehadiran
               </label>
@@ -55,6 +55,7 @@
 import { mapGetters } from 'vuex'
 import { setHours, setMinutes, setSeconds } from 'date-fns'
 import { GroupwareAPI } from '../lib/axios'
+import { ATTENDANCE } from '../lib/constants'
 
 export default {
   components: {
@@ -67,6 +68,7 @@ export default {
 
   data () {
     return {
+      ATTENDANCE,
       type: null,
       message: '',
       checkinHour: null,
@@ -89,7 +91,7 @@ export default {
         return false
       }
 
-      if (type === 'HADIR') {
+      if (type === ATTENDANCE.PRESENT) {
         if (checkinHour === null || checkinMinute === null) {
           return false
         }
@@ -97,7 +99,7 @@ export default {
 
       let checkinAt = new Date()
 
-      if (type === 'HADIR') {
+      if (type === ATTENDANCE.PRESENT) {
         checkinAt = setHours(checkinAt, checkinHour)
         checkinAt = setMinutes(checkinAt, checkinMinute)
         checkinAt = setSeconds(checkinAt, 0)
