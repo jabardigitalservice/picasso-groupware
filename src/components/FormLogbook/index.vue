@@ -466,7 +466,6 @@ export default {
         formData.append('isDocumentLink', true)
         formData.append('documentTask', this.documentTaskLink)
       }
-      formData.forEach((value, key) => console.log(key, value))
       return formData
     },
     put () {
