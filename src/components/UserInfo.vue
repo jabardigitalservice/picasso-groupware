@@ -12,7 +12,6 @@
             </p>
             <p class="text-gray-600">{{ user.job_title }}</p>
           </div>
-          <button type="button" class="text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded" @click="signOut">Logout</button>
         </div>
       </div>
     </template>
