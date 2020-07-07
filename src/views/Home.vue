@@ -21,7 +21,8 @@
               </div>
             </template>
             <template v-else>
-              <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
+              <AttendanceButton class="w-full"/>
+              <div v-for="(m, index) in menuItems" :key="index" class="w-1/2">
                 <router-link :to="m.to">
                   <div class="h-full p-3 py-4 text-center text-gray-700">
                     <i :class="[m.icon, 'text-2xl'] " />
@@ -46,6 +47,7 @@ import LoginButton from '@/components/LoginButton'
 import HomeBannerList from '@/components/HomeBannerList'
 import HomeArticleList from '@/components/HomeArticleList'
 import UserInfo from '@/components/UserInfo'
+import AttendanceButton from '@/components/AttendanceButton'
 
 export default {
   name: 'home',
@@ -53,7 +55,8 @@ export default {
     HomeBannerList,
     HomeArticleList,
     LoginButton,
-    UserInfo
+    UserInfo,
+    AttendanceButton
   },
 
   metaInfo: {
@@ -64,7 +67,8 @@ export default {
     return {
       menuItems: [
         // { name: 'Checkin', to: '/checkins', icon: 'far fa-check-circle' },
-        { name: 'Laporan', to: '/report', icon: 'fa fa-book ' }
+        { name: 'Laporan', to: '/report', icon: 'fa fa-book ' },
+        { name: 'Kehadiran', to: '/checkins', icon: 'fa fa-user-friends ' }
         // { name: 'Events', to: '/events', icon: 'far fa-calendar ' },
         // { name: 'Thank You', to: '/thankyou', icon: 'far fa-heart ' },
         // { name: 'Teams', to: '/teams', icon: 'fas fa-user-friends ' },

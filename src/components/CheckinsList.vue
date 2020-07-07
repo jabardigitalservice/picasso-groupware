@@ -11,8 +11,8 @@
                 <p class="text-gray-900 font-bold">
                     {{ item['username'] }}
                 </p>
-                <p v-if="item['type']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['type'])">{{ getStatusLabel(item['type']) }}</span></p>
-                <p class="text-gray-900">{{ item['message'] }}</p>
+                <p v-if="item['message']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['message'])">{{ getStatusLabel(item['message']) }}</span></p>
+                <p class="text-gray-900">{{ item['location'] }}</p>
                 <p class="text-gray-600">{{ getCheckInDate(item) }}</p>
               </div>
             </div>
@@ -95,7 +95,7 @@ export default {
     },
 
     getRowClass (item) {
-      if (item['type'] !== 'HADIR') {
+      if (item['message'] !== 'HADIR') {
         return 'bg-white'
       }
 
