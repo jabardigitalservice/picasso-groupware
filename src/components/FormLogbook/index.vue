@@ -6,6 +6,7 @@
         title="Nama Proyek"
         value-key="id"
         label-key="name"
+        :disabled="!isEditable"
         :options="projectOptions"
         :value="payload.projectId"
         rules="required"
@@ -13,12 +14,26 @@
         :custom-messages="{
           required: 'Nama proyek harus diisi'
         }"
-        @change="onSelectedProjectChanged"/>
+        @change="onSelectedProjectChanged">
+        <template v-if="!isViewingOnly" #subtitle>
+          <p>
+            <i class="text-gray-600">
+              Nama proyek/produk tidak ada? Kontak admin via
+            </i>
+            <a
+              class="cursor-pointer hover:underline"
+              :href="adminWhatsappBacklink">
+              <b class="text-green-500">Whatsapp</b>
+            </a>
+          </p>
+        </template>
+      </FormSelect>
       <br/>
       <FormInput
         name="nameTask"
         title="Nama Tugas"
         type="text"
+        :disabled="!isEditable"
         rules="required"
         :custom-messages="{
           required: 'Nama tugas harus diisi'
@@ -29,6 +44,7 @@
         name="dateTask"
         title="Tanggal"
         type="date"
+        :disabled="!isEditable"
         rules="required"
         :custom-messages="{
           required: 'Tanggal harus diisi'
@@ -36,33 +52,12 @@
         v-model="payload.dateTask"
       />
       <br/>
-      <FormInputDateTime
-        name="startTimeTask"
-        title="Jam Mulai"
-        type="time"
-        rules="required"
-        :custom-messages="{
-          required: 'Jam mulai harus diisi'
-        }"
-        v-model="payload.startTimeTask"
-      />
-      <br/>
-      <FormInputDateTime
-        name="endTimeTask"
-        title="Jam Selesai"
-        type="time"
-        rules="required"
-        :custom-messages="{
-          required: 'Jam selesai harus diisi'
-        }"
-        v-model="payload.endTimeTask"
-      />
-      <br/>
       <div class="relative">
         <FormRadioButtonGroup
           name="difficultyTask"
           title="Tingkat Kesulitan"
           :options="[1,2,3,4,5]"
+          :disabled="!isEditable"
           rules="required"
           :custom-messages="{
             required: 'Tingkat kesulitan harus diisi'
@@ -88,81 +83,90 @@
         title="Jenis Tugas"
         :block="true"
         :options="mainTaskOptions"
+        :disabled="!isEditable"
         :required="true"
+        rules="required"
         v-model="payload.isMainTask"
       />
       <br/>
-      <FormInputFile
-        name="evidenceTask"
-        title="Screenshot / Foto Hasil Kerja"
-        :value.sync="evidenceTaskFileURL"
-        :file.sync="evidenceTaskFileBlob"
-        :filename.sync="evidenceTaskFilename"
-        rules="required|mimes:image/*"
-        accept="image/*"
-        :custom-messages="{
-          required: 'Evidence harus diisi'
-        }"
-        />
-      <br/>
-      <FormRadioButtonGroup
-        class="mb-2"
-        name="selectedDocumentType"
-        title="Dokumen"
-        :block="false"
-        :options="documentTypeOptions"
-        :required="false"
-        :value="selectedDocumentType"
-        @change="onDocumentTypeSelectionChanged"
-      >
-        <template #subtitle>
-          <span class="font-bold text-gray-500">
-            *Pilih salah satu
-          </span>
-        </template>
-      </FormRadioButtonGroup>
-      <FormInputFile
-        v-if="isUsingFileAsDocument"
-        name="documentTask"
-        title="File Dokumen"
-        placeholder="Choose file..."
-        :value.sync="documentTaskFileURL"
-        :file.sync="documentTaskFileBlob"
-        :filename.sync="documentTaskFilename"
-        :required="false"
-      >
-        <template #title>
-          <span></span>
-        </template>
-      </FormInputFile>
-      <FormInput
-        v-if="isUsingLinkAsDocument"
-        type="text"
-        name="documentTask"
-        title="Link Dokumen"
-        placeholder="https://"
-        :rules="{regex: /^https?:\/\//}"
-        :custom-messages="{
-          regex: 'Link harus dalam bentuk URL yang valid'
-        }"
-        :required="false"
-        v-model="documentTaskLink">
-        <template #title>
-          <span></span>
-        </template>
-      </FormInput>
-      <br/>
+      <template v-if="!isViewingOnly">
+        <FormInputFile
+          name="evidenceTask"
+          title="Screenshot / Foto Hasil Kerja"
+          :value.sync="evidenceTaskFileURL"
+          :file.sync="evidenceTaskFileBlob"
+          :filename.sync="evidenceTaskFilename"
+          :disabled="!isEditable"
+          rules="required|mimes:image/*"
+          accept="image/*"
+          :custom-messages="{
+            required: 'Evidence harus diisi'
+          }"
+          />
+        <br/>
+        <FormRadioButtonGroup
+          class="mb-2"
+          name="selectedDocumentType"
+          title="Dokumen"
+          :disabled="!isEditable"
+          :block="false"
+          :options="documentTypeOptions"
+          :required="false"
+          :value="selectedDocumentType"
+          @change="onDocumentTypeSelectionChanged"
+        >
+          <template #subtitle>
+            <span class="font-bold text-gray-500">
+              *Pilih salah satu
+            </span>
+          </template>
+        </FormRadioButtonGroup>
+        <FormInputFile
+          v-if="isUsingFileAsDocument"
+          name="documentTask"
+          title="File Dokumen"
+          placeholder="Choose file..."
+          :disabled="!isEditable"
+          :value.sync="documentTaskFileURL"
+          :file.sync="documentTaskFileBlob"
+          :filename.sync="documentTaskFilename"
+          :required="false"
+        >
+          <template #title>
+            <span></span>
+          </template>
+        </FormInputFile>
+        <FormInput
+          v-if="isUsingLinkAsDocument"
+          type="text"
+          name="documentTask"
+          title="Link Dokumen"
+          placeholder="https://"
+          :disabled="!isEditable"
+          :rules="{regex: /^https?:\/\//}"
+          :custom-messages="{
+            regex: 'Link harus dalam bentuk URL yang valid'
+          }"
+          :required="false"
+          v-model="documentTaskLink">
+          <template #title>
+            <span></span>
+          </template>
+        </FormInput>
+        <br/>
+      </template>
       <FormInput
         type="text"
         name="organizerTask"
         title="Penyelenggara"
+        :disabled="!isEditable"
         rules="required"
         :custom-messages="{
           required: 'Penyelenggara harus diisi'
         }"
         v-model="payload.organizerTask"/>
       <br/>
-      <div class="flex justify-end">
+      <div v-if="isEditable" class="flex justify-end">
         <button
           class="mr-4 button focus:outline-none
                  bg-gray-200 hover:bg-gray-300 text-gray-500"
@@ -208,6 +212,18 @@ const modelData = {
   'isDocumentLink': true
 }
 
+const ACTION = {
+  CREATE: 'create',
+  EDIT: 'edit',
+  VIEW: 'view'
+}
+
+const ACTIONS = [
+  ACTION.CREATE,
+  ACTION.EDIT,
+  ACTION.VIEW
+]
+
 export default {
   components: {
     FormSelect,
@@ -220,7 +236,7 @@ export default {
     action: {
       required: true,
       validator (v) {
-        return ['create', 'edit'].includes(v)
+        return ACTIONS.includes(v)
       }
     },
     id: {
@@ -230,6 +246,7 @@ export default {
   },
   data () {
     return {
+      adminWhatsappBacklink: `https://api.whatsapp.com/send?phone=+6283822344237&text=template`,
       payload: Object.assign({}, modelData),
       mainTaskOptions: [
         {
@@ -263,6 +280,15 @@ export default {
     }
   },
   computed: {
+    isViewingOnly () {
+      return this.action === ACTION.VIEW
+    },
+    isEditable () {
+      return [
+        ACTION.CREATE,
+        ACTION.EDIT
+      ].includes(this.action)
+    },
     projectOptions () {
       return this.$store.getters['organizations/listOfProjects']
     },
@@ -287,6 +313,8 @@ export default {
               this.payload = logbook
               this.evidenceTaskFileURL = evidenceTask.fileURL
               this.documentTaskFileURL = documentTask.fileURL
+            } else {
+              this.$emit('logbook:not-found', id)
             }
           })
       }
@@ -395,9 +423,9 @@ export default {
       })
 
       try {
-        if (this.action === 'create') {
+        if (this.action === ACTION.CREATE) {
           await this.$promiseMinDelay(this.post(), 1000)
-        } else if (this.action === 'edit') {
+        } else if (this.action === ACTION.EDIT) {
           await this.$promiseMinDelay(this.put(), 1000)
         }
         return this.onSuccess('Berhasil menyimpan data')

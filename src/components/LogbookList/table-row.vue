@@ -10,18 +10,10 @@
     <td>
       <p class="whitespace-no-wrap">
         {{ formatDateLong(logbook.dateTask) }}
-        <br>
-        {{ formatTime(logbook.startTimeTask) }} - {{ formatTime(logbook.endTimeTask) }}
       </p>
     </td>
     <td>
       {{ logbook.nameTask }}
-    </td>
-    <td>
-      {{ logbook.difficultyTask }}
-    </td>
-    <td>
-      {{ logbook.urgencyTask }}
     </td>
     <td>
       <template v-if="hasEvidenceFile">
@@ -100,9 +92,9 @@ export default {
   }
 
   .document-icon {
-    @apply h-8
+    @apply h-8 px-4
     rounded bg-gray-200
-    flex justify-center items-center text-xl text-blue-500;
+    inline-flex justify-center items-center text-xl text-blue-500;
 
     &:hover,
     &:focus {

@@ -19,29 +19,29 @@
           </button>
         </p>
       </header>
-      <table class="logbook-table">
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Proyek</th>
-            <th>Tanggal dan Jam</th>
-            <th>Tugas</th>
-            <th>Tingkat Kesulitan</th>
-            <th>Tingkat Kepentingan</th>
-            <th>Evidence</th>
-            <th>Dokumen Lainnya</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <TableRow
-            v-for="(data, index) in logbookListData"
-            :key="index"
-            :logbook="data"
-            :index="getAbsoluteIndex(index)">
-          </TableRow>
-        </tbody>
-    </table>
+      <div class="flex justify-center overflow-x-auto overflow-y-hidden">
+        <table class="logbook-table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Proyek</th>
+              <th>Tanggal dan Jam</th>
+              <th>Tugas</th>
+              <th>Evidence</th>
+              <th>Dokumen Lainnya</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <TableRow
+              v-for="(data, index) in logbookListData"
+              :key="index"
+              :logbook="data"
+              :index="getAbsoluteIndex(index)">
+            </TableRow>
+          </tbody>
+      </table>
+    </div>
     </template>
   </div>
 </template>
@@ -60,7 +60,7 @@ export default {
 
 <style lang="scss" scoped>
 .logbook-table {
-  @apply block w-full text-sm select-text overflow-auto;
+  @apply w-full text-sm select-text overflow-auto;
 
   th {
     vertical-align: middle;

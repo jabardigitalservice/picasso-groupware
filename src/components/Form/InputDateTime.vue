@@ -1,6 +1,7 @@
 <template>
   <div>
     <ValidationProvider
+      :name="name"
       ref="validator"
       :rules="rules"
       :custom-messages="customMessages"
@@ -19,11 +20,12 @@
           <slot name="subtitle"></slot>
         </template>
       </FormInputHeader>
-      <input class="hidden" type="date" :value="value">
+      <input class="hidden" type="date" :value="value" :disabled="disabled">
     </ValidationProvider>
     <DateTime
       v-bind="$attrs"
       v-model="syncValue"
+      :disabled="disabled"
       input-class="form-input__input"/>
     <p v-if="errors.length"
       class="form-input__error-hint">
