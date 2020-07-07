@@ -53,7 +53,7 @@ export default {
       await this.$store.dispatch('checkins-list/checkout', {
         date: new Date()
       })
-      await this.$store.dispatch('checkins-list/getCheckinState')
+      await this.$store.dispatch('checkins-list/getCheckinState', { refresh: true })
     }
   }
 }
