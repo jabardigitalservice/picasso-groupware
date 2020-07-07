@@ -34,12 +34,14 @@
       </template>
       <template #default="{value: metadata}">
         <FilePreview  v-if="metadata"
+                      :file="file"
                       :name="filename"
                       :size="metadata.size"
                       :type="metadata.type"
                       :url="mFileURL"
                       :disabled="disabled"
                       :renameable="renameable"
+                      :download-on-click="downloadOnClick"
                       @view="onPreviewDocument"
                       @update:name="onFilenameChanged"
                       @delete="onRemoveFile"/>
@@ -78,7 +80,6 @@
 import { ContentLoader } from 'vue-content-loader'
 import { getStoredFileMetadata } from '../../api'
 import { props, components } from './input-mixin'
-// import {GroupwareAPI} from '../../lib/axios'
 
 const STORAGE = {
   FIREBASE: 'firebase',
@@ -114,6 +115,10 @@ export default {
     renameable: {
       type: Boolean,
       default: true
+    },
+    downloadOnClick: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
