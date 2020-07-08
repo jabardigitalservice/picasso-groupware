@@ -246,7 +246,8 @@ export default {
   },
   data () {
     return {
-      adminWhatsappBacklink: `https://api.whatsapp.com/send?phone=+6283822344237&text=template`,
+      adminWhatsappBacklink: `https://api.whatsapp.com/send?phone=+6283822344237&text=Usulan nama project/product anda`,
+      originalData: null,
       payload: Object.assign({}, modelData),
       mainTaskOptions: [
         {
