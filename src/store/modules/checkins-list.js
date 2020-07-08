@@ -35,7 +35,12 @@ export const actions = {
   async fetchItems ({ commit }) {
     commit(types.CHECKINS_INIT)
 
-    await GroupwareAPI.get('attendance/')
+    await GroupwareAPI.get('attendance/', {
+      params: {
+        limit: 200,
+        pageSize: 200
+      }
+    })
       .then(r => r.data.results)
       .then(list => {
         commit(types.CHECKINS_LOADED, { items: list })

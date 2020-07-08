@@ -45,6 +45,7 @@
         title="Tanggal"
         type="date"
         :disabled="!isEditable"
+        :max-datetime="maxDateTime"
         rules="required"
         :custom-messages="{
           required: 'Tanggal harus diisi'
@@ -86,6 +87,9 @@
         :disabled="!isEditable"
         :required="true"
         rules="required"
+        :custom-messages="{
+          required: 'Jenis tugas harus diisi'
+        }"
         v-model="payload.isMainTask"
       />
       <br/>
@@ -282,7 +286,9 @@ export default {
 
       evidenceTaskFileURL: null,
       evidenceTaskFileBlob: null,
-      evidenceTaskFilename: null
+      evidenceTaskFilename: null,
+
+      maxDateTime: new Date().toISOString()
     }
   },
   computed: {
