@@ -69,5 +69,14 @@ export const actions = {
       }).catch(e => {
         commit(SET_RESULT, e)
       })
+  },
+  insertLogbook (_, payload) {
+    return GroupwareAPI.post('/logbook/', payload)
+  },
+  updateLogbook (_, { id, payload } = {}) {
+    if (!id) {
+      return Promise.reject(new Error('id must be provided'))
+    }
+    return GroupwareAPI.put(`/logbook/${id}`, payload)
   }
 }

@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import _result from 'lodash/result'
+
 export default {
   computed: {
     isCheckinState () {
@@ -50,10 +52,19 @@ export default {
       })
     },
     async checkout () {
-      await this.$store.dispatch('checkins-list/checkout', {
-        date: new Date()
-      })
-      await this.$store.dispatch('checkins-list/getCheckinState')
+      try {
+        await this.$store.dispatch('checkins-list/checkout', {
+          date: new Date()
+        })
+      } catch (e) {
+        const message = _result(e, 'response.data.message') || _result(e, 'stack') || ''
+        this.$swal.fire({
+          icon: 'error',
+          text: message,
+          confirmButtonText: 'Tutup'
+        })
+      }
+      await this.$store.dispatch('checkins-list/getCheckinState', { refresh: true })
     }
   }
 }

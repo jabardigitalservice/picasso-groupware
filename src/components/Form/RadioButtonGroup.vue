@@ -26,7 +26,7 @@
     <div
       :class="{
         'mb-2 rounded overflow-hidden border border-solid border-brand-blue': true,
-        'flex-row flex-no-wrap justify-center items-center': true,
+        'flex-row flex-no-wrap justify-center items-stretch': true,
         'flex': block,
         'inline-flex': !block
       }">

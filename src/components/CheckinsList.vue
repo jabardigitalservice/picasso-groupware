@@ -11,8 +11,8 @@
                 <p class="text-gray-900 font-bold">
                     {{ item['username'] }}
                 </p>
-                <p v-if="item['type']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['type'])">{{ getStatusLabel(item['type']) }}</span></p>
-                <p class="text-gray-900">{{ item['message'] }}</p>
+                <p v-if="item['message']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['message'])">{{ getStatusLabel(item['message']) }}</span></p>
+                <p class="text-gray-900">{{ item['location'] }}</p>
                 <p class="text-gray-600">{{ getCheckInDate(item) }}</p>
               </div>
             </div>
@@ -48,6 +48,7 @@ import { ContentLoader } from 'vue-content-loader'
 import { mapGetters } from 'vuex'
 import { formatTime } from '@/lib/date'
 import { isBefore, isAfter, set } from 'date-fns'
+import { ATTENDANCE } from '../lib/constants'
 
 export default {
   components: {
@@ -63,15 +64,15 @@ export default {
     formatTime,
 
     getStatusLabel (value) {
-      if (value === 'HADIR') {
+      if (value === ATTENDANCE.PRESENT) {
         return 'Hadir'
       }
 
-      if (value === 'IZIN') {
+      if (value === ATTENDANCE.LEAVE) {
         return 'Izin / Sakit'
       }
 
-      if (value === 'OTHER') {
+      if (value === ATTENDANCE.OTHER) {
         return 'Into the Unknown'
       }
 
@@ -79,15 +80,15 @@ export default {
     },
 
     getStatusColor (value) {
-      if (value === 'HADIR') {
+      if (value === ATTENDANCE.PRESENT) {
         return 'bg-green-500'
       }
 
-      if (value === 'IZIN') {
+      if (value === ATTENDANCE.LEAVE) {
         return 'bg-yellow-500'
       }
 
-      if (value === 'OTHER') {
+      if (value === ATTENDANCE.OTHER) {
         return 'bg-purple-500'
       }
 
@@ -95,7 +96,7 @@ export default {
     },
 
     getRowClass (item) {
-      if (item['type'] !== 'HADIR') {
+      if (item['message'] !== ATTENDANCE.PRESENT) {
         return 'bg-white'
       }
 

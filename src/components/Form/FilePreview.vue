@@ -14,7 +14,8 @@
     </figcaption>
     <div class="mt-4 md:mt-0 self-stretch md:flex-auto flex flex-col justify-between">
       <ul>
-        <ValidationProvider tag="li"
+        <ValidationProvider v-if="renameable"
+                            tag="li"
                             ref="validator"
                             rules="required"
                             :custom-messages="{required: 'Nama file harus diisi'}"
@@ -28,6 +29,8 @@
                       style="min-width: 0;"
                       type="text"
                       :value="mName"
+                      :disabled="disabled"
+                      :readonly="disabled"
                       @input="onNameChanged">
             <span class="flex-none block w-24 px-2 py-1 text-gray-600 bg-gray-200 text-center rounded-tr rounded-br">
               <code>{{mFileExtension}}</code>
@@ -49,7 +52,7 @@
           </p>
         </li>
       </ul>
-      <p class="mt-2 inline-block self-end text-sm">
+      <p v-if="!disabled" class="mt-2 inline-block self-end text-sm">
         <button class="w-auto py-2 px-4 mr-4 rounded border border-solid border-blue-500 text-blue-500 hover:opacity-50 hover:bg-blue-100"
                 @click="$emit('view')">
           Tampilkan
@@ -65,8 +68,17 @@
 
 <script>
 import { isMimeTypeImage } from '../Profile/Edit/utils'
+import { saveAs } from 'file-saver'
+
 export default {
   props: {
+    file: {
+      type: File
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     name: {
       type: String,
       required: true
@@ -82,6 +94,14 @@ export default {
     url: {
       type: String,
       required: true
+    },
+    renameable: {
+      type: Boolean,
+      default: true
+    },
+    downloadOnClick: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -108,6 +128,10 @@ export default {
       this.$emit('update:name', str)
     },
     onPreviewDocument (e) {
+      if (this.downloadOnClick && this.file) {
+        saveAs(this.file, this.name)
+        return
+      }
       window.open(this.url, '_blank')
     }
   },
