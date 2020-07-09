@@ -30,7 +30,7 @@ export default {
       )
     },
     isCheckoutButton () {
-      return this.isCheckinState === true && this.isCheckinState === false
+      return this.isCheckinState === true && this.isCheckoutState === false
     },
     buttonLabel () {
       if (this.isCheckinButton) {
