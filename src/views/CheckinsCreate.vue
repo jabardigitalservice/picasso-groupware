@@ -144,6 +144,7 @@ export default {
 
       await GroupwareAPI.post('attendance/checkin', payload)
       await this.$store.dispatch('checkins-list/getCheckinState', { refresh: true })
+      await this.$store.dispatch('checkins-list/getCheckoutState', { refresh: true })
       await this.$router.push('/checkins')
       await this.$store.dispatch('checkins-list/fetchItems')
     }

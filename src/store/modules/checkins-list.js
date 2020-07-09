@@ -5,7 +5,8 @@ import { GroupwareAPI } from '../../lib/axios'
 export const state = {
   loading: true,
   items: [],
-  isCheckin: null
+  isCheckin: null,
+  isCheckout: null
 }
 
 // getters
@@ -27,6 +28,9 @@ export const mutations = {
 
   [types.CHECKIN_STATE] (state, isCheckin) {
     state.isCheckin = !!isCheckin
+  },
+  [types.CHECKOUT_STATE] (state, isCheckout) {
+    state.isCheckout = !!isCheckout
   }
 }
 
@@ -55,6 +59,16 @@ export const actions = {
         })
     }
     return state.isCheckin
+  },
+  async getCheckoutState ({ state, commit }, { refresh = false } = {}) {
+    if (state.isCheckout === null || refresh) {
+      await GroupwareAPI.get('attendance/is/checkout')
+        .then(r => r.data.isCheckout)
+        .then(truthy => {
+          commit(types.CHECKOUT_STATE, truthy)
+        })
+    }
+    return state.isCheckout
   },
   checkout (_, payload) {
     return GroupwareAPI.post('attendance/checkout', payload)

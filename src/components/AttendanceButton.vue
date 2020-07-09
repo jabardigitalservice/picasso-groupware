@@ -20,11 +20,17 @@ export default {
     isCheckinState () {
       return this.$store.state['checkins-list'].isCheckin
     },
+    isCheckoutState () {
+      return this.$store.state['checkins-list'].isCheckout
+    },
     isCheckinButton () {
-      return this.isCheckinState === false
+      return this.isCheckinState === false || (
+        this.isCheckinState === true &&
+        this.isCheckoutState === true
+      )
     },
     isCheckoutButton () {
-      return this.isCheckinState === true
+      return this.isCheckinState === true && this.isCheckinState === false
     },
     buttonLabel () {
       if (this.isCheckinButton) {
@@ -35,8 +41,9 @@ export default {
       return null
     }
   },
-  created () {
-    this.$store.dispatch('checkins-list/getCheckinState')
+  async created () {
+    await this.$store.dispatch('checkins-list/getCheckinState')
+    await this.$store.dispatch('checkins-list/getCheckoutState')
   },
   methods: {
     onClick () {
@@ -65,6 +72,7 @@ export default {
         })
       }
       await this.$store.dispatch('checkins-list/getCheckinState', { refresh: true })
+      await this.$store.dispatch('checkins-list/getCheckoutState', { refresh: true })
     }
   }
 }
