@@ -16,9 +16,9 @@
       <template v-else>
         <div>
           <div class="w-full px-2 sm:px-0">
-            <!-- <select v-model="selectedDate" @change="changeDate" class="h-12 w-full appearance-none block text-gray-700 border border-gray-300 bg-white rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-              <option v-for="date in getListDate()" :key="format(date, 'yyyyMMdd')" :value="format(date, 'yyyyMMdd')">{{ formatDateLong(date) }}</option>
-            </select> -->
+            <span class="h-12 w-full appearance-none block text-gray-700 border border-gray-300 bg-white rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+              {{ todayDate }}
+            </span>
           </div>
 
           <checkins-list class="mt-2" />
@@ -52,7 +52,8 @@ export default {
 
   data () {
     return {
-      selectedDate: new Date()
+      selectedDate: new Date(),
+      todayDate: formatDateLong(new Date())
     }
   },
 
