@@ -63,6 +63,11 @@ export default {
         await this.$store.dispatch('checkins-list/checkout', {
           date: new Date()
         })
+        await this.$swal.fire({
+          icon: 'success',
+          title: 'Terimakasih buat kontribusinya hari ini ya',
+          confirmButtonText: 'OK'
+        })
       } catch (e) {
         const message = _result(e, 'response.data.message') || _result(e, 'stack') || ''
         this.$swal.fire({
