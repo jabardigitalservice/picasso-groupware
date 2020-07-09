@@ -76,7 +76,7 @@ export default {
     },
     async beforeDeleteLogbook () {
       const { value: confirm } = await this.$swal.fire({
-        title: 'Hapus logbook?',
+        title: 'Hapus laporan?',
         showCancelButton: true,
         showConfirmButton: true,
         confirmButtonText: 'Ya, hapus',
@@ -97,9 +97,9 @@ export default {
       try {
         await this.$promiseMinDelay(GroupwareAPI.delete(`/logbook/${this.logbook._id}`), 1000)
         this.$store.dispatch('logbook-list/getLogbookList')
-        return this.onSuccess('Logbook berhasil dihapus')
+        return this.onSuccess('Laporan berhasil dihapus')
       } catch (e) {
-        return this.onError('Gagal menghapus logbook')
+        return this.onError('Gagal menghapus laporan')
       }
     }
   }
