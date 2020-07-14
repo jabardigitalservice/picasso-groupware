@@ -61,7 +61,12 @@ export const mutations = {
 
 export const actions = {
   async getLogbookList ({ commit }) {
-    await GroupwareAPI.get('/logbook/')
+    await GroupwareAPI.get('/logbook/', {
+      params: {
+        limit: 100,
+        pageSize: 100
+      }
+    })
       .then(r => r.data)
       .then(data => {
         commit(SET_RESULT, _orderBy(data.results, ['startTimeTask'], ['desc']))
