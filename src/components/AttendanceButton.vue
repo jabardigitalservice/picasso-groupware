@@ -1,5 +1,5 @@
 <template>
-  <div class="m-3">
+  <div v-show="isCheckinButton || isCheckoutButton" class="m-3">
     <button
       :class="{
         'block w-full px-4 py-2 rounded text-white': true,
@@ -24,6 +24,9 @@ export default {
       return this.$store.state['checkins-list'].isCheckout
     },
     isCheckinButton () {
+      if (this.isCheckoutState) {
+        return false
+      }
       return this.isCheckinState === false || (
         this.isCheckinState === true &&
         this.isCheckoutState === true
