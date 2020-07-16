@@ -53,6 +53,9 @@ export const actions = {
             'Content-Type': 'application/json'
           }
         }).then(r => r.data)
+        .catch(e => {
+          throw e.response.data.errors
+        })
       if (res && res.auth_token) {
         setToken(res.auth_token)
         setTokenInCookie(res.auth_token, {
@@ -66,6 +69,7 @@ export const actions = {
       }
     } catch (e) {
       commit(types.UNAUTHENTICATED)
+      throw e
     } finally {
       commit(types.AUTH_INITIALIZED)
     }
