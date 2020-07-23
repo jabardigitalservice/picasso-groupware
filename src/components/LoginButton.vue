@@ -8,7 +8,7 @@
 export default {
   methods: {
     signIn () {
-      return this.$store.dispatch('auth/login')
+      this.$router.push('/login')
     }
   }
 }
