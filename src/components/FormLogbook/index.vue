@@ -53,6 +53,17 @@
         v-model="payload.dateTask"
       />
       <br/>
+      <FormInput
+        name="workPlace"
+        title="Tempat"
+        type="text"
+        :disabled="!isEditable"
+        rules="required"
+        :custom-messages="{
+          required: 'Tempat harus diisi'
+        }"
+        v-model="payload.workPlace"/>
+      <br/>
       <div class="relative">
         <FormRadioButtonGroup
           name="difficultyTask"
@@ -214,7 +225,8 @@ const modelData = {
   'documentTask': null, // URI 'http://'
   'organizerTask': null, // ?,
   'isMainTask': null,
-  'isDocumentLink': true
+  'isDocumentLink': true,
+  'workPlace': null
 }
 
 const ACTION = {
