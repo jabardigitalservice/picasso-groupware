@@ -8,13 +8,7 @@
 export default {
   methods: {
     signIn () {
-      return this.$store.dispatch('auth/login')
-        .catch(e => {
-          this.$swal.fire({
-            icon: 'error',
-            title: e.message || 'Terjadi Kesalahan'
-          })
-        })
+      this.$router.push('/login')
     }
   }
 }

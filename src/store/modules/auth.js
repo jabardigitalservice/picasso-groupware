@@ -37,42 +37,65 @@ export const mutations = {
 }
 
 export const actions = {
+  async onLoginSuccess ({ commit, dispatch }, { token, expiredAt }) {
+    if (token) {
+      setToken(token)
+      setTokenInCookie(token, {
+        expires: new Date(expiredAt)
+      })
+      await dispatch('getUserProfile')
+    } else {
+      setToken(null)
+      setTokenInCookie(null)
+      commit(types.UNAUTHENTICATED)
+    }
+  },
+  onLoginFailed ({ commit }) {
+    commit(types.UNAUTHENTICATED)
+  },
+  async loginUsingUsernameAndPassword ({ commit, dispatch }, { username, password }) {
+    await GroupwareAPI.post('/auth/login/', {
+      username,
+      password
+    }).then(r => r.data)
+      .then(({ auth_token: token, exp: expiredAt }) => {
+        return dispatch('onLoginSuccess', {
+          token,
+          expiredAt
+        })
+      })
+      .catch((err) => {
+        dispatch('onLoginFailed')
+        throw err
+      })
+    commit(types.AUTH_INITIALIZED)
+  },
   async login ({ commit, dispatch }) {
     if (!window.GAuth) {
       return
     }
-    try {
-      commit(types.AUTH_LOADING)
-      const authCode = await window.GAuth.getAuthCode()
-      const res = await GroupwareAPI.post(`social/google-oauth2/`,
-        {
-          access_token: authCode
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(r => r.data)
-        .catch(e => {
-          throw e.response.data.errors
-        })
-      if (res && res.auth_token) {
-        setToken(res.auth_token)
-        setTokenInCookie(res.auth_token, {
-          expires: new Date(res.exp)
-        })
-        await dispatch('getUserProfile')
-      } else {
-        setToken(null)
-        setTokenInCookie(null)
-        commit(types.UNAUTHENTICATED)
+    commit(types.AUTH_LOADING)
+    const authCode = await window.GAuth.getAuthCode()
+    await GroupwareAPI.post(`social/google-oauth2/`, {
+      access_token: authCode
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
       }
-    } catch (e) {
-      commit(types.UNAUTHENTICATED)
-      throw e
-    } finally {
-      commit(types.AUTH_INITIALIZED)
-    }
+    }).then(r => r.data)
+      .then(({ auth_token: token, exp: expiredAt }) => {
+        return dispatch('onLoginSuccess', {
+          token,
+          expiredAt
+        })
+      })
+      .catch((err) => {
+        dispatch('onLoginFailed')
+        throw err
+      })
+      .finally(() => {
+        commit(types.AUTH_INITIALIZED)
+      })
   },
   async getUserProfile ({ state, commit }) {
     if (!state.user) {
