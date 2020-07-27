@@ -9,7 +9,7 @@
 
               <div class="flex-auto text-sm">
                 <p class="text-gray-900 font-bold">
-                    {{ item['username'] }}
+                    {{ item['fullname'] }}
                 </p>
                 <p v-if="item['message']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['message'])">{{ getStatusLabel(item['message']) }}</span></p>
                 <p class="text-gray-900">{{ item['location'] }}</p>
