@@ -54,9 +54,10 @@
 
 .form-input {
   &__file {
-    @apply w-full flex flex-row justify-start items-stretch;
+    @apply w-full flex flex-row justify-start items-stretch rounded-md overflow-hidden;
     > button {
       @apply order-2 w-24
+      flex-none
       inline-block py-2 px-4 
       rounded-tr
       rounded-br
@@ -71,12 +72,16 @@
     }
 
     > a {
-      text-overflow: ellipsis;
+      min-height: 2.5rem;
       @apply flex-auto order-1
       flex flex-row justify-start items-center 
       px-4
       overflow-hidden
       bg-gray-200;
+
+      > span {
+        @apply block truncate;
+      }
 
       &[href] {
         @apply text-brand-blue font-bold cursor-pointer;
