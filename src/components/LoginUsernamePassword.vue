@@ -78,7 +78,13 @@ export default {
           this.$emit('login:success')
         })
         .catch((err) => {
-          this.$emit('login:failed', err)
+          let msg
+          if ('response' in err) {
+            msg = `${err.response.status}: ${err.response.data.detail}`
+          } else if (err instanceof Error) {
+            msg = err.message
+          }
+          this.$emit('login:error', msg)
         })
     }
   }
