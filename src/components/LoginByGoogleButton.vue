@@ -3,7 +3,7 @@
     <button @click="signIn" class="login-with-google-button">
       <img src="/img/logo-google.svg" class="w-4 h-4 object-contain object-center mr-2">
       <b>
-        Login using Google
+        Login with Google
       </b>
     </button>
   </div>
