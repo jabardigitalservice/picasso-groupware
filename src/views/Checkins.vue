@@ -16,16 +16,16 @@
       <template v-else>
         <div>
           <div class="w-full px-2 sm:px-0">
-            <select v-model="selectedDate" @change="changeDate" class="h-12 w-full appearance-none block text-gray-700 border border-gray-300 bg-white rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-              <option v-for="date in getListDate()" :key="format(date, 'yyyyMMdd')" :value="format(date, 'yyyyMMdd')">{{ formatDateLong(date) }}</option>
-            </select>
+            <span class="h-12 w-full appearance-none block text-gray-700 border border-gray-300 bg-white rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+              {{ todayDate }}
+            </span>
           </div>
 
           <checkins-list class="mt-2" />
 
-          <div class="w-full p-2 sm:px-0">
+          <!-- <div class="w-full p-2 sm:px-0">
             <router-link to="/checkins/create" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Checkin</router-link>
-          </div>
+          </div> -->
         </div>
       </template>
     </div>
@@ -34,7 +34,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { analytics } from '@/lib/firebase'
 
 import LoginButton from '@/components/LoginButton'
 import CheckinsList from '@/components/CheckinsList'
@@ -53,7 +52,8 @@ export default {
 
   data () {
     return {
-      selectedDate: null
+      selectedDate: new Date(),
+      todayDate: formatDateLong(new Date())
     }
   },
 
@@ -65,8 +65,6 @@ export default {
     this.selectedDate = this.$route.query.date ? this.$route.query.date : format(new Date(), 'yyyyMMdd')
 
     this.fetchItems(this.selectedDate)
-
-    analytics.logEvent('checkins_list_view')
   },
 
   methods: {

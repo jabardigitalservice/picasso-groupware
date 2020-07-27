@@ -2,6 +2,11 @@ const page = path => () => import(`@/views/${path}`).then(m => m.default || m)
 
 export default [
   {
+    path: '/login',
+    name: 'login',
+    component: page('Login.vue')
+  },
+  {
     path: '/',
     name: 'home',
     component: page('Home.vue')

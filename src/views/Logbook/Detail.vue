@@ -1,8 +1,18 @@
 <template>
   <div class="max-w-xl mx-auto mt-16 p-8 bg-white rounded shadow-xl">
-    <h1 class="font-bold text-2xl text-green-600">
-      Lihat Laporan
-    </h1>
+    <header class="flex justify-between items-center">
+      <h1 class="font-bold text-2xl text-green-600">
+        Lihat Laporan
+      </h1>
+      <button
+        class="cursor-pointer text-sm px-4 py-1 rounded-full text-brand-green border border-solid border-brand-green hover:bg-green-100"
+        @click="onEdit">
+        <i class="fa fa-pencil-alt mr-2"></i>
+        <b class="uppercase">
+          Edit
+        </b>
+      </button>
+    </header>
     <hr class="my-8"/>
     <FormLogbook
       action="view"
@@ -17,11 +27,6 @@ export default {
   components: {
     FormLogbook: () => import('../../components/FormLogbook')
   },
-  data () {
-    return {
-      logbook: null
-    }
-  },
   computed: {
     reportId () {
       return this.$route.query.id
@@ -31,6 +36,14 @@ export default {
     onLogbookNotFound () {
       this.$router.replace({
         path: '/report'
+      })
+    },
+    onEdit () {
+      this.$router.push({
+        path: '/report/edit',
+        query: {
+          id: this.$route.query.id
+        }
       })
     }
   },

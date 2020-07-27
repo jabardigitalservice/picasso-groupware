@@ -2,6 +2,14 @@ import store from '@/store'
 import { getTokenFromCookie } from '../lib/js-cookie'
 import { setToken } from '../lib/axios'
 
+const publicPaths = ['/', '/login']
+const isPublicPath = (path) => {
+  if (path === '/') {
+    return true
+  }
+  return publicPaths.some(x => path.startsWith(x))
+}
+
 export default async (to, from, next) => {
   try {
     if (!store.state.auth.user && !store.state.auth.isInitialized) {
@@ -18,7 +26,7 @@ export default async (to, from, next) => {
     if (store.state.auth.user) {
       next()
     } else {
-      if (to.path === '/') {
+      if (isPublicPath(to.path)) {
         next()
       } else {
         next('/')

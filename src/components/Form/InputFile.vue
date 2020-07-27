@@ -34,10 +34,14 @@
       </template>
       <template #default="{value: metadata}">
         <FilePreview  v-if="metadata"
+                      :file="file"
                       :name="filename"
                       :size="metadata.size"
                       :type="metadata.type"
                       :url="mFileURL"
+                      :disabled="disabled"
+                      :renameable="renameable"
+                      :download-on-click="downloadOnClick"
                       @view="onPreviewDocument"
                       @update:name="onFilenameChanged"
                       @delete="onRemoveFile"/>
@@ -76,7 +80,6 @@
 import { ContentLoader } from 'vue-content-loader'
 import { getStoredFileMetadata } from '../../api'
 import { props, components } from './input-mixin'
-// import {GroupwareAPI} from '../../lib/axios'
 
 const STORAGE = {
   FIREBASE: 'firebase',
@@ -108,6 +111,14 @@ export default {
       validator (v) {
         return [STORAGE.FIREBASE, STORAGE.GROUPWARE_SERVICE].includes(v)
       }
+    },
+    renameable: {
+      type: Boolean,
+      default: true
+    },
+    downloadOnClick: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -127,6 +138,7 @@ export default {
           },
           function (arr) {
             const [value, file] = arr
+            this.$refs.validator.syncValue(value)
             this.mFileURL = value
             this.mFile = file
             if (typeof this.mFileURL === 'string' && this.mFileURL.startsWith('http')) {
@@ -141,7 +153,7 @@ export default {
   },
   computed: {
     shouldDisableValidation () {
-      return typeof this.value === 'string' && this.value.startsWith('https://')
+      return typeof this.value === 'string' && ['blob', 'http'].some(str => this.value.startsWith(str))
     }
   },
   methods: {

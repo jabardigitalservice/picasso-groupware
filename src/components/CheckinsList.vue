@@ -4,20 +4,18 @@
       <div class="flex flex-wrap">
         <template v-if="items.length > 0">
           <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6" :class="getRowClass(item)">
-            <router-link :to="`/users/${item['user_id']}`">
-              <div class="flex items-center">
-                <img class="w-10 h-10 rounded-full mr-4" :src="item['user_photo']" />
+            <div class="flex items-center">
+              <img class="w-10 h-10 rounded-full mr-4" :src="item['user_photo']" />
 
-                <div class="flex-auto text-sm">
-                  <p class="text-gray-900 font-bold">
-                      {{ item['user_name'] }}
-                  </p>
-                  <p v-if="item['type']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['type'])">{{ getStatusLabel(item['type']) }}</span></p>
-                  <p class="text-gray-900">{{ item['message'] }}</p>
-                  <p class="text-gray-600">{{ formatTime(item['checkin_at'].toDate()) }}</p>
-                </div>
+              <div class="flex-auto text-sm">
+                <p class="text-gray-900 font-bold">
+                    {{ item['username'] }}
+                </p>
+                <p v-if="item['message']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['message'])">{{ getStatusLabel(item['message']) }}</span></p>
+                <p class="text-gray-900">{{ item['location'] }}</p>
+                <p class="text-gray-600">{{ getCheckInDate(item) }}</p>
               </div>
-            </router-link>
+            </div>
           </div>
         </template>
         <template v-else>
@@ -50,6 +48,7 @@ import { ContentLoader } from 'vue-content-loader'
 import { mapGetters } from 'vuex'
 import { formatTime } from '@/lib/date'
 import { isBefore, isAfter, set } from 'date-fns'
+import { ATTENDANCE } from '../lib/constants'
 
 export default {
   components: {
@@ -65,15 +64,15 @@ export default {
     formatTime,
 
     getStatusLabel (value) {
-      if (value === 'HADIR') {
+      if (value === ATTENDANCE.PRESENT) {
         return 'Hadir'
       }
 
-      if (value === 'IZIN') {
+      if (value === ATTENDANCE.LEAVE) {
         return 'Izin / Sakit'
       }
 
-      if (value === 'OTHER') {
+      if (value === ATTENDANCE.OTHER) {
         return 'Into the Unknown'
       }
 
@@ -81,15 +80,15 @@ export default {
     },
 
     getStatusColor (value) {
-      if (value === 'HADIR') {
+      if (value === ATTENDANCE.PRESENT) {
         return 'bg-green-500'
       }
 
-      if (value === 'IZIN') {
+      if (value === ATTENDANCE.LEAVE) {
         return 'bg-yellow-500'
       }
 
-      if (value === 'OTHER') {
+      if (value === ATTENDANCE.OTHER) {
         return 'bg-purple-500'
       }
 
@@ -97,11 +96,11 @@ export default {
     },
 
     getRowClass (item) {
-      if (item['type'] !== 'HADIR') {
+      if (item['message'] !== ATTENDANCE.PRESENT) {
         return 'bg-white'
       }
 
-      const checkinDateTime = item['checkin_at'].toDate()
+      const checkinDateTime = new Date(item['startDate'])
       const yellowLine = set(checkinDateTime, { hours: 8, minutes: 0, seconds: 0 })
       const redLine = set(checkinDateTime, { hours: 9, minutes: 0, seconds: 0 })
 
@@ -118,6 +117,10 @@ export default {
       }
 
       return 'bg-white'
+    },
+    getCheckInDate (item) {
+      const date = new Date(item.startDate)
+      return formatTime(date)
     }
   }
 }
