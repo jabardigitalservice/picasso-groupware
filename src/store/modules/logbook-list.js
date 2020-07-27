@@ -75,6 +75,13 @@ export const actions = {
         commit(SET_RESULT, e)
       })
   },
+  async getLogbookById (_, { id }) {
+    if (typeof id !== 'string' || !id.length) {
+      return Promise.reject(new Error('id is either empty or not a string'))
+    }
+    return GroupwareAPI.get(`logbook/${id}`)
+      .then(r => r.data)
+  },
   insertLogbook (_, payload) {
     return GroupwareAPI.post('/logbook/', payload)
   },

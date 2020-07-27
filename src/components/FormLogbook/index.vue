@@ -14,21 +14,26 @@
         :custom-messages="{
           required: 'Nama proyek harus diisi'
         }"
-        @change="onSelectedProjectChanged">
-        <template v-if="!isViewingOnly" #subtitle>
+        @change="onSelectedProjectChanged"
+      >
+        <template
+          v-if="!isViewingOnly"
+          #subtitle
+        >
           <p>
             <i class="text-gray-600">
               Nama proyek/produk tidak ada? Kontak admin via
             </i>
             <a
               class="cursor-pointer hover:underline"
-              :href="adminWhatsappBacklink">
+              :href="adminWhatsappBacklink"
+            >
               <b class="text-green-500">Whatsapp</b>
             </a>
           </p>
         </template>
       </FormSelect>
-      <br/>
+      <br />
       <FormInput
         name="nameTask"
         title="Nama Tugas"
@@ -38,8 +43,9 @@
         :custom-messages="{
           required: 'Nama tugas harus diisi'
         }"
-        v-model="payload.nameTask"/>
-      <br/>
+        v-model="payload.nameTask"
+      />
+      <br />
       <FormInputDateTime
         name="dateTask"
         title="Tanggal"
@@ -52,18 +58,20 @@
         }"
         v-model="payload.dateTask"
       />
-      <br/>
+      <br />
       <FormInput
         name="workPlace"
         title="Tempat"
         type="text"
+        placeholder="Tempat bekerja"
         :disabled="!isEditable"
         rules="required"
         :custom-messages="{
-          required: 'Tempat harus diisi'
+          required: 'Tempat bekerja harus diisi'
         }"
-        v-model="payload.workPlace"/>
-      <br/>
+        v-model="payload.workPlace"
+      />
+      <br />
       <div class="relative">
         <FormRadioButtonGroup
           name="difficultyTask"
@@ -88,7 +96,7 @@
           </template>
         </FormRadioButtonGroup>
       </div>
-      <br/>
+      <br />
       <FormRadioButtonGroup
         class="mb-2"
         name="isMainTask"
@@ -103,23 +111,21 @@
         }"
         v-model="payload.isMainTask"
       />
-      <br/>
-      <FormInputFile
-          name="evidenceTask"
-          title="Screenshot / Foto Hasil Kerja"
-          :value.sync="evidenceTaskFileURL"
-          :file.sync="evidenceTaskFileBlob"
-          :filename.sync="evidenceTaskFilename"
-          :disabled="!isEditable"
-          :renameable="false"
-          :download-on-click="true"
-          rules="required|mimes:image/*"
-          accept="image/*"
-          :custom-messages="{
-            required: 'Evidence harus diisi'
-          }"
-          />
-      <br/>
+      <br />
+      <FormInputEvidence
+        ref="formInputEvidence"
+        name="evidenceTask"
+        title="Screenshot / Foto Hasil Kerja"
+        :url.sync="payload.evidenceTaskURL"
+        :path="payload.evidenceTaskPath"
+        :disabled="!isEditable"
+        rules="required|mimes:image/*"
+        accept="image/*"
+        :custom-messages="{
+          required: 'Evidence harus diisi'
+        }"
+      />
+      <br />
       <FormRadioButtonGroup
         class="mb-2"
         name="selectedDocumentType"
@@ -132,30 +138,32 @@
         @change="onDocumentTypeSelectionChanged"
       >
         <template #subtitle>
-          <span v-if="!isViewingOnly" class="font-bold text-gray-500">
+          <span
+            v-if="!isViewingOnly"
+            class="font-bold text-gray-500"
+          >
             *Pilih salah satu
           </span>
         </template>
       </FormRadioButtonGroup>
-      <FormInputFile
+      <FormInputDocument
         v-if="isUsingFileAsDocument"
+        ref="formInputDocumentFile"
         name="documentTask"
         title="File Dokumen"
-        placeholder="Choose file..."
+        placeholder="Pilih file"
         :disabled="!isEditable"
-        :value.sync="documentTaskFileURL"
-        :file.sync="documentTaskFileBlob"
-        :filename.sync="documentTaskFilename"
+        :url.sync="payload.documentTaskURL"
+        :path="payload.documentTaskPath"
         :required="false"
-        :renameable="false"
-        :download-on-click="true"
       >
         <template #title>
           <span></span>
         </template>
-      </FormInputFile>
+      </FormInputDocument>
       <FormInput
         v-if="isUsingLinkAsDocument"
+        ref="formInputDocumentLink"
         type="text"
         name="documentTask"
         title="Link Dokumen"
@@ -166,12 +174,13 @@
           regex: 'Link harus dalam bentuk URL yang valid'
         }"
         :required="false"
-        v-model="documentTaskLink">
+        v-model="documentTaskLink"
+      >
         <template #title>
           <span></span>
         </template>
       </FormInput>
-      <br/>
+      <br />
       <FormInput
         type="text"
         name="organizerTask"
@@ -181,19 +190,25 @@
         :custom-messages="{
           required: 'Penyelenggara harus diisi'
         }"
-        v-model="payload.organizerTask"/>
-      <br/>
-      <div v-if="isEditable" class="flex justify-end">
+        v-model="payload.organizerTask"
+      />
+      <br />
+      <div
+        v-if="isEditable"
+        class="flex justify-end"
+      >
         <button
           class="mr-4 button focus:outline-none
                  bg-gray-200 hover:bg-gray-300 text-gray-500"
-          @click="onCancel">
+          @click="onCancel"
+        >
           Cancel
         </button>
         <button
           class="button focus:outline-none
                  bg-brand-blue hover:bg-brand-blue-lighter text-white"
-          @click="handleSubmit(beforeSave)">
+          @click="handleSubmit(beforeSave)"
+        >
           Save
         </button>
       </div>
@@ -204,10 +219,10 @@
 <script>
 import FormSelect from '../Form/Select'
 import FormInput from '../Form/Input'
-import FormInputFile from '../Form/InputFile'
+import FormInputEvidence from '../Form/EvidenceImageInput'
+import FormInputDocument from '../Form/DocumentFileInput'
 import FormInputDateTime from '../Form/InputDateTime'
 import FormRadioButtonGroup from '../Form/RadioButtonGroup'
-import { GroupwareAPI } from '../../lib/axios'
 import _cloneDeep from 'lodash/cloneDeep'
 
 const DOCUMENT_TYPE = {
@@ -216,13 +231,11 @@ const DOCUMENT_TYPE = {
 }
 
 const modelData = {
-  'dateTask': null, // timestamptz '2020-06-11T06:55:24.698Z'
+  'dateTask': new Date().toISOString(), // timestamptz '2020-06-11T06:55:24.698Z'
   'projectId': null, // ?
   'projectName': null, // ?
   'nameTask': null, // ?
   'difficultyTask': null, // number in range of [1, 5],
-  'evidenceTask': null, // URI 'http://'
-  'documentTask': null, // URI 'http://'
   'organizerTask': null, // ?,
   'isMainTask': null,
   'isDocumentLink': true,
@@ -245,7 +258,8 @@ export default {
   components: {
     FormSelect,
     FormInput,
-    FormInputFile,
+    FormInputEvidence,
+    FormInputDocument,
     FormInputDateTime,
     FormRadioButtonGroup
   },
@@ -291,14 +305,7 @@ export default {
         }
       ],
       selectedDocumentType: DOCUMENT_TYPE.LINK,
-      documentTaskFileURL: null,
-      documentTaskFileBlob: null,
-      documentTaskFilename: null,
       documentTaskLink: null,
-
-      evidenceTaskFileURL: null,
-      evidenceTaskFileBlob: null,
-      evidenceTaskFilename: null,
 
       maxDateTime: new Date().toISOString()
     }
@@ -335,26 +342,11 @@ export default {
           this.$emit('logbook:not-found', id)
           return
         }
-        const { evidenceTask, documentTask, isDocumentLink } = logbook
+        const { documentTaskURL, isDocumentLink } = logbook
         this.originalData = _cloneDeep(logbook)
         this.payload = logbook
         this.selectedDocumentType = logbook.isDocumentLink === true ? DOCUMENT_TYPE.LINK : DOCUMENT_TYPE.FILE
-        await this.getEvidenceTaskFile(evidenceTask.filePath)
-          .then(({ name, url, file }) => {
-            this.evidenceTaskFilename = name
-            this.evidenceTaskFileURL = url
-            this.evidenceTaskFileBlob = file
-          })
-        if (isDocumentLink === false) {
-          await this.getDocumentTaskFile(documentTask.filePath)
-            .then(({ name, url, file }) => {
-              this.documentTaskFilename = name
-              this.documentTaskFileURL = url
-              this.documentTaskFileBlob = file
-            })
-        } else if (isDocumentLink === true) {
-          this.documentTaskLink = documentTask.fileURL
-        }
+        this.documentTaskLink = isDocumentLink ? documentTaskURL : null
       }
     }
   },
@@ -373,45 +365,8 @@ export default {
     },
     getLogbookFromDatabase (id) {
       return Promise.resolve(null)
-    },
-    async getEvidenceTaskFile (filePath) {
-      if (typeof filePath !== 'string' || !filePath.length) {
-        return Promise.resolve({})
-      }
-      const __filePath = filePath.replace('image/', 'image-blob/')
-      const mimetype = filePath.substring(filePath.lastIndexOf('.') + 1)
-      const blob = await GroupwareAPI.get(`file/${__filePath}`)
-        .then(r => {
-          return fetch(r.data).then(r => r.blob())
-        })
-      const file = new File([blob], `${new Date().getTime()}`, {
-        type: `image/${mimetype}`
-      })
-      const url = window.URL.createObjectURL(file)
-      return {
-        name: filePath,
-        url,
-        file
-      }
-    },
-    async getDocumentTaskFile (filePath) {
-      if (typeof filePath !== 'string' || !filePath.length) {
-        return Promise.resolve({})
-      }
-      const __filePath = filePath.replace('image/', 'image-blob/')
-      const blob = await GroupwareAPI.get(`file/${__filePath}`, {
-        responseType: 'blob'
-      })
-        .then(r => {
-          return r.data
-        })
-      const file = new File([blob], `${new Date().getTime()}`)
-      const url = window.URL.createObjectURL(file)
-      return {
-        name: filePath,
-        url,
-        file
-      }
+      // TODO: bentukan API by id harusnya sama dengan keluaran list
+      // return this.$store.dispatch('logbook-list/getLogbookById', { id })
     },
     resetPayload () {
       this.payload = Object.assign({}, modelData)
@@ -434,8 +389,10 @@ export default {
     },
     createFormDataToPost () {
       const {
-        evidenceTask,
-        documentTask,
+        evidenceTaskURL,
+        evidenceTaskPath,
+        documentTaskURL,
+        documentTaskPath,
         ...rest
       } = this.payload
 
@@ -443,23 +400,31 @@ export default {
       Object.entries(rest).forEach(([key, value]) => {
         formData.append(key, value)
       })
-      formData.append('evidenceTask', this.evidenceTaskFileBlob)
-      if (this.isUsingFileAsDocument) {
-        formData.append('documentTask', this.documentTaskFileBlob)
-      } else if (this.isUsingLinkAsDocument) {
-        formData.append('documentTask', this.documentTaskLink)
-      }
 
-      return formData
+      try {
+        const evidenceFile = this.$refs.formInputEvidence.getSelectedFile()
+        formData.append('evidenceTask', evidenceFile)
+        if (this.isUsingLinkAsDocument) {
+          formData.append('documentTask', this.documentTaskLink)
+        } else if (this.isUsingFileAsDocument) {
+          const documentFile = this.$refs.formInputDocumentFile.getSelectedFile()
+          formData.append('documentTask', documentFile)
+        }
+        return formData
+      } catch (e) {
+        return null
+      }
     },
-    post () {
+    async post () {
       const formData = this.createFormDataToPost()
       return this.$store.dispatch('logbook-list/insertLogbook', formData)
     },
     createFormDataToPut () {
       const {
-        evidenceTask,
-        documentTask,
+        evidenceTaskPath,
+        evidenceTaskURL,
+        documentTaskPath,
+        documentTaskURL,
         isDocumentLink,
         ...rest
       } = this.payload
@@ -468,25 +433,22 @@ export default {
       Object.entries(rest).forEach(([key, value]) => {
         formData.append(key, value)
       })
-      if (this.payload.evidenceTask.filePath === this.evidenceTaskFilename) {
-        formData.append('evidenceTask', null)
-      } else {
-        formData.append('evidenceTask', this.evidenceTaskFileBlob)
-      }
-      if (this.isUsingFileAsDocument) {
-        formData.append('isDocumentLink', false)
-        if (this.payload.documentTask.filePath !== this.documentTaskFilename) {
-          formData.append('documentTask', this.documentTaskFileBlob)
-        } else {
-          formData.append('documentTask', null)
+
+      try {
+        const evidenceFile = this.$refs.formInputEvidence.getSelectedFile()
+        formData.append('evidenceTask', evidenceFile)
+        if (this.isUsingLinkAsDocument) {
+          formData.append('documentTask', this.documentTaskLink)
+        } else if (this.isUsingFileAsDocument) {
+          const documentFile = this.$refs.formInputDocumentFile.getSelectedFile()
+          formData.append('documentTask', documentFile)
         }
-      } else {
-        formData.append('isDocumentLink', true)
-        formData.append('documentTask', this.documentTaskLink)
+        return formData
+      } catch (e) {
+        return null
       }
-      return formData
     },
-    put () {
+    async put () {
       const formData = this.createFormDataToPut()
       return this.$store.dispatch('logbook-list/updateLogbook', {
         id: this.id,
@@ -552,5 +514,4 @@ export default {
 </script>
 
 <style>
-
 </style>
