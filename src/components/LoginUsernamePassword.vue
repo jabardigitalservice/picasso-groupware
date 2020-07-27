@@ -8,12 +8,11 @@
       <FormInput
         name="username"
         title="Username"
-        type="email"
+        type="text"
         v-model="payload.username"
         rules="required"
         :custom-messages="{
-          required: 'Username harus diisi',
-          email: 'Username harus dalam format email'
+          required: 'Username harus diisi'
         }"
       />
       <br/>
