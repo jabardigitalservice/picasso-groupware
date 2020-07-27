@@ -16,7 +16,8 @@
                   <p class="text-sm">Silahkan login terlebih dahulu</p>
                 </div>
                 <div class="mx-2 my-2">
-                  <login-button />
+                  <login-button class="mb-2"/>
+                  <login-by-google-button/>
                 </div>
               </div>
             </template>
@@ -44,6 +45,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import LoginButton from '@/components/LoginButton'
+import LoginByGoogleButton from '@/components/LoginByGoogleButton'
 import HomeBannerList from '@/components/HomeBannerList'
 import HomeArticleList from '@/components/HomeArticleList'
 import UserInfo from '@/components/UserInfo'
@@ -55,6 +57,7 @@ export default {
     HomeBannerList,
     HomeArticleList,
     LoginButton,
+    LoginByGoogleButton,
     UserInfo,
     AttendanceButton
   },
