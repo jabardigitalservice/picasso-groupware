@@ -7,7 +7,8 @@
 
     </template>
     <template v-else-if="logbookListData">
-      <header class="mb-12 flex justify-between items-center">
+      <DateRangePicker/>
+      <header class="mb-6 flex justify-between items-center">
         <p class="text-sm text-gray-600">
           Menampilkan {{ startIndex + 1 }} - {{ endIndex + 1 }} dari total {{ totalCount }} data
         </p>
@@ -36,11 +37,14 @@
 
 <script>
 import listMixin from './list-mixin'
+import DateRangePicker from './date-range-picker.vue'
 import CardListItem from './card-list-item'
+
 export default {
   name: 'LogbookCardList',
   mixins: [listMixin],
   components: {
+    DateRangePicker,
     CardListItem
   }
 }

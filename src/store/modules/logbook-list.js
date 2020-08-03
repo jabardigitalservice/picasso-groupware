@@ -60,11 +60,12 @@ export const mutations = {
 }
 
 export const actions = {
-  async getLogbookList ({ commit }) {
+  async getLogbookList ({ commit }, params = {}) {
     await GroupwareAPI.get('/logbook/', {
       params: {
         limit: 9999,
-        pageSize: 9999
+        pageSize: 9999,
+        ...params
       }
     })
       .then(r => r.data)
