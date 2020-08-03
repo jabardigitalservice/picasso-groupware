@@ -112,7 +112,7 @@ export default {
       selectedDateOption: DATE_OPTION.THIS_MONTH,
       pickerHelpers: [
         { label: 'Hari ini', value: { start: new Date(), end: new Date() } },
-        { label: 'Minggu ini', value: { start: new Date(), end: subDays(new Date(), 7) } },
+        { label: 'Minggu ini', value: { start: subDays(new Date(), 7), end: new Date() } },
         { label: 'Bulan ini', value: { start: setDate(new Date(), 1), end: setDate(new Date(), getDaysInMonth(new Date())) } }
       ]
     }
