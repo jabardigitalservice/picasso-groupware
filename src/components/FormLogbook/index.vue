@@ -1,19 +1,16 @@
 <template>
   <div>
     <ValidationObserver #default="{handleSubmit}">
-      <FormSelect
+      <FormInputProject
         name="projectId"
         title="Nama Proyek"
-        value-key="id"
-        label-key="name"
+        type="text"
         :disabled="!isEditable"
-        :options="projectOptions"
-        :value="payload.projectId"
         rules="required"
-        :required="true"
         :custom-messages="{
           required: 'Nama proyek harus diisi'
         }"
+        :value="payload.projectName"
         @change="onSelectedProjectChanged"
       >
         <template
@@ -27,12 +24,13 @@
             <a
               class="cursor-pointer hover:underline"
               :href="adminWhatsappBacklink"
+              target="_blank"
             >
               <b class="text-green-500">Whatsapp</b>
             </a>
           </p>
         </template>
-      </FormSelect>
+      </FormInputProject>
       <br />
       <FormInput
         name="nameTask"
@@ -217,7 +215,8 @@
 </template>
 
 <script>
-import FormSelect from '../Form/Select'
+import FormInputProject from './InputProjectAutocomplete'
+// import FormSelect from '../Form/Select'
 import FormInput from '../Form/Input'
 import FormInputEvidence from '../Form/EvidenceImageInput'
 import FormInputDocument from '../Form/DocumentFileInput'
@@ -256,7 +255,8 @@ const ACTIONS = [
 
 export default {
   components: {
-    FormSelect,
+    // FormSelect,
+    FormInputProject,
     FormInput,
     FormInputEvidence,
     FormInputDocument,
