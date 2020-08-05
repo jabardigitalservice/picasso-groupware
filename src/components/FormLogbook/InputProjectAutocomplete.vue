@@ -20,6 +20,7 @@
     </FormInputHeader>
     <div class="relative">
       <input
+        autocomplete="off"
         ref="input"
         :type="type"
         :name="name"
@@ -28,6 +29,8 @@
         :class="{'form-input__input': true, 'is-invalid': failed}"
         v-bind="$attrs"
         @input="onInput"
+        @focus="onInputFocused"
+        @blur="onInputBlur"
       >
       <div v-if="showResultsPopover" class="form-input-project__results">
         <ul>
@@ -105,22 +108,27 @@ export default {
     }
   },
   methods: {
-    onInput (e) {
-      this.showResultsPopover = true
-      this.isSearching = true
-      this.mValue = e.target.value
-      if (!this.mValue) {
-        this.isSearching = false
-        this.results = null
+    onInputFocused () {
+      this.onSearch()
+    },
+    onInputBlur () {
+      setTimeout(() => {
         this.showResultsPopover = false
-      } else {
-        this.onSearch()
-      }
+      }, 250)
+    },
+    onInput (e) {
+      this.mValue = e.target.value
+      this.onSearch()
     },
     onSearch: debounce(function () {
-      this.results = this.$store.getters['organizations/listOfProjects']
+      this.showResultsPopover = true
+      this.isSearching = true
+
+      const searchString = typeof this.mValue === 'string' ? this.mValue : ''
+      this.results = this.$store
+        .getters['organizations/listOfProjects']
         .filter(x => {
-          return `${x.name}`.toLowerCase().includes(`${this.mValue}`.toLowerCase())
+          return `${x.name}`.toLowerCase().includes(searchString.toLowerCase())
         })
       this.isSearching = false
     }, 600),
