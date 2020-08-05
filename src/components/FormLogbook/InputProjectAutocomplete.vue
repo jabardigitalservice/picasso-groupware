@@ -109,6 +109,8 @@ export default {
   },
   methods: {
     onInputFocused () {
+      this.showResultsPopover = true
+      this.isSearching = true
       this.onSearch()
     },
     onInputBlur () {
@@ -118,12 +120,11 @@ export default {
     },
     onInput (e) {
       this.mValue = e.target.value
+      this.showResultsPopover = true
+      this.isSearching = true
       this.onSearch()
     },
     onSearch: debounce(function () {
-      this.showResultsPopover = true
-      this.isSearching = true
-
       const searchString = typeof this.mValue === 'string' ? this.mValue : ''
       this.results = this.$store
         .getters['organizations/listOfProjects']
