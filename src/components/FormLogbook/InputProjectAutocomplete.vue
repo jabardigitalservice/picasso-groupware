@@ -143,7 +143,9 @@ export default {
 
 <style lang="scss" scoped>
 .form-input-project__results {
+  max-height: 50vh;
   @apply absolute z-10 left-0 right-0
+  overflow-x-hidden overflow-y-scroll
   p-4
   border border-solid border-gray-400
   bg-white
