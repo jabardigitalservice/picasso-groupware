@@ -7,6 +7,7 @@
 
     </template>
     <template v-else-if="logbookListData">
+      <DateRangePicker/>
       <header class="mb-8 flex justify-between items-center">
         <p class="text-sm text-gray-600">
           Menampilkan {{ startIndex + 1 }} - {{ endIndex + 1 }} dari total {{ totalCount }} data
@@ -33,12 +34,23 @@
             </tr>
           </thead>
           <tbody>
-            <TableRow
-              v-for="(data, index) in logbookListData"
-              :key="index"
-              :logbook="data"
-              :index="getAbsoluteIndex(index)">
-            </TableRow>
+            <template v-if="!logbookListData || !logbookListData.length">
+              <tr>
+                <td colspan="7">
+                  <div class="p-4 text-center font-bold text-gray-400 bg-gray-200 uppercase">
+                    Tidak ada data
+                  </div>
+                </td>
+              </tr>
+            </template>
+            <template v-else>
+              <TableRow
+                v-for="(data, index) in logbookListData"
+                :key="index"
+                :logbook="data"
+                :index="getAbsoluteIndex(index)">
+              </TableRow>
+            </template>
           </tbody>
       </table>
     </div>
@@ -48,12 +60,14 @@
 
 <script>
 import listMixin from './list-mixin'
+import DateRangePicker from './date-range-picker.vue'
 import TableRow from './table-row'
 export default {
   name: 'LogbookTable',
   mixins: [listMixin],
   components: {
-    TableRow
+    TableRow,
+    DateRangePicker
   }
 }
 </script>

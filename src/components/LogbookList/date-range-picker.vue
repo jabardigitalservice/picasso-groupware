@@ -10,7 +10,7 @@
         </span>
       </header>
       <br/>
-      <div class="flex justify-between items-stretch">
+      <div class="flex justify-between sm:justify-start items-stretch">
         <InputText
           name="startDate"
           type="text"
@@ -42,15 +42,7 @@
           </template>
         </InputText>
       </div>
-      <div class="date-range-picker__helpers">
-        <button
-          v-for="(h, index) in pickerHelpers"
-          :key="index"
-          :class="[isHelperSelected(h) && 'is-active']"
-          @click="onHelperClick(h)">
-          {{ h.label }}
-        </button>
-      </div>
+      <DateRangePickerHelpers v-bind="rangeOfDateValue" @change="performFilter"/>
     </div>
     <div :class="['date-range-picker__modal', showModal && 'is-active']">
       <div class="p-4 rounded-lg bg-white shadow-lg">
@@ -83,9 +75,9 @@
 
 <script>
 import VDatePicker from 'v-calendar/lib/components/date-picker.umd'
-import { format, subDays, setDate, getDaysInMonth, isEqual } from 'date-fns'
-// import InputSelect from '../Form/Select'
+import format from 'date-fns/format'
 import InputText from '../Form/Input'
+import DateRangePickerHelpers from './date-range-picker-helpers'
 
 const formatDateToYMD = (date) => format(date, 'yyyy-MM-dd')
 
@@ -99,7 +91,7 @@ const DATE_OPTION = {
 export default {
   components: {
     InputText,
-    // InputSelect,
+    DateRangePickerHelpers,
     VDatePicker
   },
   data () {
@@ -109,12 +101,7 @@ export default {
         start: null,
         end: null
       },
-      selectedDateOption: DATE_OPTION.THIS_MONTH,
-      pickerHelpers: [
-        { label: 'Hari ini', value: { start: new Date(), end: new Date() } },
-        { label: 'Minggu ini', value: { start: subDays(new Date(), 7), end: new Date() } },
-        { label: 'Bulan ini', value: { start: setDate(new Date(), 1), end: setDate(new Date(), getDaysInMonth(new Date())) } }
-      ]
+      selectedDateOption: DATE_OPTION.THIS_MONTH
     }
   },
   computed: {
@@ -127,20 +114,7 @@ export default {
   },
   methods: {
     onReset () {
-      this.rangeOfDateValue = {
-        start: null,
-        end: null
-      }
-      this.performFilter()
-    },
-    isHelperSelected (helper) {
-      const { value: { start, end } } = helper
-      return isEqual(start, this.rangeOfDateValue.start) &&
-        isEqual(end, this.rangeOfDateValue.end)
-    },
-    onHelperClick (helper) {
-      this.rangeOfDateValue = helper.value
-      this.performFilter(helper.value)
+      this.performFilter({ start: null, end: null })
     },
     onCancelSelection () {
       this.showModal = false
@@ -148,13 +122,13 @@ export default {
     onConfirmSelection () {
       const { start, end } = this.$refs.rangeDatePicker.value_
       this.singleDateValue = null
-      this.rangeOfDateValue = { start, end }
-      this.performFilter(this.rangeOfDateValue)
+      this.performFilter({ start, end })
       this.$nextTick(() => {
         this.showModal = false
       })
     },
     performFilter ({ start, end } = {}) {
+      this.rangeOfDateValue = { start, end }
       const params = {}
       if (start instanceof Date || end instanceof Date) {
         Object.assign(params, {
@@ -192,28 +166,6 @@ export default {
 
   &:hover {
     @apply opacity-50;
-  }
-}
-
-.date-range-picker__helpers {
-  @apply mt-2;
-  > button {
-    @apply px-3 py-1 rounded-full
-    text-xs
-    bg-blue-100 text-blue-500;
-
-    &:focus,
-    &:active {
-      @apply outline-none;
-    }
-
-    &.is-active {
-      @apply bg-blue-500 text-white;
-    }
-  }
-
-  > button + button {
-    @apply ml-2;
   }
 }
 </style>
