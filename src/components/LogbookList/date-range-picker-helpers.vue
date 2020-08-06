@@ -39,8 +39,12 @@ export default {
         isEqual(end, this.end)
     },
     onHelperClick (helper) {
-      const { start, end } = helper.value
-      this.$emit('change', { start, end })
+      if (this.isHelperSelected(helper)) {
+        this.$emit('change', { start: null, end: null })
+      } else {
+        const { start, end } = helper.value
+        this.$emit('change', { start, end })
+      }
     }
   }
 }
