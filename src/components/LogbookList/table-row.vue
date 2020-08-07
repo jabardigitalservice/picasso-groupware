@@ -18,7 +18,7 @@
     <td>
       <template v-if="hasEvidenceFile">
         <a
-          :href="logbook.evidenceTask.fileURL"
+          :href="logbook.evidenceTaskURL"
           target="_blank"
           class="document-icon"
           @click.prevent="onClickEvidence">
@@ -26,14 +26,14 @@
         </a>
       </template>
       <i
-        v-else
-        class="fa fa-question-circle-o">
+        v-else>
+        -
       </i>
     </td>
     <td>
       <template v-if="hasDocumentFile">
         <a
-          :href="logbook.documentTask.fileURL"
+          :href="logbook.documentTaskURL"
           target="_blank"
           class="document-icon"
           @click.prevent="onClickDocument">
@@ -41,8 +41,8 @@
         </a>
       </template>
       <i
-        v-else
-        class="fa fa-question-circle-o">
+        v-else>
+        -
       </i>
     </td>
     <td class="whitespace-no-wrap">

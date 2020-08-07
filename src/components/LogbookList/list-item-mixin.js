@@ -20,14 +20,16 @@ export default {
   computed: {
     hasEvidenceFile () {
       try {
-        return typeof this.logbook.evidenceTask.fileURL === 'string' && !!this.logbook.evidenceTask.fileURL.length
+        return typeof this.logbook.evidenceTaskURL === 'string' && !!this.logbook.evidenceTaskURL.length
       } catch (e) {
         return false
       }
     },
     hasDocumentFile () {
       try {
-        return typeof this.logbook.documentTask.fileURL === 'string' && !!this.logbook.documentTask.fileURL.length
+        return typeof this.logbook.documentTaskURL === 'string' &&
+          !!this.logbook.documentTaskURL.length &&
+          this.logbook.documentTaskURL !== 'null'
       } catch (e) {
         return false
       }
@@ -41,10 +43,10 @@ export default {
       return __formatTime(new Date(value))
     },
     onClickEvidence () {
-      alert('on development')
+      window.open(this.logbook.evidenceTaskURL, '_blank')
     },
     onClickDocument () {
-      alert('on development')
+      window.open(this.logbook.documentTaskURL, '_blank')
     },
     onSuccess (title, message) {
       return this.$swal.fire({
