@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import { useRefreshTokenHook } from './lib/axios'
 
 import removeServiceWorker from './removeServiceWorker'
 
@@ -45,6 +46,15 @@ async function init () {
         Vue.use(p)
       }
     })
+  useRefreshTokenHook({
+    onRefreshSuccess: async () => {
+      await store.dispatch('auth/getUserProfile')
+    },
+    onRefreshFailed: async () => {
+      store.dispatch('auth/onLoginFailed')
+      router.replace('/')
+    }
+  })
   /* eslint-disable no-new */
   new Vue({
     router,
