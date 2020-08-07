@@ -124,7 +124,13 @@
           mimes: 'File harus berupa gambar',
           size: 'Gambar tidak boleh lebih dari 1MB'
         }"
-      />
+      >
+        <template #subtitle>
+          <span class="font-bold text-gray-500">
+            File tidak boleh lebih dari 1MB
+          </span>
+        </template>
+      </FormInputEvidence>
       <br />
       <FormRadioButtonGroup
         class="mb-2"
