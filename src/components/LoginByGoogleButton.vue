@@ -14,6 +14,16 @@ export default {
   methods: {
     signIn () {
       this.$store.dispatch('auth/login')
+        .catch((e) => {
+          let msg = 'Terjadi Kesalahan'
+          if (e && e.response && e.response.data) {
+            msg = e.response.data.errors.message
+          }
+          this.$swal.fire({
+            icon: 'error',
+            text: msg
+          })
+        })
     }
   }
 }
