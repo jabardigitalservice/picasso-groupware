@@ -13,7 +13,14 @@
                 </p>
                 <p v-if="item['message']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['message'])">{{ getStatusLabel(item['message']) }}</span></p>
                 <p class="text-gray-900">{{ item['location'] }}</p>
-                <p class="text-gray-600">{{ getCheckInDate(item) }}</p>
+                <p class="text-gray-600">
+                  <template v-if="hasCheckout(item)">
+                    {{ getCheckInDate(item) }} - {{ getCheckOutDate(item) }}
+                  </template>
+                  <template v-else>
+                    {{ getCheckInDate(item) }}
+                  </template>
+                </p>
               </div>
             </div>
           </div>
@@ -118,8 +125,15 @@ export default {
 
       return 'bg-white'
     },
+    hasCheckout (item) {
+      return item.endDate !== null
+    },
     getCheckInDate (item) {
       const date = new Date(item.startDate)
+      return formatTime(date)
+    },
+    getCheckOutDate (item) {
+      const date = new Date(item.endDate)
       return formatTime(date)
     }
   }
