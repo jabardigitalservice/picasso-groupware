@@ -1,6 +1,6 @@
 import * as types from '../mutation-types'
 import { GroupwareAPI, setToken } from '../../lib/axios'
-import { setTokenInCookie } from '../../lib/js-cookie'
+import { setTokenInCookie, setRefreshTokenInCookie } from '../../lib/js-cookie'
 
 // state
 export const state = {
@@ -37,20 +37,22 @@ export const mutations = {
 }
 
 export const actions = {
-  async onLoginSuccess ({ commit, dispatch }, { token, expiredAt }) {
+  async onLoginSuccess ({ commit, dispatch }, { token, expiredAt, refreshToken }) {
     if (token) {
       setToken(token)
       setTokenInCookie(token, {
         expires: new Date(expiredAt)
       })
+      setRefreshTokenInCookie(refreshToken)
       await dispatch('getUserProfile')
     } else {
-      setToken(null)
-      setTokenInCookie(null)
-      commit(types.UNAUTHENTICATED)
+      await dispatch('onLoginFailed')
     }
   },
   onLoginFailed ({ commit }) {
+    setToken(null)
+    setTokenInCookie(null)
+    setRefreshTokenInCookie(null)
     commit(types.UNAUTHENTICATED)
   },
   async loginUsingUsernameAndPassword ({ commit, dispatch }, { username, password }) {
@@ -58,10 +60,11 @@ export const actions = {
       username,
       password
     }).then(r => r.data)
-      .then(({ auth_token: token, exp: expiredAt }) => {
+      .then(({ auth_token: token, exp: expiredAt, refresh_token: refreshToken }) => {
         return dispatch('onLoginSuccess', {
           token,
-          expiredAt
+          expiredAt,
+          refreshToken
         })
       })
       .catch((err) => {
@@ -83,10 +86,11 @@ export const actions = {
         'Content-Type': 'application/json'
       }
     }).then(r => r.data)
-      .then(({ auth_token: token, exp: expiredAt }) => {
+      .then(({ auth_token: token, exp: expiredAt, refresh_token: refreshToken }) => {
         return dispatch('onLoginSuccess', {
           token,
-          expiredAt
+          expiredAt,
+          refreshToken
         })
       })
       .catch((err) => {
