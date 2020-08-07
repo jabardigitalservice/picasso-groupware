@@ -23,7 +23,9 @@
     <template v-else>
       <FileSelector
         :url="mUrl"
+        accept="image/*"
         v-bind="$props"
+        @preview="onPreview"
         @change="onSelectedFileChange"
       />
     </template>
@@ -78,6 +80,9 @@ export default {
     onDelete () {
       this.mUrl = null
       this.mFile = null
+    },
+    onPreview () {
+      window.open(this.mUrl, '_blank')
     },
     onSelectedFileChange (url, file) {
       this.mUrl = url

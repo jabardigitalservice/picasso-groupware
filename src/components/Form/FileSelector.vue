@@ -28,8 +28,8 @@
       v-show="false"
       ref="input"
       :name="name"
-      :rules="rules"
       type="file"
+      :accept="$attrs.accept"
       :multiple="false"
       v-bind="$attrs"
       @change="onChange($event)"
@@ -64,7 +64,8 @@ export default {
   data () {
     return {
       mFile: null,
-      mUrl: null
+      mUrl: null,
+      isValid: null
     }
   },
   computed: {
@@ -95,10 +96,15 @@ export default {
   },
   methods: {
     onPreview () {
-      this.$emit('preview')
+      if (this.isValid) {
+        this.$emit('preview')
+      } else if (this.mUrl) {
+        window.open(this.mUrl, '_blank')
+      }
     },
     resetInputElement () {
       if (this.$refs.input) {
+        this.$refs.validator.reset()
         this.$refs.input.type = ''
         this.$refs.input.setAttribute('type', '')
         return this.$nextTick()
@@ -110,6 +116,7 @@ export default {
       return Promise.resolve()
     },
     onChooseFile () {
+      this.isValid = null
       this.mFile = null
       this.mUrl = null
       this.resetInputElement()
@@ -120,20 +127,28 @@ export default {
     onRemoveFile () {
       this.resetInputElement()
         .then(() => {
+          this.isValid = null
           this.mFile = null
           this.mUrl = null
-          this.emitChange(null, null, null)
+          this.emitChange(null, null)
           return this.$nextTick()
         }).then(() => {
           this.$refs.validator.validate()
         })
     },
-    onChange (e) {
+    async onChange (e) {
       if (e.target.files) {
-        this.mFile = e.target.files.length ? e.target.files[0] : null
-
+        const file = e.target.files[0] || null
+        await this.$refs.validator.syncValue(file)
+        const { valid } = await this.$refs.validator.validate()
+        this.isValid = valid
+        this.mFile = file
         this.mUrl = window.URL.createObjectURL(this.mFile)
-        this.emitChange(this.mUrl, this.mFile)
+        if (this.isValid) {
+          this.emitChange(this.mUrl, this.mFile)
+        } else {
+          this.emitChange(null, null)
+        }
       }
     },
     emitChange (url, file) {

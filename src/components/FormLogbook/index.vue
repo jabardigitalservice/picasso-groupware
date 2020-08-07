@@ -117,10 +117,12 @@
         :url.sync="payload.evidenceTaskURL"
         :path="payload.evidenceTaskPath"
         :disabled="!isEditable"
-        rules="required|mimes:image/*"
+        rules="required|mimes:image/*|size:1024"
         accept="image/*"
         :custom-messages="{
-          required: 'Evidence harus diisi'
+          required: 'Evidence harus diisi',
+          mimes: 'File harus berupa gambar',
+          size: 'Gambar tidak boleh lebih dari 1MB'
         }"
       />
       <br />
