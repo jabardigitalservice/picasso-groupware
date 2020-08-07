@@ -62,6 +62,19 @@ export default {
       })
     },
     async checkout () {
+      const { value: confirm } = await this.$swal.fire({
+        text: 'Apa kamu yakin untuk checkout sekarang?',
+        icon: 'question',
+        confirmButtonText: 'Ya, checkout sekarang',
+        cancelButtonText: 'Tidak',
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonColor: '#808080',
+        cancelButtonColor: 'blue'
+      })
+      if (!confirm) {
+        return
+      }
       try {
         await this.$store.dispatch('checkins-list/checkout', {
           date: new Date()
