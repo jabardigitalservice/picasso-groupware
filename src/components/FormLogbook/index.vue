@@ -117,17 +117,17 @@
         :url.sync="payload.evidenceTaskURL"
         :path="payload.evidenceTaskPath"
         :disabled="!isEditable"
-        rules="required|mimes:image/*|size:1024"
+        rules="required|mimes:image/*|size:5120"
         accept="image/*"
         :custom-messages="{
           required: 'Evidence harus diisi',
           mimes: 'File harus berupa gambar',
-          size: 'Gambar tidak boleh lebih dari 1MB'
+          size: 'Gambar tidak boleh lebih dari 5MB'
         }"
       >
         <template #subtitle>
           <span class="font-bold text-gray-500">
-            File tidak boleh lebih dari 1MB
+            File tidak boleh lebih dari 5MB
           </span>
         </template>
       </FormInputEvidence>
