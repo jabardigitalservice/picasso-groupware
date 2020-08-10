@@ -15,7 +15,9 @@ export function setRefreshTokenInCookie (token, opts) {
   if (typeof token !== 'string' || !token.length) {
     jsCookie.remove(refreshKey)
   } else {
-    jsCookie.set(refreshKey, token, opts)
+    jsCookie.set(refreshKey, token, {
+      expires: 7
+    })
   }
 }
 
