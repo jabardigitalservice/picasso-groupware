@@ -63,6 +63,7 @@ export const actions = {
   async getLogbookList ({ commit }, params = {}) {
     await GroupwareAPI.get('/logbook/', {
       params: {
+        sort: 'dateTask',
         limit: 9999,
         pageSize: 9999,
         ...params
