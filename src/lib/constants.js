@@ -1,5 +1,7 @@
 export const ATTENDANCE = {
   PRESENT: 'HADIR',
   LEAVE: 'IZIN',
-  OTHER: 'OTHER'
+  OTHER: 'OTHER',
+  SICK_LEAVE: 'SAKIT',
+  PAID_LEAVE: 'CUTI'
 }

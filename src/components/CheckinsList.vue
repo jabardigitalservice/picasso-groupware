@@ -76,14 +76,18 @@ export default {
       }
 
       if (value === ATTENDANCE.LEAVE) {
-        return 'Izin / Sakit'
+        return 'Izin'
       }
 
-      if (value === ATTENDANCE.OTHER) {
-        return 'Into the Unknown'
+      if (value === ATTENDANCE.SICK_LEAVE) {
+        return 'Sakit'
       }
 
-      return 'bg-gray-800'
+      if (value === ATTENDANCE.PAID_LEAVE) {
+        return 'Cuti'
+      }
+
+      return '-'
     },
 
     getStatusColor (value) {
