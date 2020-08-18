@@ -11,6 +11,8 @@ pipeline {
         timeout(time: 1, unit: 'HOURS')
     }
 
+    stages {
+
         stage('Run Docker on staging jabarcloud') {
                        
             environment {
@@ -39,7 +41,5 @@ pipeline {
                     }
             }    
         }        
-        
-    } 
-
-}
+    }
+} 
