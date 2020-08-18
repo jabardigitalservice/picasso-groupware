@@ -1,0 +1,45 @@
+pipeline {
+
+    agent any
+    environment {
+        USER_PIKOBAR = "${env.USER_PIKOBAR}"
+        HOST_GROUPWARE_STAGING = "${env.HOST_GROUPWARE_STAGING}"
+        
+    }
+
+    options {
+        timeout(time: 1, unit: 'HOURS')
+    }
+
+        stage('Run Docker on staging jabarcloud') {
+                       
+            environment {
+                SSH_COMMAND = "ssh-agent bash -c 'ssh-add ~/.ssh/id_rsa; git pull origin development'"     
+            }
+
+            steps{
+                    sshagent (['']){
+                        // ssh block
+                    sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_GROUPWARE_STAGING "cd /home/ubuntu/app/groupware && $SSH_COMMAND \
+                                                                                    && sudo docker-compose -f docker-compose-development.yml down \
+                                                                                    && sudo docker-compose -f docker-compose-development.yml build --no-cache \
+                                                                                    && sudo docker-compose -f docker-compose-development.yml up -d"'
+                                                                                        
+                    }
+                
+            }      
+        }
+        
+        stage('Test staging jabarcloud') {
+            
+            steps{
+                   sshagent (['']){
+                       // ssh block
+                       sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_GROUPWARE_STAGING "echo ok"'
+                    }
+            }    
+        }        
+        
+    } 
+
+}
