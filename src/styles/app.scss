@@ -117,3 +117,37 @@ i.app-logo {
     }
   }
 }
+
+
+@keyframes anim-shimmering {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.bg-shimmering {
+  position: relative;
+  overflow: hidden;
+  background-color: #eee;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: inherit;
+    background-image: linear-gradient(
+      to right,
+      transparent 25%,
+      rgba(255,255,255,0.75) 50%,
+      transparent 75%);
+    background-repeat: no-repeat;
+    background-size: 400%;
+    animation: anim-shimmering infinite 1.5s linear reverse;
+  }
+}

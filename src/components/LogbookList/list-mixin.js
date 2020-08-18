@@ -1,5 +1,3 @@
-import { mapGetters } from 'vuex'
-
 export default {
   props: {
     clickableRow: {
@@ -17,18 +15,6 @@ export default {
   },
   data () {
     return {}
-  },
-  computed: {
-    ...mapGetters('logbook-list', [
-      'isLoadingLogbookList',
-      'logbookListError',
-      'logbookListData',
-      'totalCount',
-      'currentPage',
-      'perPage',
-      'startIndex',
-      'endIndex'
-    ])
   },
   methods: {
     getAbsoluteIndex (rowIndex) {

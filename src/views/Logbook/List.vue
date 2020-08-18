@@ -12,7 +12,6 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.$store.dispatch('organizations/fetchProjects')
-      vm.$store.dispatch('logbook-list/getLogbookList')
     })
   }
 }
