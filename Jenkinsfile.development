@@ -23,9 +23,9 @@ pipeline {
                     sshagent (['']){
                         // ssh block
                     sh 'ssh -o StrictHostKeyChecking=no $USER_PIKOBAR@$HOST_GROUPWARE_STAGING "cd /home/ubuntu/app/groupware && $SSH_COMMAND \
-                                                                                    && sudo docker-compose -f docker-compose-development.yml down \
-                                                                                    && sudo docker-compose -f docker-compose-development.yml build --no-cache \
-                                                                                    && sudo docker-compose -f docker-compose-development.yml up -d"'
+                                                                                    && docker-compose -f docker-compose-development.yml down \
+                                                                                    && docker-compose -f docker-compose-development.yml build --no-cache \
+                                                                                    && docker-compose -f docker-compose-development.yml up -d"'
                                                                                         
                     }
                 
@@ -41,5 +41,6 @@ pipeline {
                     }
             }    
         }        
+    
     }
 } 
