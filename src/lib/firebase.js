@@ -22,7 +22,7 @@ export const storage = firebase.storage()
 const { Timestamp, GeoPoint, FieldValue } = firebase.firestore
 export { Timestamp, GeoPoint, FieldValue }
 
-const messaging = null
+const messaging = firebase.messaging()
 export { messaging }
 
 export const analytics = firebase.analytics()

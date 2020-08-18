@@ -53,10 +53,18 @@ export default {
       showPopupNotification: false
     }
   },
+  watch: {
+    '$store.state.auth.user': {
+      immediate: true,
+      handler (v) {
+        if (v) {
+          this.checkPermission()
+        }
+      }
+    }
+  },
 
   mounted () {
-    this.checkPermission()
-
     this.$store.dispatch('home-banners/fetchItems')
     this.$store.dispatch('home-articles/fetchItems')
     this.$store.dispatch('messages-list/fetchItems')
@@ -68,6 +76,7 @@ export default {
   methods: {
     async checkPermission () {
       if (!messaging) return
+      if (!this.$store.state.auth.user) return
 
       const permission = await Notification.permission
 
