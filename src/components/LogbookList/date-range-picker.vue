@@ -136,7 +136,7 @@ export default {
           end_date: formatDateToYMD(end)
         })
       }
-      this.$store.dispatch('logbook-list/getLogbookList', params)
+      this.$emit('change-date', params)
     }
   }
 }
