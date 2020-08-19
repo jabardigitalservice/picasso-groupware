@@ -32,7 +32,7 @@ export default {
   },
   data () {
     return {
-      showDetail: false
+      showDetail: true
     }
   },
   beforeRouteEnter (to, from, next) {
