@@ -93,7 +93,7 @@ export default {
       if (mDate !== this.selectedDate) {
         this.$router.push({
           query: {
-            date: format(new Date(date), 'yyyy-MM-dd')
+            date: mDate
           }
         })
       }
