@@ -22,8 +22,10 @@
             value-zone="UTC+7"
             type="date"
             format="DDDD"
-            input-class="w-full p-4 rounded-md border border-solid border-gray-300 mb-2"
-            @input="changeDate" />
+            class="attendance-date-picker"
+            input-class="attendance-date-picker-input"
+            @input="changeDate">
+          </DateTime>
           <checkins-list class="mt-2" :date="selectedDate" />
         </div>
       </template>
@@ -105,3 +107,22 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.vdatetime.attendance-date-picker {
+  @apply cursor-pointer relative flex items-center;
+
+  &::after {
+    content: '▼';
+    transform: translateY(-0.25em);
+    right: 1rem;
+    @apply pointer-events-none
+    absolute inline-block
+    text-gray-700
+    leading-none;
+  }
+}
+.attendance-date-picker-input {
+  @apply cursor-pointer w-full p-4 rounded-md border border-solid border-gray-300 mb-2;
+}
+</style>
