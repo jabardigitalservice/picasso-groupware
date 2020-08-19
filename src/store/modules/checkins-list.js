@@ -36,13 +36,14 @@ export const mutations = {
 
 // actions
 export const actions = {
-  async fetchItems ({ commit }) {
+  async fetchItems ({ commit }, { date } = {}) {
     commit(types.CHECKINS_INIT)
 
     await GroupwareAPI.get('attendance/', {
       params: {
         limit: 200,
-        pageSize: 200
+        pageSize: 200,
+        date
       }
     })
       .then(r => r.data.results)

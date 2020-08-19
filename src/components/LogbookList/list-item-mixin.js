@@ -98,9 +98,10 @@ export default {
 
       try {
         await this.$promiseMinDelay(GroupwareAPI.delete(`/logbook/${this.logbook._id}`), 1000)
-        this.$store.dispatch('logbook-list/getLogbookList')
+        this.$emit('delete:success')
         return this.onSuccess('Laporan berhasil dihapus')
       } catch (e) {
+        this.$emit('delete:error')
         return this.onError('Gagal menghapus laporan')
       }
     }
