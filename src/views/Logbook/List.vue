@@ -13,7 +13,7 @@
         <br>
         Jadi jika rekan-rekan tidak mengisi laporan
         bulan JULI melalui aplikasi sapaJDS sampai tanggal 25 agustus 2020 ini, maka data dalam
-        server tidak akan bisa ditambah/diubah/dihapus lagi. Semangatt rekan-rekan semuanya :)
+        server tidak akan bisa ditambah/diubah/dihapus lagi. Semangat mengisi laporan rekan-rekan semuanya :)
       </p>
       <div class="mt-8 flex justify-end md:justify-start">
         <a class="cursor-pointer text-xs text-orange-700 uppercase font-bold" @click.prevent="showDetail = !showDetail">
