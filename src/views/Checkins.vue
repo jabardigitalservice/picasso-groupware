@@ -15,17 +15,16 @@
       </template>
       <template v-else>
         <div>
-          <div class="w-full px-2 sm:px-0">
-            <span class="h-12 w-full appearance-none block text-gray-700 border border-gray-300 bg-white rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-              {{ todayDate }}
-            </span>
-          </div>
-
-          <checkins-list class="mt-2" />
-
-          <!-- <div class="w-full p-2 sm:px-0">
-            <router-link to="/checkins/create" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Checkin</router-link>
-          </div> -->
+          <DateTime
+            :value="selectedDate"
+            :min-datetime="minDateTime"
+            :max-datetime="maxDateTime"
+            value-zone="UTC+7"
+            type="date"
+            format="DDDD"
+            input-class="w-full p-4 rounded-md border border-solid border-gray-300 mb-2"
+            @input="changeDate" />
+          <checkins-list class="mt-2" :date="selectedDate" />
         </div>
       </template>
     </div>
@@ -33,15 +32,17 @@
 </template>
 
 <script>
+import { Datetime as DateTime } from 'vue-datetime'
 import { mapGetters } from 'vuex'
 
 import LoginButton from '@/components/LoginButton'
 import CheckinsList from '@/components/CheckinsList'
 import { formatDateLong } from '@/lib/date'
-import { eachDayOfInterval, subDays, format } from 'date-fns'
+import { format, subMonths } from 'date-fns'
 
 export default {
   components: {
+    DateTime,
     LoginButton,
     CheckinsList
   },
@@ -52,38 +53,50 @@ export default {
 
   data () {
     return {
-      selectedDate: new Date(),
-      todayDate: formatDateLong(new Date())
+      minDateTime: subMonths(new Date(), 1).toISOString(),
+      maxDateTime: new Date().toISOString(),
+      selectedDate: null
     }
   },
 
-  computed: mapGetters({
-    user: 'auth/user'
-  }),
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    }),
+    formattedSelectedDate () {
+      if (this.selectedDate) {
+        return formatDateLong(new Date(this.selectedDate))
+      }
+      return ''
+    }
+  },
+
+  watch: {
+    '$route.query': {
+      immediate: true,
+      handler ({ date } = {}) {
+        this.selectedDate = date || format(new Date(), 'yyyy-MM-dd')
+        this.fetchItems(this.selectedDate)
+      }
+    }
+  },
 
   created () {
-    this.selectedDate = this.$route.query.date ? this.$route.query.date : format(new Date(), 'yyyyMMdd')
-
     this.fetchItems(this.selectedDate)
   },
 
   methods: {
     format,
     formatDateLong,
-
-    getListDate () {
-      const maxPrevious = subDays(new Date(), 30)
-
-      return eachDayOfInterval({
-        start: maxPrevious,
-        end: new Date()
-      })
-    },
-
-    changeDate () {
-      this.$router.push({ query: { date: this.selectedDate } })
-
-      this.fetchItems(this.selectedDate)
+    changeDate (date) {
+      const mDate = format(new Date(date), 'yyyy-MM-dd')
+      if (mDate !== this.selectedDate) {
+        this.$router.push({
+          query: {
+            date: mDate
+          }
+        })
+      }
     },
 
     async fetchItems (date) {
