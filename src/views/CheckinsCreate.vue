@@ -77,7 +77,7 @@
                       :key="i"
                       class="location-radio">
                       <input v-if="i === 0" type="radio" v-model="message" :value="opt" name="input-message">
-                      <input v-else type="radio" :value="opt" name="input-message">
+                      <input v-else type="radio" :value="opt" name="input-message" @change="message = opt">
                       {{ opt }}
                     </label>
                   </fieldset>
