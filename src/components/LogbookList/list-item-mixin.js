@@ -67,11 +67,13 @@ export default {
       })
     },
     onOpenLogbookDetail () {
+      this.$store.commit('logbook-list/setLogbookInView', this.logbook)
       this.$router.push({
         path: `/report/detail?id=${this.logbook._id}`
       })
     },
     onEditLogbook () {
+      this.$store.commit('logbook-list/setLogbookInView', this.logbook)
       this.$router.push({
         path: `/report/edit?id=${this.logbook._id}`
       })

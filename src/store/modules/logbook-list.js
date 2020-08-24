@@ -1,5 +1,16 @@
+import _cloneDeep from 'lodash/cloneDeep'
 import pMinDelay from 'p-min-delay'
 import { GroupwareAPI } from '../../lib/axios'
+
+export const state = () => ({
+  logbookInView: null
+})
+
+export const mutations = {
+  setLogbookInView (state, logbook) {
+    state.logbookInView = _cloneDeep(logbook)
+  }
+}
 
 export const actions = {
   getLogbookList ({ state, commit }, params = {}) {
