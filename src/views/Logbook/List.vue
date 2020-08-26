@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-6xl mx-auto my-16 p-6 md:p-8 bg-white rounded-lg shadow-lg">
-    <div class="mb-4 p-4 rounded-md border border-solid border-orange-500 bg-orange-100 text-gray-700">
+    <div v-if="false" class="mb-4 p-4 rounded-md border border-solid border-orange-500 bg-orange-100 text-gray-700">
       <strong>
         <span class="text-orange-700">Perhatian</span>
         <br>
