@@ -435,7 +435,6 @@ export default {
         evidenceTaskURL,
         documentTaskPath,
         documentTaskURL,
-        isDocumentLink,
         ...rest
       } = this.payload
 
