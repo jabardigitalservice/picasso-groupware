@@ -31,13 +31,13 @@
                   <ValidationProvider name="checkinHour" rules="required" >
                     <select v-model="checkinHour" class=" appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mr-3">
                       <option :value="null">Select...</option>
-                      <option v-for="n in ['06', '07', '08', '09', 10, 11, 12, 13, 14, 15, 16, 17]" :key="n">{{ n }}</option>
+                      <option v-for="n in hourOptions" :key="n">{{ n }}</option>
                     </select>
                   </ValidationProvider>
                   <ValidationProvider name="checkinMinute" rules="required" >
                     <select v-model="checkinMinute" class=" appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                       <option :value="null">Select...</option>
-                      <option v-for="n in ['00', '05', 15, 20, 25, 30, 35, 40, 45, 50, 55]" :key="n">{{ n }}</option>
+                      <option v-for="n in minuteOptions" :key="n">{{ n }}</option>
                     </select>
                   </ValidationProvider>
                 </div>
@@ -136,6 +136,22 @@ export default {
   },
 
   computed: {
+    hourOptions () {
+      return new Array(24).fill(null).map((_, n) => {
+        if (n < 10) {
+          return `0${n}`
+        }
+        return `${n}`
+      })
+    },
+    minuteOptions () {
+      return new Array(60 / 5).fill(null).map((_, n) => {
+        if (n < 10 /5) {
+          return `0${n * 5}`
+        }
+        return 5 * n
+      })
+    },
     ...mapGetters({
       user: 'auth/user'
     }),
