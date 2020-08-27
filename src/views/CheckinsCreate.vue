@@ -146,7 +146,7 @@ export default {
     },
     minuteOptions () {
       return new Array(60 / 5).fill(null).map((_, n) => {
-        if (n < 10 /5) {
+        if (n < 10 / 5) {
           return `0${n * 5}`
         }
         return 5 * n
