@@ -1,3 +1,4 @@
+import addHours from 'date-fns/addHours'
 import * as types from '../mutation-types'
 import { GroupwareAPI, setToken } from '../../lib/axios'
 import { setTokenInCookie, setRefreshTokenInCookie } from '../../lib/js-cookie'
@@ -41,7 +42,7 @@ export const actions = {
     if (token) {
       setToken(token)
       setTokenInCookie(token, {
-        expires: new Date(expiredAt)
+        expires: addHours(new Date(), 24)
       })
       setRefreshTokenInCookie(refreshToken)
       await dispatch('getUserProfile')
