@@ -35,7 +35,8 @@
 
 <script>
 import Navbar from '@/components/Navbar'
-import { db, FieldValue, messaging } from '@/lib/firebase'
+import { messaging } from '@/lib/firebase'
+import { getDeviceTokenByUserId, retrieveToken, updateToken, listenToRefreshTokenEvent } from '../lib/fcm-notification'
 
 export default {
   components: {
@@ -85,9 +86,14 @@ export default {
       }
 
       if (permission === 'granted') {
-        const token = await messaging.getToken()
-
-        this.saveToken(token)
+        const existingToken = await getDeviceTokenByUserId(this.$store.state.auth.user.id)
+        if (!existingToken) {
+          await retrieveToken()
+        }
+        listenToRefreshTokenEvent()
+      }
+      if (permission === 'denied') {
+        //
       }
     },
 
@@ -98,30 +104,16 @@ export default {
       const permission = await Notification.requestPermission()
 
       if (permission === 'granted') {
-        const token = await messaging.getToken()
-
-        this.saveToken(token)
+        const existingToken = await getDeviceTokenByUserId(this.$store.state.auth.user.id)
+        if (!existingToken) {
+          await retrieveToken()
+        } else {
+          await updateToken()
+        }
+        listenToRefreshTokenEvent()
       }
-
-      messaging.onTokenRefresh(async () => {
-        const token = await messaging.getToken()
-
-        this.saveToken(token)
-      })
 
       this.showPopupNotification = false
-    },
-
-    async saveToken (token) {
-      const tokenRef = await db.collection('tokens').doc(token)
-      const record = await tokenRef.get()
-
-      if (record.exists === false) {
-        tokenRef.set({
-          'token': token,
-          'createdAt': FieldValue.serverTimestamp()
-        })
-      }
     }
   }
 }

@@ -23,6 +23,7 @@ const { Timestamp, GeoPoint, FieldValue } = firebase.firestore
 export { Timestamp, GeoPoint, FieldValue }
 
 const messaging = firebase.messaging()
+messaging.usePublicVapidKey(firebaseConfig.publicVapidKey)
 export { messaging }
 
 export const analytics = firebase.analytics()

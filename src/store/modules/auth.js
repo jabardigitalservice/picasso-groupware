@@ -1,4 +1,5 @@
 import * as types from '../mutation-types'
+import addHours from 'date-fns/addHours'
 import { GroupwareAPI, setToken } from '../../lib/axios'
 import { setTokenInCookie, setRefreshTokenInCookie } from '../../lib/js-cookie'
 
@@ -39,9 +40,10 @@ export const mutations = {
 export const actions = {
   async onLoginSuccess ({ commit, dispatch }, { token, expiredAt, refreshToken }) {
     if (token) {
+      const date = addHours(new Date(), 24)
       setToken(token)
       setTokenInCookie(token, {
-        expires: new Date(expiredAt)
+        expires: date
       })
       setRefreshTokenInCookie(refreshToken)
       await dispatch('getUserProfile')
@@ -108,6 +110,7 @@ export const actions = {
         .then(profile => {
           commit(types.SET_USER, {
             user: {
+              ...profile,
               name: profile.nama_lengkap,
               email: profile.email,
               photo: profile.foto
