@@ -367,9 +367,11 @@ export default {
       return logbook
     },
     getLogbookFromVuex (id) {
-      const arr = this.$store.getters['logbook-list/logbookListData']
-      const logbook = arr.find(x => x._id === id)
-      return Promise.resolve(logbook)
+      const logbook = this.$store.state['logbook-list'].logbookInView
+      if (logbook._id === id) {
+        return Promise.resolve(logbook)
+      }
+      return Promise.resolve(null)
     },
     getLogbookFromDatabase (id) {
       return Promise.resolve(null)
@@ -433,7 +435,6 @@ export default {
         evidenceTaskURL,
         documentTaskPath,
         documentTaskURL,
-        isDocumentLink,
         ...rest
       } = this.payload
 
