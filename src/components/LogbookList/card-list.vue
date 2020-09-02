@@ -72,7 +72,7 @@ export default {
   data () {
     return {
       page: 1,
-      perPage: 7,
+      perPage: 10,
       totalPage: 0,
       totalCount: 0,
       startDate: null,

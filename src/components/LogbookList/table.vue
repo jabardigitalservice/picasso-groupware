@@ -85,7 +85,7 @@ export default {
       totalPage: 0,
       totalCount: 0,
       page: 1,
-      perPage: 7,
+      perPage: 10,
       startDate: null,
       endDate: null
     }
