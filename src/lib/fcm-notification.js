@@ -18,8 +18,6 @@ export function retrieveToken () {
     if (currentToken) {
       onTokenRetrieved(currentToken)
     }
-  }).catch((err) => {
-    console.error(err)
   })
 }
 
@@ -28,8 +26,6 @@ export function updateToken () {
     if (currentToken) {
       onTokenRefreshed(currentToken)
     }
-  }).catch((err) => {
-    console.error(err)
   })
 }
 
@@ -37,8 +33,6 @@ export function listenToRefreshTokenEvent () {
   messaging.onTokenRefresh(() => {
     messaging.getToken().then((refreshedToken) => {
       onTokenRefreshed(refreshedToken)
-    }).catch((err) => {
-      console.error(err)
     })
   })
 }
