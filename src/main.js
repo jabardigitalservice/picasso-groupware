@@ -4,10 +4,6 @@ import router from './router'
 import store from './store'
 import { useRefreshTokenHook } from './lib/axios'
 
-import removeServiceWorker from './removeServiceWorker'
-
-removeServiceWorker()
-
 Vue.config.productionTip = false
 
 /**
