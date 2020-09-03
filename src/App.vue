@@ -15,8 +15,10 @@
     </div>
 
     <template v-if="loading">
-      <div class="flex content-center flex-wrap mt-32">
-        <img class="block h-32 mx-auto" src="@/assets/android-chrome-512x512.png" alt>
+      <div class="w-screen h-screen flex justify-center items-center flex-wrap bg-brand-green">
+        <i class="block p-8 rounded-full bg-white shadow">
+          <img class="block h-32 -ml-1 -mt-1" src="/img/icons/android-chrome-512x512.png" alt>
+        </i>
       </div>
     </template>
     <template v-else>

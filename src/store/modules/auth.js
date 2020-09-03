@@ -109,6 +109,7 @@ export const actions = {
         .then(profile => {
           commit(types.SET_USER, {
             user: {
+              ...profile,
               name: profile.nama_lengkap,
               email: profile.email,
               photo: profile.foto
