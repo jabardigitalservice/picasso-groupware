@@ -16,10 +16,11 @@
     <div class="bg-brand-green-dark mb-8">
       <div class="container mx-auto px-4">
         <div class="relative bg-white mx-auto max-w-sm shadow rounded-lg overflow-hidden" style="top: 20px">
-          <div class="flex px-6 py-4">
-            <img class="block h-10 mx-auto mr-4" src="@/assets/logo.png" alt>
+          <div class="flex items-center px-6 py-4">
+            <img class="block h-12 mx-auto mr-4" src="@/assets/logo.png" alt>
             <div class="text-left flex-grow">
-              <p class="text-sm leading-normal">Groupware</p>
+              <p class="text-sm leading-normal">DigiTeam</p>
+              <p class="text-sm text-gray-600">Digital Together Everyone Achieve More</p>
               <p class="text-sm text-gray-600">Jabar Digital Service</p>
             </div>
           </div>
@@ -35,7 +36,8 @@
 
 <script>
 import Navbar from '@/components/Navbar'
-import { db, FieldValue, messaging } from '@/lib/firebase'
+import { messaging } from '@/lib/firebase'
+import { getDeviceTokenByUserId, retrieveToken, updateToken, listenToRefreshTokenEvent } from '../lib/fcm-notification'
 
 export default {
   components: {
@@ -53,10 +55,18 @@ export default {
       showPopupNotification: false
     }
   },
+  watch: {
+    '$store.state.auth.user': {
+      immediate: true,
+      handler (v) {
+        if (v) {
+          this.checkPermission()
+        }
+      }
+    }
+  },
 
   mounted () {
-    this.checkPermission()
-
     this.$store.dispatch('home-banners/fetchItems')
     this.$store.dispatch('home-articles/fetchItems')
     this.$store.dispatch('messages-list/fetchItems')
@@ -68,6 +78,7 @@ export default {
   methods: {
     async checkPermission () {
       if (!messaging) return
+      if (!this.$store.state.auth.user) return
 
       const permission = await Notification.permission
 
@@ -76,9 +87,14 @@ export default {
       }
 
       if (permission === 'granted') {
-        const token = await messaging.getToken()
-
-        this.saveToken(token)
+        const existingToken = await getDeviceTokenByUserId(this.$store.state.auth.user.id)
+        if (!existingToken) {
+          await retrieveToken()
+        }
+        listenToRefreshTokenEvent()
+      }
+      if (permission === 'denied') {
+        //
       }
     },
 
@@ -89,30 +105,16 @@ export default {
       const permission = await Notification.requestPermission()
 
       if (permission === 'granted') {
-        const token = await messaging.getToken()
-
-        this.saveToken(token)
+        const existingToken = await getDeviceTokenByUserId(this.$store.state.auth.user.id)
+        if (!existingToken) {
+          await retrieveToken()
+        } else {
+          await updateToken()
+        }
+        listenToRefreshTokenEvent()
       }
-
-      messaging.onTokenRefresh(async () => {
-        const token = await messaging.getToken()
-
-        this.saveToken(token)
-      })
 
       this.showPopupNotification = false
-    },
-
-    async saveToken (token) {
-      const tokenRef = await db.collection('tokens').doc(token)
-      const record = await tokenRef.get()
-
-      if (record.exists === false) {
-        tokenRef.set({
-          'token': token,
-          'createdAt': FieldValue.serverTimestamp()
-        })
-      }
     }
   }
 }
