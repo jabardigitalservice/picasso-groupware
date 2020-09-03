@@ -53,19 +53,6 @@
                 </p>
               </div>
 
-              <div v-if="showNoteTextarea" class="my-4">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-message">
-                  Catatan
-                </label>
-                <ValidationProvider name="input-message" rules="required" #default="{ errors }">
-                  <textarea v-model="message" id="input-message" rows="5" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Keterangan izin / sakit / cuti" />
-                  <p
-                    v-if="errors && errors.length"
-                    class="form-input__error-hint">
-                    Catatan harus diisi
-                  </p>
-                </ValidationProvider>
-              </div>
               <div v-if="showLocationRadios">
                 <ValidationProvider name="input-message" rules="required" #default="{ errors }">
                   <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-message">
@@ -85,6 +72,19 @@
                     v-if="errors && errors.length"
                     class="form-input__error-hint" style="margin-top: 0.5rem;">
                     Lokasi harus diisi
+                  </p>
+                </ValidationProvider>
+              </div>
+              <div v-if="showNoteTextarea" class="my-4">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="input-message">
+                  Catatan
+                </label>
+                <ValidationProvider name="input-message" :rules="isNoteTextAreaRequired" #default="{ errors }">
+                  <textarea :value="noteTextAreaValue" @input="onNoteTextAreaInput" id="input-message" rows="5" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" :placeholder="notePlaceholder" />
+                  <p
+                    v-if="errors && errors.length"
+                    class="form-input__error-hint">
+                    Catatan harus diisi
                   </p>
                 </ValidationProvider>
               </div>
@@ -124,6 +124,7 @@ export default {
     return {
       ATTENDANCE,
       type: null,
+      note: '',
       message: '',
       checkinHour: null,
       checkinMinute: null,
@@ -157,10 +158,44 @@ export default {
     }),
     showNoteTextarea () {
       return [
+        ATTENDANCE.PRESENT,
         ATTENDANCE.LEAVE,
         ATTENDANCE.SICK_LEAVE,
         ATTENDANCE.PAID_LEAVE
       ].includes(this.type)
+    },
+    isNoteTextAreaRequired () {
+      const required = [
+        ATTENDANCE.LEAVE,
+        ATTENDANCE.SICK_LEAVE,
+        ATTENDANCE.PAID_LEAVE
+      ].includes(this.type)
+
+      return required ? 'required' : ''
+    },
+    notePlaceholder () {
+      switch (this.type) {
+        case ATTENDANCE.LEAVE:
+        case ATTENDANCE.SICK_LEAVE:
+        case ATTENDANCE.PAID_LEAVE:
+          return 'Keterangan izin / sakit / cuti'
+        case ATTENDANCE.PRESENT:
+          return 'Keterangan  hadir (opsional)'
+        default:
+          return ''
+      }
+    },
+    noteTextAreaValue () {
+      switch (this.type) {
+        case ATTENDANCE.LEAVE:
+        case ATTENDANCE.SICK_LEAVE:
+        case ATTENDANCE.PAID_LEAVE:
+          return this.message
+        case ATTENDANCE.PRESENT:
+          return this.note
+        default:
+          return ''
+      }
     },
     showLocationRadios () {
       return this.type === ATTENDANCE.PRESENT
@@ -172,12 +207,28 @@ export default {
       handler (newValue, oldValue) {
         if (newValue !== oldValue) {
           this.message = ''
+          this.note = ''
         }
       }
     }
   },
 
   methods: {
+    onNoteTextAreaInput (e) {
+      const { value } = e.target
+      switch (this.type) {
+        case ATTENDANCE.LEAVE:
+        case ATTENDANCE.SICK_LEAVE:
+        case ATTENDANCE.PAID_LEAVE:
+          this.message = value
+          break
+        case ATTENDANCE.PRESENT:
+          this.note = value
+          break
+        default:
+          return ''
+      }
+    },
     async submit () {
       // eslint-disable-next-line no-unreachable
       const type = this.type
@@ -206,7 +257,8 @@ export default {
       const payload = {
         date: checkinAt,
         location: this.message,
-        message: this.type
+        message: this.type,
+        note: this.note
       }
 
       await GroupwareAPI.post('attendance/checkin', payload)
