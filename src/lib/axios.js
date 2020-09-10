@@ -51,6 +51,7 @@ export function useRefreshTokenHook ({
     },
     async function onError (error) {
       if (error && error.response.status === 401) {
+        setToken(null)
         try {
           await getNewToken()
           if (typeof onRefreshSuccess === 'function') {
