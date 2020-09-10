@@ -11,7 +11,11 @@ export const GroupwareAPI = axios.create({
 })
 
 export function setToken (token) {
-  GroupwareAPI.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null
+  if (token) {
+    GroupwareAPI.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  } else {
+    delete GroupwareAPI.defaults.headers.common['Authorization']
+  }
 }
 
 async function getNewToken () {
