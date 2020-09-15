@@ -18,7 +18,7 @@ export function setToken (token) {
   }
 }
 
-async function getNewToken () {
+export async function getNewToken () {
   const refreshToken = getRefreshTokenFromCookie()
   if (!refreshToken) {
     return Promise.reject(new Error('no refresh token'))
@@ -37,7 +37,10 @@ async function getNewToken () {
         setTokenInCookie(null)
         setToken(null)
       }
-      return true
+      return {
+        refreshToken: newRefreshToken,
+        authToken: newAuthToken
+      }
     })
 }
 
