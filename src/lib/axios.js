@@ -21,7 +21,7 @@ export function setToken (token) {
 export async function getNewToken () {
   const refreshToken = getRefreshTokenFromCookie()
   if (!refreshToken) {
-    return Promise.reject(new Error('no refresh token'))
+    return
   }
   return GroupwareAPI
     .post('auth/refresh/', {
@@ -41,6 +41,8 @@ export async function getNewToken () {
         refreshToken: newRefreshToken,
         authToken: newAuthToken
       }
+    }).catch((e) => {
+      return null
     })
 }
 
