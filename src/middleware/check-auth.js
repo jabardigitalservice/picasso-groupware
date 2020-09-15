@@ -1,6 +1,6 @@
 import store from '@/store'
 import { getTokenFromCookie } from '../lib/js-cookie'
-import { setToken } from '../lib/axios'
+import { setToken, getNewToken } from '../lib/axios'
 
 const publicPaths = ['/', '/login']
 const isPublicPath = (path) => {
@@ -13,7 +13,11 @@ const isPublicPath = (path) => {
 export default async (to, from, next) => {
   try {
     if (!store.state.auth.user && !store.state.auth.isInitialized) {
-      const t = getTokenFromCookie()
+      let t = getTokenFromCookie()
+      if (!t) {
+        const { authToken } = await getNewToken().catch(() => {})
+        t = authToken
+      }
       if (t) {
         setToken(t)
         await store
