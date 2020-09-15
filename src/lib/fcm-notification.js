@@ -14,6 +14,7 @@ function onTokenRefreshed (token) {
 }
 
 export function retrieveToken () {
+  if (!messaging) return
   messaging.getToken().then((currentToken) => {
     if (currentToken) {
       onTokenRetrieved(currentToken)
@@ -22,6 +23,7 @@ export function retrieveToken () {
 }
 
 export function updateToken () {
+  if (!messaging) return
   messaging.getToken().then((currentToken) => {
     if (currentToken) {
       onTokenRefreshed(currentToken)
@@ -30,6 +32,7 @@ export function updateToken () {
 }
 
 export function listenToRefreshTokenEvent () {
+  if (!messaging) return
   messaging.onTokenRefresh(() => {
     messaging.getToken().then((refreshedToken) => {
       onTokenRefreshed(refreshedToken)
