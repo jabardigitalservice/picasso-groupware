@@ -8,15 +8,16 @@ const firebaseConfig = JSON.parse(ENVERYWHERE_FIREBASE_CRED)
 
 firebase.initializeApp(firebaseConfig)
 
-const messaging = firebase.messaging()
+if (firebase.messaging.isSupported()) {
+  const messaging = firebase.messaging()
+  messaging.setBackgroundMessageHandler(function (payload) {
+    const notificationTitle = payload.notification.title
+    const notificationOptions = {
+      body: payload.notification.body,
+      icon: '/img/icons/android-chrome-192x192.png'
+    }
 
-messaging.setBackgroundMessageHandler(function (payload) {
-  const notificationTitle = payload.notification.title
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: '/img/icons/android-chrome-192x192.png'
-  }
-
-  return self.registration.showNotification(notificationTitle,
-    notificationOptions)
-})
+    return self.registration.showNotification(notificationTitle,
+      notificationOptions)
+  })
+}
