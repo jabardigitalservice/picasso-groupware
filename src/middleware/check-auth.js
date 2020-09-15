@@ -15,8 +15,11 @@ export default async (to, from, next) => {
     if (!store.state.auth.user && !store.state.auth.isInitialized) {
       let t = getTokenFromCookie()
       if (!t) {
-        const { authToken } = await getNewToken().catch(() => {})
-        t = authToken
+        const result = await getNewToken()
+        if (result && result.authToken) {
+          t = result.authToken
+        }
+        // t = authToken
       }
       if (t) {
         setToken(t)
