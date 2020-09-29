@@ -63,7 +63,7 @@
 </template>
 
 <script>
-// import { GroupwareAPI } from '../../../lib/axios'
+import { GroupwareAPI } from '../../../lib/axios'
 import { formatDateLong, formatTime } from '../../../lib/date'
 
 const STATUS = {
@@ -114,12 +114,7 @@ export default {
       this.formSubmissionError = null
       this.isFormSubmitted = true
       try {
-        await new Promise((resolve, reject) => {
-          setTimeout(() => {
-            resolve()
-          }, 3000)
-        })
-        // await GroupwareAPI.post('attendance/checkin', this.payload)
+        await GroupwareAPI.post('attendance/checkin', this.payload)
         await this.onSubmitSuccess()
       } catch (e) {
         await this.onSubmitError(e)
