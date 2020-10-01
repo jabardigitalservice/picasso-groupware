@@ -3,11 +3,11 @@ import FormInputHeader from './InputHeader.vue'
 export const props = {
   name: {
     type: String,
-    required: true
+    required: false
   },
   title: {
     type: String,
-    required: true
+    required: false
   },
   subtitle: {
     type: String,

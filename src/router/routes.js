@@ -57,6 +57,11 @@ export default [
     component: page('CheckinsCreate.vue')
   },
   {
+    path: '/dayoff/create',
+    name: 'dayoff.create',
+    component: page('Dayoff/Create.vue')
+  },
+  {
     path: '/feedback/create',
     name: 'feedback.create',
     component: page('FeedbackCreate.vue')

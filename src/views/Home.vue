@@ -23,7 +23,7 @@
             </template>
             <template v-else>
               <AttendanceButton class="w-full"/>
-              <div v-for="(m, index) in menuItems" :key="index" class="w-1/2">
+              <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
                 <router-link :to="m.to">
                   <div class="h-full p-3 py-4 text-center text-gray-700">
                     <i :class="[m.icon, 'text-2xl'] " />
@@ -70,8 +70,9 @@ export default {
     return {
       menuItems: [
         // { name: 'Checkin', to: '/checkins', icon: 'far fa-check-circle' },
-        { name: 'Laporan', to: '/report', icon: 'fa fa-book ' },
-        { name: 'Kehadiran', to: '/checkins', icon: 'fa fa-user-friends ' }
+        { name: 'Izin', to: '/dayoff/create', icon: 'fa fa-user-clock ' },
+        { name: 'Kehadiran', to: '/checkins', icon: 'fa fa-user-friends ' },
+        { name: 'Laporan', to: '/report', icon: 'fa fa-book ' }
         // { name: 'Events', to: '/events', icon: 'far fa-calendar ' },
         // { name: 'Thank You', to: '/thankyou', icon: 'far fa-heart ' },
         // { name: 'Teams', to: '/teams', icon: 'fas fa-user-friends ' },
