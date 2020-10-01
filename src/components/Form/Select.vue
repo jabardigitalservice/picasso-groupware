@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import _isNil from 'lodash/isNil'
 import { props, components } from './input-mixin'
 
 export default {
@@ -102,7 +103,7 @@ export default {
     selectedOptionLabel () {
       if (Array.isArray(this.options)) {
         const selectedOpt = this.options.find(opt => this.getOptionValue(opt) === this.value)
-        return selectedOpt ? this.getOptionLabel(selectedOpt) : null
+        return _isNil(selectedOpt) ? this.getOptionLabel(selectedOpt) : null
       }
       return null
     }

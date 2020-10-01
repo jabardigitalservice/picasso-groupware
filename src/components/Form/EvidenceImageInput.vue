@@ -80,6 +80,7 @@ export default {
     onDelete () {
       this.mUrl = null
       this.mFile = null
+      this.emitChanges()
     },
     onPreview () {
       window.open(this.mUrl, '_blank')
@@ -87,9 +88,14 @@ export default {
     onSelectedFileChange (url, file) {
       this.mUrl = url
       this.mFile = file
+      this.emitChanges()
     },
     getSelectedFile () {
       return this.isSelectedFileChanged ? this.mFile : null
+    },
+    emitChanges () {
+      this.$emit('change:url', this.mUrl)
+      this.$emit('change:file', this.mFile)
     }
   }
 }

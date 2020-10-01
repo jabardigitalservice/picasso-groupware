@@ -47,7 +47,7 @@ async function init () {
       await store.dispatch('auth/getUserProfile')
     },
     onRefreshFailed: async () => {
-      store.dispatch('auth/onLoginFailed')
+      await store.dispatch('auth/onLoginFailed')
       router.replace('/')
     }
   })
