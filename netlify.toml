@@ -1,0 +1,4 @@
+[context.master.environment]
+  VUE_APP_BASE_API_API = "https://groupware-api.digitalservice.id"
+[context.development.environment]
+  VUE_APP_BASE_API_API = "https://groupware-api-staging.digitalservice.id"
