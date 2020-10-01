@@ -41,7 +41,7 @@
           <InputDateTime
             name="endDate"
             type="date"
-            :min-datetime="minimumStartDate"
+            :min-datetime="startDateISOString"
             rules="required"
             :custom-messages="{
               required: 'Tanggal harus diisi'
