@@ -29,9 +29,10 @@
             name="startDate"
             type="date"
             :min-datetime="minimumStartDate"
-            rules="required"
+            rules="required|date_compare:lte,@endDate"
             :custom-messages="{
-              required: 'Tanggal harus diisi'
+              required: 'Tanggal harus diisi',
+              date_compare: 'Tanggal mulai harus lebih dulu dari tanggal akhir'
             }"
             placeholder="Tanggal Mulai"
             :value="startDateISOString"
