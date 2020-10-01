@@ -2,21 +2,21 @@
   <ValidationObserver #default="{ handleSubmit }">
     <div class="dayoff-form">
 
-      <!-- START: DAYOFF TYPE INPUT -->
+      <!-- START: PERMIT TYPE INPUT -->
       <div class="dayoff-form__input-segment">
         <RadioButtonGroup
-          name="type"
+          name="permitsType"
           title="Jenis Izin"
           required
           rules="required"
           :custom-messages="{
             required: 'Jenis izin harus diisi'
           }"
-          :options="dayoffOptions"
-          v-model="payload.type"
+          :options="permitTypeOptions"
+          v-model="payload.permitsType"
         />
       </div>
-      <!-- END: DAYOFF TYPE INPUT -->
+      <!-- END: PERMIT TYPE INPUT -->
 
       <!-- START: START & END DATE INPUT -->
       <div class="dayoff-form__input-segment">
@@ -35,6 +35,7 @@
             }"
             placeholder="Tanggal Mulai"
             :value="startDateISOString"
+            value-zone="local"
             @change="onStartDateChanged"
           />
           <InputDateTime
@@ -47,6 +48,7 @@
             }"
             placeholder="Tanggal Akhir"
             :value="endDateISOString"
+            value-zone="local"
             @change="onEndDateChanged"
           />
         </div>
@@ -54,36 +56,45 @@
       <!-- END: START & END DATE INPUT -->
 
       <!-- START: REASON INPUT -->
-      <div class="dayoff-form__input-segment">
+      <ValidationObserver tag="div" class="dayoff-form__input-segment" #default="{ errors }">
         <InputHeader
           label-for="startDate_endDate"
           title="Yuk kasih tau dulu"
           required/>
-        <p
+        <ValidationProvider tag="p"
           class="dayoff-form__stakeholder-checkbox"
-          v-for="(sh, index) in stakeholderOptions" :key="index"
-          @click.capture="onStakeholderOptionChecked(sh)">
+          :rules="{ required: { allowFalse: false }}"
+          v-for="(ack, index) in permitAcknowledgmentOptions" :key="index"
+          @click.native.capture="onAcknowledgementOptionChecked(ack)">
           <input
             multiple
             type="checkbox"
-            :checked="isStakeholderOptionChecked(sh)"/>
+            :name="`permitAcknowledge[${index}]`"
+            :value="isAcknowledgementOptionChecked(ack)"
+            :checked="isAcknowledgementOptionChecked(ack)"/>
           <label>
-            {{ sh }}
+            {{ ack }}
           </label>
+        </ValidationProvider>
+        <p v-if="isSomePermitAcknowledgementEmpty(errors)"
+          class="form-input__error-hint mt-2">
+          Oops, kamu belum ngasih tahu kesemua stakeholder.
+          <br>
+          Yuk kasih tahu dulu, lalu checklist formnya.
         </p>
-      </div>
+      </ValidationObserver>
       <div class="dayoff-form__input-segment">
         <InputTextarea
           name="reason"
           rows="5"
-          :placeholder="reasonPlaceholder"
+          :placeholder="notePlaceholder"
           title="Alasan Izin"
           required
           rules="required"
           :custom-messages="{
             required: 'Alasan harus diisi'
           }"
-          v-model="payload.reason"
+          v-model="payload.note"
         />
       </div>
       <!-- END: REASON INPUT -->
@@ -94,8 +105,6 @@
           ref="evidenceImageInput"
           name="evidence"
           title="Upload Evidence"
-          :url.sync="payload.evidenceURL"
-          :path="payload.evidencePath"
           rules="required|mimes:image/*|size:5120"
           accept="image/*"
           :custom-messages="{
@@ -103,10 +112,12 @@
             mimes: 'File harus berupa gambar',
             size: 'Gambar tidak boleh lebih dari 5MB'
           }"
+          @change:url="onEvidenceImageURLChanged"
+          @change:file="onEvidenceImageFileChanged"
         >
           <template #subtitle>
-            <span class="italic text-gray-500">
-              File tidak boleh lebih dari 5MB
+            <span class=" text-gray-600">
+              Misal: Foto/file surat dokter, chat izin ke koor/HR/rekan
             </span>
           </template>
         </EvidenceImageInput>
@@ -117,7 +128,7 @@
         Kirim
       </button>
     </div>
-    <Dialog :show="showSubmissionDialog">
+    <Dialog :show="showSubmissionDialog" max-width="480px">
       <Submission
         v-bind="{ payload }"
         @success="onSubmissionSuccess"
@@ -133,25 +144,26 @@ import _cloneDeep from 'lodash/cloneDeep'
 import setHours from 'date-fns/setHours'
 
 const emptyPayload = {
-  type: null,
+  permitsType: null,
+  permitAcknowledged: [],
   startDate: null,
   endDate: null,
-  reason: '',
-  evidenceURL: '',
-  evidencePath: '',
-  stakeholders: []
+  note: null,
+  file: null,
+  imageFile: null,
+  imageURL: null
 }
 
-const DAYOFF = {
+const PERMIT = {
   SICK: 'Sakit',
   LEAVE: 'Izin',
-  PAID_LEAVE: 'Cuti Tahunan'
+  PAID_LEAVE: 'Cuti'
 }
 
-const dayoffOptions = [
-  DAYOFF.SICK,
-  DAYOFF.LEAVE,
-  DAYOFF.PAID_LEAVE
+const permitTypeOptions = [
+  PERMIT.SICK,
+  PERMIT.LEAVE,
+  PERMIT.PAID_LEAVE
 ]
 
 const STAKEHOLDER = {
@@ -161,7 +173,7 @@ const STAKEHOLDER = {
   WORK_PARTNER: 'Rekan Kerja'
 }
 
-const stakeholderOptions = [
+const permitAcknowledgmentOptions = [
   STAKEHOLDER.STRUCTURAL,
   STAKEHOLDER.HR,
   STAKEHOLDER.COORDINATOR,
@@ -181,9 +193,9 @@ export default {
   data () {
     return {
       minimumStartDate: setHours(new Date(), 0).toISOString(),
-      stakeholderOptions: Object.freeze(stakeholderOptions),
-      dayoffOptions: Object.freeze(dayoffOptions),
-      reasonPlaceholder: 'Ketikkan alasan izin kamu disini',
+      permitAcknowledgmentOptions: Object.freeze(permitAcknowledgmentOptions),
+      permitTypeOptions: Object.freeze(permitTypeOptions),
+      notePlaceholder: 'Ketikkan alasan izin kamu disini',
 
       payload: _cloneDeep(emptyPayload),
 
@@ -201,20 +213,25 @@ export default {
     }
   },
   methods: {
-    isStakeholderOptionChecked (opt) {
-      return this.payload.stakeholders.includes(opt)
+    isAcknowledgementOptionChecked (opt) {
+      return this.payload.permitAcknowledged.includes(opt)
     },
-    onStakeholderOptionChecked (opt) {
-      let { stakeholders } = this.payload
-      if (!Array.isArray(stakeholders)) {
-        stakeholders = []
+    onAcknowledgementOptionChecked (opt) {
+      let { permitAcknowledged } = this.payload
+      if (!Array.isArray(permitAcknowledged)) {
+        permitAcknowledged = []
       }
-      if (this.isStakeholderOptionChecked(opt)) {
-        stakeholders = stakeholders.filter((sh) => sh !== opt)
+      if (this.isAcknowledgementOptionChecked(opt)) {
+        permitAcknowledged = permitAcknowledged.filter((ack) => ack !== opt)
       } else {
-        stakeholders.push(opt)
+        permitAcknowledged.push(opt)
       }
-      this.$set(this.payload, 'stakeholders', stakeholders)
+      this.$set(this.payload, 'permitAcknowledged', permitAcknowledged)
+    },
+
+    isSomePermitAcknowledgementEmpty (validationObserverErrors) {
+      return validationObserverErrors && typeof validationObserverErrors === 'object' &&
+        Object.values(validationObserverErrors).some((arr) => Array.isArray(arr) && arr.length)
     },
 
     onStartDateChanged (date) {
@@ -228,12 +245,20 @@ export default {
       }
     },
 
+    onEvidenceImageURLChanged (url) {
+      this.$set(this.payload, 'imageURL', url)
+    },
+    onEvidenceImageFileChanged (file) {
+      this.$set(this.payload, 'imageFile', file)
+    },
+
     beforeSubmit () {
       this.showSubmissionDialog = true
     },
 
     onSubmissionSuccess () {
       this.onCloseConfirmationDialog()
+      this.$router.replace('/')
     },
     onSubmissionError (/* err */) {
       this.onCloseConfirmationDialog()

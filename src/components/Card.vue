@@ -1,13 +1,26 @@
 <template>
-  <div :class="{
-    'card bg-white': true,
-    'is-flat': $attrs.flat,
-    'is-borderless': $attrs.borderless,
-    'is-square': $attrs.square
-  }">
+  <div :class="['card bg-white', attrsToClassList]">
     <slot></slot>
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    attrsToClassList () {
+      const attrs = [
+        'paddingless',
+        'flat',
+        'borderless',
+        'square'
+      ]
+      return attrs.filter((attr) => attr in this.$attrs)
+        .map((attr) => `is-${attr}`)
+        .join(' ')
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .card {
@@ -17,6 +30,10 @@
 
   @screen md {
     @apply p-8;
+  }
+
+  &.is-paddingless {
+    @apply p-0;
   }
 
   &.is-flat {

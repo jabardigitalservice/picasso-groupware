@@ -1,7 +1,13 @@
 <template>
   <div :class="['dialog-overlay', show && 'is-active']" @click.self="onClickOverlay">
-    <Card v-if="lazy ? show : true" class="dialog-content">
-      <slot></slot>
+    <Card
+      v-if="lazy ? show : true"
+      class="dialog-body"
+      :style="{ maxWidth }"
+      paddingless>
+      <div class="dialog-content">
+        <slot></slot>
+      </div>
     </Card>
   </div>
 </template>
@@ -25,6 +31,10 @@ export default {
     lazy: {
       type: Boolean,
       default: false
+    },
+    maxWidth: {
+      type: String,
+      default: '640px'
     }
   },
   methods: {
@@ -42,9 +52,11 @@ export default {
   background-color: rgba(0,0,0,0.1);
   backdrop-filter: blur(4px);
   visibility: hidden;
-  pointer-events: none;
   @apply z-50 fixed inset-0
-  flex justify-center items-center;
+  overflow-hidden
+  flex justify-center items-center
+  p-8
+  pointer-events-none;
 
   &.is-active {
     pointer-events: all;
@@ -52,17 +64,23 @@ export default {
   }
 }
 
-.dialog-content {
+.dialog-body {
   transition-property: transform, opacity;
   transition-duration: 0.3s;
   transition-timing-function: ease-out;
-  transform: translateY(0);
+  transform: translateY(1rem);
   opacity: 0;
+  @apply max-h-full overflow-hidden
+  flex flex-row;
+}
+
+.dialog-content {
+  @apply max-h-full;
 }
 
 .dialog-overlay.is-active {
-  .dialog-content {
-    transform: translateY(-1rem);
+  .dialog-body {
+    transform: translateY(0rem);
     opacity: 1;
   }
 }

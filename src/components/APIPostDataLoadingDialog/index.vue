@@ -9,7 +9,9 @@
     <template v-if="state === STATE.SUCCESS">
       <img :src="assets.successMark" />
       <p class="dialog-loading__text text-green-600">
-        Data berhasil disimpan
+        <slot name="message-success">
+          Data berhasil disimpan
+        </slot>
       </p>
     </template>
     <template v-else-if="state === STATE.ERROR">
@@ -17,9 +19,9 @@
       <p class="dialog-loading__text text-red-600">
         Terjadi kesalahan
         <br />
-        <span v-if="formSubmissionError">
-          {{ formSubmissionError }}
-        </span>
+        <small>
+          <slot name="message-error"></slot>
+        </small>
       </p>
     </template>
     <button class="dialog-loading__btn-close" @click="onClose">
