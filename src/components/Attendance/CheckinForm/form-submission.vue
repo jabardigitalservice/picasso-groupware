@@ -106,6 +106,8 @@ export default {
       try {
         const post = GroupwareAPI.post('attendance/checkin', this.payload)
         await pMinDelay(post, 1500)
+        await this.$store.dispatch('checkins-list/getCheckinState', { refresh: true })
+        await this.$store.dispatch('checkins-list/getCheckoutState', { refresh: true })
         await this.onSubmitSuccess()
       } catch (e) {
         await this.onSubmitError(e)
