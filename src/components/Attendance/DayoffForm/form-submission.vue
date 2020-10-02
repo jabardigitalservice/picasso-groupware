@@ -132,7 +132,11 @@ export default {
       this.formSubmissionError = null
       this.isFormSubmitted = true
       try {
-        const post = GroupwareAPI.post('day-off/create', this.formattedPayload)
+        const formData = new FormData()
+        Object.entries(this.formattedPayload).forEach(([key, value]) => {
+          formData.append(key, value)
+        })
+        const post = GroupwareAPI.post('day-off/create', formData)
         await pMinDelay(post, 1500)
         await this.onSubmitSuccess()
       } catch (e) {
