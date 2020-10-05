@@ -28,7 +28,7 @@
           <InputDateTime
             name="startDate"
             type="date"
-            :min-datetime="minimumStartDate"
+            :min-datetime="null"
             rules="required|date_compare:lte,@endDate"
             :custom-messages="{
               required: 'Tanggal harus diisi',
@@ -142,7 +142,6 @@
 
 <script>
 import _cloneDeep from 'lodash/cloneDeep'
-import setHours from 'date-fns/setHours'
 
 const emptyPayload = {
   permitsType: null,
@@ -193,7 +192,6 @@ export default {
   },
   data () {
     return {
-      minimumStartDate: setHours(new Date(), 0).toISOString(),
       permitAcknowledgmentOptions: Object.freeze(permitAcknowledgmentOptions),
       permitTypeOptions: Object.freeze(permitTypeOptions),
       notePlaceholder: 'Ketikkan alasan izin kamu disini',
