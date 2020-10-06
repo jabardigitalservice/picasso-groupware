@@ -42,7 +42,7 @@ export async function getNewToken () {
         authToken: newAuthToken
       }
     }).catch((e) => {
-      return null
+      throw e
     })
 }
 
@@ -66,7 +66,6 @@ export function useRefreshTokenHook ({
           if (typeof onRefreshFailed === 'function') {
             await onRefreshFailed()
           }
-          throw error
         }
       } else {
         return Promise.reject(error)
