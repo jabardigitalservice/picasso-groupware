@@ -24,12 +24,12 @@
             <template v-else>
               <AttendanceButton class="w-full"/>
               <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
-                <router-link :to="m.to">
+                <component :is="getMenuLinkComponent(m)" v-bind="getMenuLinkProps(m)" >
                   <div class="h-full p-3 py-4 text-center text-gray-700">
                     <i :class="[m.icon, 'text-2xl'] " />
                     <p class="text-xs mt-1">{{m.name}}</p>
                   </div>
-                </router-link>
+                </component>
               </div>
             </template>
           </div>
@@ -69,22 +69,61 @@ export default {
   data () {
     return {
       menuItems: [
-        // { name: 'Checkin', to: '/checkins', icon: 'far fa-check-circle' },
-        { name: 'Izin', to: '/dayoff/create', icon: 'fa fa-user-clock ' },
-        { name: 'Kehadiran', to: '/checkins', icon: 'fa fa-user-friends ' },
-        { name: 'Laporan', to: '/report', icon: 'fa fa-book ' }
-        // { name: 'Events', to: '/events', icon: 'far fa-calendar ' },
-        // { name: 'Thank You', to: '/thankyou', icon: 'far fa-heart ' },
-        // { name: 'Teams', to: '/teams', icon: 'fas fa-user-friends ' },
-        // { name: 'Booking', to: '/booking', icon: 'far fa-building ' },
-        // { name: 'Pesan Kopi', to: '/underconstruction', icon: 'fas fa-wine-bottle ' }
+        {
+          name: 'Izin',
+          to: '/dayoff/create',
+          icon: 'fa fa-user-clock'
+        },
+        {
+          name: 'Kehadiran',
+          to: '/checkins',
+          icon: 'fa fa-user-friends '
+        },
+        {
+          name: 'Laporan',
+          to: '/report',
+          icon: 'fa fa-book '
+        },
+        {
+          name: 'Agenda',
+          href: ['https://calendar.google.com/calendar/u/0?cid=ZHEzMWhiYWlqdnAydXVyc3ZhbjE3ZnB1cW9AZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ', '_blank'],
+          icon: 'fa fa-calendar-alt'
+        },
+        {
+          name: 'Booking',
+          href: ['https://digitalservice.skedda.com/booking', '_blank'],
+          icon: 'fa fa-book '
+        }
       ]
     }
   },
 
   computed: mapGetters({
-    // authLoading: 'auth/loading',
     user: 'auth/user'
-  })
+  }),
+
+  methods: {
+    getMenuLinkComponent (menu) {
+      if (menu.to) {
+        return 'RouterLink'
+      }
+      if (menu.href) {
+        return 'a'
+      }
+      return null
+    },
+    getMenuLinkProps (menu) {
+      if (menu.to) {
+        return { to: menu.to }
+      }
+      if (menu.href) {
+        return {
+          href: menu.href[0],
+          target: menu.href[1]
+        }
+      }
+      return null
+    }
+  }
 }
 </script>
