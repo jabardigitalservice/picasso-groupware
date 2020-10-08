@@ -92,7 +92,12 @@ export default {
         {
           name: 'Booking',
           href: ['https://digitalservice.skedda.com/booking', '_blank'],
-          icon: 'fa fa-book '
+          icon: 'fa fa-book'
+        },
+        {
+          name: 'Administrasi',
+          href: ['https://forms.gle/Mw8uMqKKXS4bWMqW9', '_blank'],
+          icon: 'fa fa-id-card-alt'
         }
       ]
     }
