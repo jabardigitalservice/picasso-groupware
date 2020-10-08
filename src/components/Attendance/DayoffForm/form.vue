@@ -28,10 +28,11 @@
           <InputDateTime
             name="startDate"
             type="date"
-            :min-datetime="minimumStartDate"
-            rules="required"
+            :min-datetime="null"
+            rules="required|date_compare:lte,@endDate"
             :custom-messages="{
-              required: 'Tanggal harus diisi'
+              required: 'Tanggal harus diisi',
+              date_compare: 'Tanggal mulai harus lebih dulu dari tanggal akhir'
             }"
             placeholder="Tanggal Mulai"
             :value="startDateISOString"
@@ -41,7 +42,7 @@
           <InputDateTime
             name="endDate"
             type="date"
-            :min-datetime="minimumStartDate"
+            :min-datetime="startDateISOString"
             rules="required"
             :custom-messages="{
               required: 'Tanggal harus diisi'
@@ -141,7 +142,6 @@
 
 <script>
 import _cloneDeep from 'lodash/cloneDeep'
-import setHours from 'date-fns/setHours'
 
 const emptyPayload = {
   permitsType: null,
@@ -192,7 +192,6 @@ export default {
   },
   data () {
     return {
-      minimumStartDate: setHours(new Date(), 0).toISOString(),
       permitAcknowledgmentOptions: Object.freeze(permitAcknowledgmentOptions),
       permitTypeOptions: Object.freeze(permitTypeOptions),
       notePlaceholder: 'Ketikkan alasan izin kamu disini',

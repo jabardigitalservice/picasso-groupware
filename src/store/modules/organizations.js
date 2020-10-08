@@ -35,8 +35,7 @@ export const actions = {
     if (!Array.isArray(state.projects) || !state.projects.length) {
       return GroupwareAPI.get('/project/', {
         params: {
-          limit: 100,
-          pageSize: 100
+          pageSize: 200
         }
       })
         .then(r => r.data.results)

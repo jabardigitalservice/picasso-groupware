@@ -157,7 +157,10 @@ export default {
     */
     getCurrentHourAndMinute () {
       const today = new Date()
-      const currentHour = today.getHours()
+      let currentHour = today.getHours()
+      if (currentHour < 10) {
+        currentHour = `0${currentHour}`
+      }
       let currentMinute = Math.ceil(today.getMinutes() / 5) * 5
       if (currentMinute < 10) {
         currentMinute = `0${currentMinute}`
