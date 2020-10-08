@@ -97,7 +97,7 @@ export default {
         {
           name: 'Administrasi',
           href: ['https://forms.gle/Mw8uMqKKXS4bWMqW9', '_blank'],
-          icon: 'fa fa-book'
+          icon: 'fa fa-id-card-alt'
         }
       ]
     }
