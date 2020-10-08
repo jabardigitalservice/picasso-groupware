@@ -71,7 +71,7 @@ export default {
       menuItems: [
         {
           name: 'Izin',
-          to: '/dayoff/create',
+          to: '/dayoff',
           icon: 'fa fa-user-clock'
         },
         {
