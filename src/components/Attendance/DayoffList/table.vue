@@ -65,8 +65,8 @@ const tableColumns = Object.freeze([
   {
     label: 'Sampai',
     get: ({ row }) => {
-      if (row.start_date) {
-        return formatDateLong(new Date(row.start_date))
+      if (row.end_date) {
+        return formatDateLong(new Date(row.end_date))
       }
       return '-'
     }
