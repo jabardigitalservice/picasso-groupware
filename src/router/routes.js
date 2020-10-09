@@ -17,6 +17,11 @@ export default [
     component: page('ArticleDetail.vue')
   },
   {
+    path: '/announcement/:id',
+    name: 'announcement.detail',
+    component: page('Announcement/_id.vue')
+  },
+  {
     path: '/messages',
     name: 'messages',
     component: page('Messages.vue')
