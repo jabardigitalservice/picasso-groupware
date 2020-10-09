@@ -35,7 +35,16 @@
           </div>
         </div>
         <div class="w-full md:w-2/3">
-          <home-article-list class="mt-2" />
+          <div v-show="showAnnouncement">
+            <h5 class="font-bold text-lg m-4">
+              Pengumuman Penting
+            </h5>
+            <AnnouncementList class="mt-2" @found="showAnnouncement = true" />
+          </div>
+          <h5 class="font-bold text-lg m-4">
+            Artikel
+          </h5>
+          <HomeArticleList class="mt-2" />
         </div>
       </div>
     </div>
@@ -47,14 +56,49 @@ import { mapGetters } from 'vuex'
 import LoginButton from '@/components/LoginButton'
 import LoginByGoogleButton from '@/components/LoginByGoogleButton'
 import HomeBannerList from '@/components/HomeBannerList'
+import AnnouncementList from '@/components/Announcement/AnnouncementList'
 import HomeArticleList from '@/components/HomeArticleList'
 import UserInfo from '@/components/UserInfo'
 import AttendanceButton from '@/components/AttendanceButton'
+
+const menuItems = Object.freeze([
+  {
+    name: 'Izin',
+    to: '/dayoff',
+    icon: 'fa fa-user-clock'
+  },
+  {
+    name: 'Kehadiran',
+    to: '/checkins',
+    icon: 'fa fa-user-friends '
+  },
+  {
+    name: 'Laporan',
+    to: '/report',
+    icon: 'fa fa-book '
+  },
+  {
+    name: 'Agenda',
+    href: ['https://calendar.google.com/calendar/u/0?cid=ZHEzMWhiYWlqdnAydXVyc3ZhbjE3ZnB1cW9AZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ', '_blank'],
+    icon: 'fa fa-calendar-alt'
+  },
+  {
+    name: 'Booking',
+    href: ['https://digitalservice.skedda.com/booking', '_blank'],
+    icon: 'fa fa-book'
+  },
+  {
+    name: 'Administrasi',
+    href: ['https://forms.gle/Mw8uMqKKXS4bWMqW9', '_blank'],
+    icon: 'fa fa-id-card-alt'
+  }
+])
 
 export default {
   name: 'home',
   components: {
     HomeBannerList,
+    AnnouncementList,
     HomeArticleList,
     LoginButton,
     LoginByGoogleButton,
@@ -68,38 +112,8 @@ export default {
 
   data () {
     return {
-      menuItems: [
-        {
-          name: 'Izin',
-          to: '/dayoff',
-          icon: 'fa fa-user-clock'
-        },
-        {
-          name: 'Kehadiran',
-          to: '/checkins',
-          icon: 'fa fa-user-friends '
-        },
-        {
-          name: 'Laporan',
-          to: '/report',
-          icon: 'fa fa-book '
-        },
-        {
-          name: 'Agenda',
-          href: ['https://calendar.google.com/calendar/u/0?cid=ZHEzMWhiYWlqdnAydXVyc3ZhbjE3ZnB1cW9AZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ', '_blank'],
-          icon: 'fa fa-calendar-alt'
-        },
-        {
-          name: 'Booking',
-          href: ['https://digitalservice.skedda.com/booking', '_blank'],
-          icon: 'fa fa-book'
-        },
-        {
-          name: 'Administrasi',
-          href: ['https://forms.gle/Mw8uMqKKXS4bWMqW9', '_blank'],
-          icon: 'fa fa-id-card-alt'
-        }
-      ]
+      menuItems,
+      showAnnouncement: false
     }
   },
 
