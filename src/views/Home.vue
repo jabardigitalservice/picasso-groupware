@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="w-full md:w-2/3">
-          <div v-show="showAnnouncement">
+          <div v-if="user" v-show="showAnnouncement">
             <h5 class="font-bold text-lg m-4">
               Pengumuman Penting
             </h5>
