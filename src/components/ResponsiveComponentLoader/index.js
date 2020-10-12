@@ -4,17 +4,29 @@ const VIEWPORT_TYPE = {
 }
 
 export default {
+  props: {
+    breakpointWidth: {
+      type: [String, Number],
+      default: 640
+    },
+    forDesktop: {
+      type: String
+    },
+    forMobile: {
+      type: String
+    }
+  },
   data () {
     return {
       viewportType: null,
-      listComponent: null
+      component: null
     }
   },
   watch: {
     viewportType: {
       immediate: false,
       async handler (type) {
-        this.listComponent = await this.loadListComponent()
+        this.component = await this.loadComponent()
           .then(m => m ? m.default || m : null)
       }
     }
@@ -34,25 +46,26 @@ export default {
   },
   methods: {
     onWindowResize () {
-      if (window.innerWidth < 640) {
+      if (window.innerWidth < this.breakpointWidth) {
         this.viewportType = VIEWPORT_TYPE.MOBILE
       } else {
         this.viewportType = VIEWPORT_TYPE.DESKTOP
       }
     },
-    loadListComponent () {
+    async loadComponent () {
       switch (this.viewportType) {
-        case VIEWPORT_TYPE.DESKTOP: return import('./table')
+        case VIEWPORT_TYPE.DESKTOP:
+          return this.forDesktop ? import(`@/components/${this.forDesktop}`) : null
         case VIEWPORT_TYPE.MOBILE:
-          return import('./card-list')
+          return this.forMobile ? import(`@/components/${this.forMobile}`) : null
         default:
-          return Promise.resolve(null)
+          return null
       }
     }
   },
   render (h) {
-    if (this.listComponent) {
-      return h(this.listComponent)
+    if (this.component) {
+      return h(this.component)
     }
     return null
   }

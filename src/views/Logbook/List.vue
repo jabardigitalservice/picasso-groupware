@@ -28,7 +28,7 @@
 <script>
 export default {
   components: {
-    LogbookList: () => import('../../components/LogbookList/index.js')
+    LogbookList: () => import('../../components/LogbookList')
   },
   data () {
     return {

@@ -125,9 +125,14 @@
       </div>
       <!-- END: EVIDENCE INPUT -->
 
-      <button class="dayoff-form__btn-submit" @click="handleSubmit(beforeSubmit)">
-        Kirim
-      </button>
+      <div class="dayoff-form__actions">
+        <button class="dayoff-form__btn-cancel" @click="onCancel">
+          Batal
+        </button>
+        <button class="dayoff-form__btn-submit" @click="handleSubmit(beforeSubmit)">
+          Kirim
+        </button>
+      </div>
     </div>
     <Dialog :show="showSubmissionDialog" max-width="480px">
       <Submission
@@ -142,6 +147,7 @@
 
 <script>
 import _cloneDeep from 'lodash/cloneDeep'
+import { PERMIT, STAKEHOLDER } from '../../../lib/constants'
 
 const emptyPayload = {
   permitsType: null,
@@ -154,24 +160,11 @@ const emptyPayload = {
   imageURL: null
 }
 
-const PERMIT = {
-  SICK: 'Sakit',
-  LEAVE: 'Izin',
-  PAID_LEAVE: 'Cuti'
-}
-
 const permitTypeOptions = [
   PERMIT.SICK,
   PERMIT.LEAVE,
   PERMIT.PAID_LEAVE
 ]
-
-const STAKEHOLDER = {
-  STRUCTURAL: 'Struktural',
-  HR: 'HR',
-  COORDINATOR: 'Koor',
-  WORK_PARTNER: 'Rekan Kerja'
-}
 
 const permitAcknowledgmentOptions = [
   STAKEHOLDER.STRUCTURAL,
@@ -212,6 +205,11 @@ export default {
     }
   },
   methods: {
+    onCancel () {
+      this.$router.replace({
+        path: '/dayoff'
+      })
+    },
     isAcknowledgementOptionChecked (opt) {
       return this.payload.permitAcknowledged.includes(opt)
     },
@@ -257,9 +255,9 @@ export default {
 
     onSubmissionSuccess () {
       this.onCloseConfirmationDialog()
-      this.$router.replace('/')
+      this.$router.replace('/dayoff')
     },
-    onSubmissionError (/* err */) {
+    onSubmissionError () {
       this.onCloseConfirmationDialog()
     },
     onCloseConfirmationDialog () {
@@ -290,11 +288,30 @@ export default {
     }
   }
 
+  &__actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    @apply mt-12;
+
+    > button {
+      @apply w-full
+      px-4 py-2
+      rounded;
+    }
+  }
+
+  &__btn-cancel {
+    @apply bg-gray-300
+    text-gray-700;
+
+    &:hover {
+      @apply bg-gray-400;
+    }
+  }
+
   &__btn-submit {
-    @apply w-full mt-12
-    px-4 py-2
-    rounded
-    bg-blue-600
+    @apply bg-blue-600
     text-white;
 
     &:hover {
