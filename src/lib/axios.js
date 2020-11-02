@@ -42,6 +42,9 @@ export async function getNewToken () {
         authToken: newAuthToken
       }
     }).catch((e) => {
+      setRefreshTokenInCookie(null)
+      setTokenInCookie(null)
+      setToken(null)
       throw e
     })
 }
