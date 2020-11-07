@@ -12,7 +12,7 @@ const isPublicPath = (path) => {
 
 export default async (to, from, next) => {
   try {
-    if (!store.state.auth.isIniatialized) {
+    if (!store.state.auth.isInitialized) {
       let t = getTokenFromCookie()
       if (!t) {
         const result = await getNewToken()
