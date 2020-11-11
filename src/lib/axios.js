@@ -19,31 +19,35 @@ export function setToken (token) {
 }
 
 export async function getNewToken () {
-  const refreshToken = getRefreshTokenFromCookie()
-  if (!refreshToken) {
-    return
-  }
-  return GroupwareAPI
-    .post('auth/refresh/', {
-      refreshtoken: refreshToken
-    }).then((res) => res.data)
-    .then(({ refresh_token: newRefreshToken, auth_token: newAuthToken }) => {
-      if (newRefreshToken && newAuthToken) {
+  try {
+    const oldRefreshToken = getRefreshTokenFromCookie()
+    if (!oldRefreshToken) {
+      throw new Error('no refresh token in cookie')
+    }
+    const [newRefreshToken, newAuthToken] = await GroupwareAPI
+      .post('auth/refresh/', {
+        refreshtoken: oldRefreshToken
+      })
+      .then((res) => res.data)
+      .then(({ refresh_token: newRefreshToken, auth_token: newAuthToken }) => {
+        if (!newRefreshToken || !newAuthToken) {
+          throw new Error('no refresh token from API')
+        }
         setRefreshTokenInCookie(newRefreshToken)
         setTokenInCookie(newAuthToken)
         setToken(newAuthToken)
-      } else {
-        setRefreshTokenInCookie(null)
-        setTokenInCookie(null)
-        setToken(null)
-      }
-      return {
-        refreshToken: newRefreshToken,
-        authToken: newAuthToken
-      }
-    }).catch((e) => {
-      throw e
-    })
+        return [newRefreshToken, newAuthToken]
+      })
+    return {
+      refreshToken: newRefreshToken,
+      authToken: newAuthToken
+    }
+  } catch (e) {
+    setRefreshTokenInCookie(null)
+    setTokenInCookie(null)
+    setToken(null)
+    throw e
+  }
 }
 
 export function useRefreshTokenHook ({
