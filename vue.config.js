@@ -2,7 +2,7 @@ const VueEnv = require('vue-enverywhere')
 // const webpack = require('webpack')
 // const path = require('path')
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin')
+// const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin')
 
 // let plugins = [
 //   new VueEnv({
@@ -33,10 +33,17 @@ module.exports = {
       // new webpack.IgnorePlugin(
       //   /^\.\/locale$/, /moment$/
       // ),
-      new PreloadWebpackPlugin({
-        rel: 'preload',
-        as: 'script'
-      }),
+      // new PreloadWebpackPlugin({
+      //   rel: 'preload',
+      //   as: 'script'
+      // }),
     ]
+  },
+  chainWebpack: (config) => {
+    config.plugins.delete('prefetch')
+    config.plugin('preload').tap((options) => {
+      options[0].include = 'allChunks'
+      return options
+    })
   },
 }
