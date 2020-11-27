@@ -27,8 +27,11 @@ module.exports = {
       config.performance
         .maxEntrypointSize(400000)
         .maxAssetSize(400000)
+      config.optimization.runtimeChunk('single')
       config.optimization.splitChunks({
-        minSize: 10000,
+        chunks: 'all',
+        maxInitialRequests: Infinity,
+        minSize: 100000,
         maxSize: 200000,
         cacheGroups: {
           default: false,
@@ -37,11 +40,17 @@ module.exports = {
               name: 'app',
               test: /[\\/]node_modules[\\/]/,
               // test: /\.(s?css|vue)$/, // chunks plugin has to be aware of all kind of files able to output css in order to put them together
-              chunks: 'initial',
-              minChunks: 1,
-              enforce: true
+              name(module) {
+                const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                return `npm.${packageName.replace('@', '')}`;
+              },
           }
         }
+      })
+      config.optimization.minimizer("terser").tap(args => {
+        const { terserOptions } = args[0]
+        terserOptions.compress = true
+        return args
       })
     })
   },
