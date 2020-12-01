@@ -22,6 +22,36 @@
               </div>
             </template>
             <template v-else>
+              <dl class="w-full flex-col mx-4 pt-2 grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-2">
+                <div class="bg-green-600 overflow-hidden shadow antialiased rounded-lg" style="border-radius: 20% 0 / 140px 0px">
+                  <div class="text-center ml-4 mr-2 pt-1">
+                    <b class="text-xs text-center text-white">Laporan Bulan Ini</b>
+                    <div class="text-center text-white text-2xl">
+                      3
+                    </div>
+                  </div>
+                  <div class="text-center mr-2 sm:pl-8 lg:pr-8">
+                    <b class="text-xs text-justify text-white">Total Laporan</b>
+                    <div class="text-1md text-center text-white">
+                      3
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-green-600 overflow-hidden shadow antialiased rounded-lg" style="border-radius: 20% 0 / 140px 0px">
+                  <div class="text-center ml-4 mr-2 pt-1">
+                    <b class="text-xs text-justify text-white">Jam Kerja Bulan Ini</b>
+                    <div class="text-center text-white text-2xl">
+                      3
+                    </div>
+                  </div>
+                  <div class="text-center pb-3 mr-2 sm:pl-8 lg:pr-8">
+                    <b class="text-xs text-center text-white">Total Jam Kerja</b>
+                    <div class="center text-white text-1md">
+                      3
+                    </div>
+                  </div>
+                </div>
+              </dl>
               <AttendanceButton class="w-full"/>
               <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
                 <component :is="getMenuLinkComponent(m)" v-bind="getMenuLinkProps(m)" >
