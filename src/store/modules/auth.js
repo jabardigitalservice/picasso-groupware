@@ -111,8 +111,9 @@ export const actions = {
             user: {
               ...profile,
               name: profile.nama_lengkap,
+              jabatan: profile.jabatan,
               email: profile.email,
-              photo: profile.foto
+              photo: profile.photo
             }
           })
         })
