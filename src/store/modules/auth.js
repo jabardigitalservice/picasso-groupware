@@ -2,7 +2,7 @@ import addHours from 'date-fns/addHours'
 import * as types from '../mutation-types'
 import { GroupwareAPI, setToken } from '../../lib/axios'
 import { setTokenInCookie, setRefreshTokenInCookie } from '../../lib/js-cookie'
-
+import { getIdFromUrl, googleDriveUrl } from '../../lib/string'
 // state
 export const state = {
   loading: true,
@@ -107,13 +107,14 @@ export const actions = {
       await GroupwareAPI.get('/user/info')
         .then(r => r.data.data)
         .then(profile => {
+          const urlPhoto = googleDriveUrl + getIdFromUrl(profile.photo)
           commit(types.SET_USER, {
             user: {
               ...profile,
               name: profile.nama_lengkap,
               jabatan: profile.jabatan,
               email: profile.email,
-              photo: profile.photo
+              photo: urlPhoto
             }
           })
         })

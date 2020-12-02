@@ -5,20 +5,21 @@
                             class="w-full md:mb-8 mx-auto bg-transparent md:bg-gray-300"/>
       <template v-if="user && !loading">
         <template v-if="!error">
-          <div class="bg-white m-0 sm:rounded shadow">
-            <div class="text-center p-6  border-b">
-              <a :href="item['photo']">
-                <img class="h-40 w-40 rounded-full mx-auto" :src="item['photo']" :alt="item['name']" />
-              </a>
-
+          <div class="flex mx-auto justify-center" style="position: absolute;height: 100%;top: 18%;left:40%;">
+            <a :href="user.photo">
+              <img class="h-24 w-24 lg:h-32 lg:w-32 rounded-full mx-auto" :src="user.photo" :alt="user.fullname" />
+            </a>
+          </div>
+          <div class="bg-white m-0 mt-24 lg:mt-28 sm:rounded shadow">
+            <div class="text-center p-6 border-b">
               <p class="pt-4 text-lg font-semibold">
-                {{ item['name'] }}
+                {{ user.fullname }}
               </p>
-              <p v-if="item['job_title']" class="text-gray-600">
-                {{ item['job_title'] }}
+              <p v-if="user.jabatan" class="text-gray-600">
+                {{ user.jabatan }}
               </p>
             </div>
-            <div class="border-b">
+            <!-- <div class="border-b">
               <a href="#" class="px-2 py-3 hover:bg-gray-200 flex">
                 <div class="pl-3">
                   <p class="font-semibold">
@@ -59,14 +60,14 @@
                   </p>
                 </div>
               </a>
-            </div>
-            <div class="border-b">
+            </div> -->
+            <!-- <div class="border-b">
               <div class="px-4 py-4 text-center">
                 <router-link to="/profile/edit/personal" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">
                   Edit Profile
                 </router-link>
               </div>
-            </div>
+            </div> -->
           </div>
         </template>
         <template v-else>
