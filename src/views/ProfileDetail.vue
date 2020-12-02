@@ -6,7 +6,7 @@
       <template v-if="user && !loading">
         <template v-if="!error">
           <div class="bg-white m-0 mt-24 lg:mt-32 sm:rounded shadow">
-            <div class="flex mx-auto justify-center absolute inset-x-0" style="top: 18%;">
+            <div class="flex mx-auto justify-center absolute inset-x-0" style="top: 28%;">
               <a :href="user.photo">
                 <img class="h-24 w-24 lg:h-32 lg:w-32 rounded-full mx-auto" :src="user.photo" :alt="user.fullname" />
               </a>
