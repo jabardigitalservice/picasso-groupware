@@ -1,5 +1,5 @@
 import _cloneDeep from 'lodash/cloneDeep'
-import pMinDelay from 'p-min-delay'
+// import pMinDelay from 'p-min-delay'
 import { GroupwareAPI } from '../../lib/axios'
 
 export const state = () => ({
@@ -13,14 +13,14 @@ export const mutations = {
 }
 
 export const actions = {
-  getLogbookList ({ state, commit }, params = {}) {
-    const get = GroupwareAPI.get('/logbook/', {
+  async getLogbookList ({ state, commit }, params = {}) {
+    const get = await GroupwareAPI.get('/logbook/', {
       params: {
         sort: 'dateTask',
         ...params
       }
     }).then(r => r.data)
-    return pMinDelay(get, 1000)
+    return get
   },
   async getLogbookById (_, { id }) {
     if (typeof id !== 'string' || !id.length) {

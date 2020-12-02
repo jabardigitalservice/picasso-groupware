@@ -5,12 +5,12 @@
                             class="w-full md:mb-8 mx-auto bg-transparent md:bg-gray-300"/>
       <template v-if="user && !loading">
         <template v-if="!error">
-          <div class="flex mx-auto justify-center" style="position: absolute;height: 100%;top: 18%;left:40%;">
-            <a :href="user.photo">
-              <img class="h-24 w-24 lg:h-32 lg:w-32 rounded-full mx-auto" :src="user.photo" :alt="user.fullname" />
-            </a>
-          </div>
-          <div class="bg-white m-0 mt-24 lg:mt-28 sm:rounded shadow">
+          <div class="bg-white m-0 mt-24 lg:mt-32 sm:rounded shadow">
+            <div class="flex mx-auto justify-center absolute inset-x-0" style="top: 18%;">
+              <a :href="user.photo">
+                <img class="h-24 w-24 lg:h-32 lg:w-32 rounded-full mx-auto" :src="user.photo" :alt="user.fullname" />
+              </a>
+            </div>
             <div class="text-center p-6 border-b">
               <p class="pt-4 text-lg font-semibold">
                 {{ user.fullname }}
@@ -18,6 +18,9 @@
               <p v-if="user.jabatan" class="text-gray-600">
                 {{ user.jabatan }}
               </p>
+            </div>
+            <div class="w-full p-2">
+              <AttendanceCardUser />
             </div>
             <!-- <div class="border-b">
               <a href="#" class="px-2 py-3 hover:bg-gray-200 flex">
@@ -98,12 +101,14 @@ import { mapGetters } from 'vuex'
 import { ContentLoader } from 'vue-content-loader'
 import { formatDateTimeShort, formatDateLong } from '@/lib/date'
 import { analytics } from '@/lib/firebase'
+import AttendanceCardUser from '@/components/Dashboard/AttendanceCardUser'
 
 export default {
   middleware: 'check-auth',
 
   components: {
     ContentLoader,
+    AttendanceCardUser,
     DataCompletionStatus: () => import('../components/Profile/Edit/DataCompletionStatus')
   },
 

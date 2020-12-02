@@ -33,14 +33,16 @@ export const actions = {
     commit('setReportUser', items.data)
     commit('setLoading', false)
   },
-  getDashboardAttendanceUser ({ commit }, { month = null } = {}) {
+  async getDashboardAttendanceUser ({ commit }, { month = null } = {}) {
     commit('setLoading', true)
-    const items = GroupwareAPI.get('dashboard/attendance-user', {
+
+    const items = await GroupwareAPI.get('dashboard/attendance-user', {
       params: {
         month: month
       }
     }).then(r => r.data)
-    commit('setAttendanceUser', items)
+
+    commit('setAttendanceUser', items.data)
     commit('setLoading', false)
   }
 }
