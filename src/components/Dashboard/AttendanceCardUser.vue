@@ -43,7 +43,7 @@
             <i class="fa fa-running fa-5x lg:fa-3x" />
           </div>
           <div class="relative">
-            <div class="absolute bottom-0 text-center text-xl mb-2 sm:my-12 lg:my-10">
+            <div class="absolute bottom-0 right-0 text-center text-xl mb-2 sm:my-12 lg:my-10 lg:mr-16" style="right: 5%;">
                 <b class="text-white">Terlambat</b>
                 <div class="text-white">
                 {{ itemsAttendanceUser.total_late_presence }}
@@ -166,7 +166,8 @@ export default {
   },
 
   mounted () {
-    this.loadData(this.month)
+    const d = new Date()
+    this.loadData(d.getMonth() + 1)
   },
 
   methods: {
