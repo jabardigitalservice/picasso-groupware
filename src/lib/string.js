@@ -6,7 +6,7 @@ export function replaceNewLine (string) {
   return string.replace(new RegExp('\\n', 'g'), '\n')
 }
 
-export const googleDriveUrl = 'https://drive.google.com/uc?export=view&id='
+export const googleDriveUrl = 'https://drive.google.com/thumbnail?&id='
 
 export function getIdFromUrl (url) {
   let idImage = url.match(/[-\w]{25,}/)

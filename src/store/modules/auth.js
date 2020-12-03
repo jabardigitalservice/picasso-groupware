@@ -107,7 +107,7 @@ export const actions = {
       await GroupwareAPI.get('/user/info')
         .then(r => r.data.data)
         .then(profile => {
-          const urlPhoto = googleDriveUrl + getIdFromUrl(profile.photo)
+          const urlPhoto = googleDriveUrl + getIdFromUrl(profile.photo) + '&sz=w{{200}}-h{{100}}'
           commit(types.SET_USER, {
             user: {
               ...profile,
