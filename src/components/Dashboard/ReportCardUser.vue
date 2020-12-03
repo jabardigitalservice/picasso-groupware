@@ -6,13 +6,13 @@
           <div class="text-center ml-4 mr-2 pt-1">
             <b class="text-xs text-center text-white">Laporan Bulan Ini</b>
             <div class="text-center text-white text-2xl">
-              {{ itemsReportUser.total_report_month }}
+              {{ itemsReportUser.total_report_month }} <span class="text-sm">Task</span>
             </div>
           </div>
           <div class="text-center mr-2 sm:pl-8 lg:pr-8">
             <b class="text-xs text-justify text-white">Total Laporan Tahun Ini</b>
             <div class="text-1md text-center text-white">
-              {{ itemsReportUser.total_report_year }}
+              {{ itemsReportUser.total_report_year }} <span class="text-xs">Task</span>
             </div>
           </div>
         </div>
@@ -20,13 +20,13 @@
           <div class="text-center ml-4 mr-2 pt-1">
             <b class="text-xs text-justify text-white">Jam Kerja Bulan Ini</b>
             <div class="text-center text-white text-2xl">
-              {{ itemsReportUser.total_office_hour_month }}
+              {{ itemsReportUser.total_office_hour_month }} <span class="text-sm">Jam</span>
             </div>
           </div>
           <div class="text-center pb-3 mr-2 sm:pl-8 lg:pr-8">
             <b class="text-xs text-center text-white">Total Jam Kerja Tahun Ini</b>
             <div class="center text-white text-1md">
-                {{ itemsReportUser.total_office_hour_year }}
+                {{ itemsReportUser.total_office_hour_year }} <span class="text-xs">Jam</span>
             </div>
           </div>
         </div>
