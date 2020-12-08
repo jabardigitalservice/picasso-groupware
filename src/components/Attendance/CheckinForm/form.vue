@@ -158,14 +158,19 @@ export default {
     getCurrentHourAndMinute () {
       const today = new Date()
       let currentHour = today.getHours()
-      if (currentHour < 10) {
-        currentHour = `0${currentHour}`
-      }
-      let currentMinute = Math.ceil(today.getMinutes() / 5) * 5
+
+      let currentMinute = Math.round(today.getMinutes() / 5) * 5
       if (currentMinute < 10) {
         currentMinute = `0${currentMinute}`
+      } else if (currentMinute === 60) {
+        currentMinute = '00'
+        currentHour += 1
       } else {
         currentMinute = currentMinute.toString()
+      }
+
+      if (currentHour < 10) {
+        currentHour = `0${currentHour}`
       }
       this.checkinHour = currentHour
       this.checkinMinute = currentMinute
