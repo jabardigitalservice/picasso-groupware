@@ -9,6 +9,12 @@
           </router-link>
         </div>
         <div v-if="user" class="text-center px-2 py-1">
+          <router-link class="no-underline text-gray-700 block" to="/profile">
+            <i class="far fa-user text-lg" />
+            <p class="text-xs">Profile</p>
+          </router-link>
+        </div>
+        <div v-if="user" class="text-center px-2 py-1">
           <router-link class="no-underline text-gray-700 block" to="/messages">
             <i class="far fa-bell text-lg" />
             <p class="text-xs">Messages</p>

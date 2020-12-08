@@ -18,3 +18,8 @@ export const STAKEHOLDER = {
   COORDINATOR: 'Koor',
   WORK_PARTNER: 'Rekan Kerja'
 }
+
+export const listMonths = [
+  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+]
