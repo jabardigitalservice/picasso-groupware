@@ -22,6 +22,7 @@
               </div>
             </template>
             <template v-else>
+              <ReportCardUser class="w-full flex-col" />
               <AttendanceButton class="w-full"/>
               <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
                 <component :is="getMenuLinkComponent(m)" v-bind="getMenuLinkProps(m)" >
@@ -55,6 +56,7 @@
 import { mapGetters } from 'vuex'
 import LoginButton from '@/components/LoginButton'
 import LoginByGoogleButton from '@/components/LoginByGoogleButton'
+import ReportCardUser from '@/components/Dashboard/ReportCardUser'
 import HomeBannerList from '@/components/HomeBannerList'
 import AnnouncementList from '@/components/Announcement/AnnouncementList'
 import HomeArticleList from '@/components/HomeArticleList'
@@ -100,6 +102,7 @@ export default {
     HomeBannerList,
     AnnouncementList,
     HomeArticleList,
+    ReportCardUser,
     LoginButton,
     LoginByGoogleButton,
     UserInfo,
