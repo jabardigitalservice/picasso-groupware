@@ -9,9 +9,13 @@ export function replaceNewLine (string) {
 export const googleDriveUrl = 'https://drive.google.com/thumbnail?&id='
 
 export function getIdFromUrl (url) {
-  let idImage = url.match(/[-\w]{25,}/)
-  if (idImage.length > 0) {
-    idImage = idImage[0]
+  // ensure that url is string, so `match` is a valid property
+  if (typeof url === 'string' && url.length) {
+    let idImage = url.match(/[-\w]{25,}/)
+    if (idImage.length > 0) {
+      idImage = idImage[0]
+    }
+    return idImage
   }
-  return idImage
+  return null
 }
