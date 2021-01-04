@@ -4,7 +4,9 @@ import 'firebase/storage'
 import 'firebase/messaging'
 import 'firebase/analytics'
 
-import { firebaseConfig } from '@/config'
+import { getFirebaseConfig } from '@/config'
+
+const firebaseConfig = getFirebaseConfig()
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
