@@ -23,3 +23,7 @@ export const listMonths = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ]
+
+export const ASSETS = {
+  AVATAR_PLACEHOLDER: '/img/user.svg'
+}
