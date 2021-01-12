@@ -6,8 +6,11 @@
       <template v-if="user">
         <div class="bg-white m-0 mt-24 lg:mt-32 sm:rounded shadow">
           <div class="flex mx-auto justify-center absolute inset-x-0 photo-center">
-            <a :href="user.photo">
-              <img class="transform rotate-0 h-24 w-24 lg:h-32 lg:w-32 rounded-full mx-auto" :src="user.photo" :alt="user.fullname" />
+            <a :href="user.photo || null">
+              <img
+                class="transform rotate-0 h-24 w-24 lg:h-32 lg:w-32 rounded-full mx-auto"
+                :src="user.photo || AVATAR_PLACEHOLDER"
+                :alt="user.fullname" />
             </a>
           </div>
           <div class="text-center p-6 border-b">
@@ -91,6 +94,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { ContentLoader } from 'vue-content-loader'
+import { ASSETS } from '@/lib/constants'
 import { formatDateTimeShort, formatDateLong } from '@/lib/date'
 import AttendanceCardUser from '@/components/Dashboard/AttendanceCardUser'
 
@@ -105,6 +109,12 @@ export default {
 
   metaInfo: {
     title: 'My Profile'
+  },
+
+  data () {
+    return {
+      AVATAR_PLACEHOLDER: ASSETS.AVATAR_PLACEHOLDER
+    }
   },
 
   computed: mapGetters({
