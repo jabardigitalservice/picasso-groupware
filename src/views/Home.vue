@@ -86,7 +86,7 @@ const menuItems = Object.freeze([
   },
   {
     name: 'Booking',
-    href: ['https://digitalservice.skedda.com/booking', '_blank'],
+    href: ['https://bit.ly/SkeddaBooking-JDS', '_blank'],
     icon: 'fa fa-book'
   },
   {
