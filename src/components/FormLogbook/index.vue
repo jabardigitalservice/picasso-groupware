@@ -139,7 +139,7 @@
         :disabled="!isEditable"
         :block="false"
         :options="documentTypeOptions"
-        :required="false"
+        :required="true"
         :value="selectedDocumentType"
         @change="onDocumentTypeSelectionChanged"
       >
@@ -158,10 +158,14 @@
         name="documentTask"
         title="File Dokumen"
         placeholder="Pilih file"
+        rules="required"
         :disabled="!isEditable"
         :url.sync="payload.documentTaskURL"
         :path="payload.documentTaskPath"
-        :required="false"
+        :required="true"
+        :custom-messages="{
+          required: 'Dokumen harus diisi',
+        }"
       >
         <template #title>
           <span></span>
@@ -175,11 +179,12 @@
         title="Link Dokumen"
         placeholder="https://"
         :disabled="!isEditable"
-        :rules="{regex: /^https?:\/\//}"
+        :rules="{ required: true, regex: /^https?:\/\//}"
         :custom-messages="{
+          required: 'Link dokumen harus diisi',
           regex: 'Link harus dalam bentuk URL yang valid'
         }"
-        :required="false"
+        :required="true"
         v-model="documentTaskLink"
       >
         <template #title>
