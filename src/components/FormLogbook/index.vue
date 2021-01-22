@@ -194,7 +194,7 @@
             bentuk <i>offline</i>, maka silahkan <i>upload</i> terlebih dahulu ke
             <a
               class="underline text-brand-blue"
-              href="https://drive.google.com/drive/u/0/my-drive"
+              :href="jdsGoogleDriveLink"
               target="_blank">
               <b>Google Drive</b>
             </a> atau <i>storage</i> lain untuk kemudian di <i>attach</i> disini.
@@ -303,8 +303,14 @@ export default {
     }
   },
   data () {
+    const {
+      VUE_APP_JDS_PUBLIC_DRIVE: jdsGoogleDriveLink,
+      VUE_APP_ADMIN_WHATSAPP_NUMBER: adminWhatsappNumber
+    } = process.env
+    const adminWhatsappBacklink = `https://api.whatsapp.com/send?phone=${adminWhatsappNumber}&text=Usulan nama project/product anda`
     return {
-      adminWhatsappBacklink: `https://api.whatsapp.com/send?phone=+6283822344237&text=Usulan nama project/product anda`,
+      adminWhatsappBacklink,
+      jdsGoogleDriveLink,
       originalData: null,
       payload: Object.assign({}, modelData),
       mainTaskOptions: [
