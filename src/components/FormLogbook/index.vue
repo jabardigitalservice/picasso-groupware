@@ -126,13 +126,15 @@
         }"
       >
         <template #subtitle>
-          <span class="font-bold text-gray-500">
+          <span class="text-gray-700">
             File tidak boleh lebih dari 5MB
           </span>
         </template>
       </FormInputEvidence>
       <br />
+      <!-- temporarily disable document upload -->
       <FormRadioButtonGroup
+        v-if="false"
         class="mb-2"
         name="selectedDocumentType"
         title="Dokumen"
@@ -152,8 +154,9 @@
           </span>
         </template>
       </FormRadioButtonGroup>
+      <!-- temporarily disable document upload -->
       <FormInputDocument
-        v-if="isUsingFileAsDocument"
+        v-if="false"
         ref="formInputDocumentFile"
         name="documentTask"
         title="File Dokumen"
@@ -172,23 +175,30 @@
         </template>
       </FormInputDocument>
       <FormInput
-        v-if="isUsingLinkAsDocument"
         ref="formInputDocumentLink"
         type="text"
         name="documentTask"
         title="Link Dokumen"
         placeholder="https://"
         :disabled="!isEditable"
-        :rules="{ required: true, regex: /^https?:\/\//}"
+        :rules="{ regex: /^https?:\/\//}"
         :custom-messages="{
-          required: 'Link dokumen harus diisi',
           regex: 'Link harus dalam bentuk URL yang valid'
         }"
-        :required="true"
+        :required="false"
         v-model="documentTaskLink"
       >
-        <template #title>
-          <span></span>
+        <template #subtitle>
+          <p class="text-gray-700">
+            Silahkan <i>attach link</i> hasil kerja disini. Jika file yang dikerjakan dalam
+            bentuk <i>offline</i>, maka silahkan <i>upload</i> terlebih dahulu ke
+            <a
+              class="underline text-brand-blue"
+              :href="jdsGoogleDriveLink"
+              target="_blank">
+              <b>Google Drive JDS</b>
+            </a> atau <i>storage online</i> lain untuk kemudian di <i>attach</i> disini.
+          </p>
         </template>
       </FormInput>
       <br />
@@ -293,8 +303,14 @@ export default {
     }
   },
   data () {
+    const {
+      VUE_APP_JDS_PUBLIC_DRIVE: jdsGoogleDriveLink,
+      VUE_APP_ADMIN_WHATSAPP_NUMBER: adminWhatsappNumber
+    } = process.env
+    const adminWhatsappBacklink = `https://api.whatsapp.com/send?phone=${adminWhatsappNumber}&text=Usulan nama project/product anda`
     return {
-      adminWhatsappBacklink: `https://api.whatsapp.com/send?phone=+6283822344237&text=Usulan nama project/product anda`,
+      adminWhatsappBacklink,
+      jdsGoogleDriveLink,
       originalData: null,
       payload: Object.assign({}, modelData),
       mainTaskOptions: [
