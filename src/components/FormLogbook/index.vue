@@ -181,12 +181,11 @@
         title="Link Dokumen"
         placeholder="https://"
         :disabled="!isEditable"
-        :rules="{ required: true, regex: /^https?:\/\//}"
+        :rules="{ regex: /^https?:\/\//}"
         :custom-messages="{
-          required: 'Link dokumen harus diisi',
           regex: 'Link harus dalam bentuk URL yang valid'
         }"
-        :required="true"
+        :required="false"
         v-model="documentTaskLink"
       >
         <template #subtitle>
