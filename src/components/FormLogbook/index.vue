@@ -196,7 +196,7 @@
               class="underline text-brand-blue"
               :href="jdsGoogleDriveLink"
               target="_blank">
-              <b>Google Drive</b>
+              <b>Google Drive JDS</b>
             </a> atau <i>storage</i> lain untuk kemudian di <i>attach</i> disini.
           </p>
         </template>
