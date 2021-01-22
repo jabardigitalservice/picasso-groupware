@@ -197,7 +197,7 @@
               :href="jdsGoogleDriveLink"
               target="_blank">
               <b>Google Drive JDS</b>
-            </a> atau <i>storage</i> lain untuk kemudian di <i>attach</i> disini.
+            </a> atau <i>storage online</i> lain untuk kemudian di <i>attach</i> disini.
           </p>
         </template>
       </FormInput>
