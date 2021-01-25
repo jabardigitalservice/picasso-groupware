@@ -1,6 +1,12 @@
 <template>
   <div>
     <ValidationObserver #default="{handleSubmit}">
+      <FormInputTupoksi
+        name="tupoksiJabatanId"
+        :show-as-readonly-input="isViewingOnly"
+        :disabled="!isEditable"
+        v-model="payload.tupoksiJabatanId" />
+      <br />
       <FormInputProject
         name="projectId"
         title="Nama Proyek"
@@ -238,8 +244,8 @@
 </template>
 
 <script>
+import FormInputTupoksi from './InputTupoksi'
 import FormInputProject from './InputProjectAutocomplete'
-// import FormSelect from '../Form/Select'
 import FormInput from '../Form/Input'
 import FormInputEvidence from '../Form/EvidenceImageInput'
 import FormInputDocument from '../Form/DocumentFileInput'
@@ -261,7 +267,8 @@ const modelData = {
   'organizerTask': null, // ?,
   'isMainTask': null,
   'isDocumentLink': true,
-  'workPlace': null
+  'workPlace': null,
+  'tupoksiJabatanId': null
 }
 
 const ACTION = {
@@ -278,7 +285,7 @@ const ACTIONS = [
 
 export default {
   components: {
-    // FormSelect,
+    FormInputTupoksi,
     FormInputProject,
     FormInput,
     FormInputEvidence,
