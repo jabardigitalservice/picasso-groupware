@@ -49,10 +49,6 @@ export default {
       type: String,
       required: true
     },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
     value: {
       type: [String, Number],
       default: ''

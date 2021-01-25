@@ -4,7 +4,6 @@
       <FormInputTupoksi
         name="tupoksiJabatanId"
         :show-as-readonly-input="isViewingOnly"
-        :disabled="!isEditable"
         v-model="payload.tupoksiJabatanId" />
       <br />
       <FormInputProject
