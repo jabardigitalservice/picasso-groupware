@@ -14,9 +14,10 @@
       </template>
     </FormInputHeader>
     <template v-if="showAsReadonlyInput">
-      <FormInputText
+      <FormInputTextarea
         disabled
         readonly
+        rows="3"
         type="text"
         :name="name"
         :title="title"
@@ -85,12 +86,12 @@
 
 <script>
 import { props, components } from './input-mixin'
-import FormInputText from './Input'
+import FormInputTextarea from './Textarea'
 
 export default {
   components: {
     ...components,
-    FormInputText
+    FormInputTextarea
   },
   model: {
     prop: 'value',
