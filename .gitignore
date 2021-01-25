@@ -25,3 +25,8 @@ yarn.lock
 
 *.code-workspace
 public/vue-env.js
+
+# SonarQube
+sonar-project.properties
+.sonar/
+.scannerwork/
