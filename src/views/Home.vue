@@ -90,9 +90,9 @@ const menuItems = Object.freeze([
     icon: 'fa fa-book'
   },
   {
-    name: 'Administrasi',
-    href: ['https://forms.gle/Mw8uMqKKXS4bWMqW9', '_blank'],
-    icon: 'fa fa-id-card-alt'
+    name: 'Wiki',
+    href: ['https://wiki.digitalservice.id/', '_blank'],
+    icon: 'far fa-file-word'
   }
 ])
 
