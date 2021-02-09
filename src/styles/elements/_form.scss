@@ -144,6 +144,33 @@
   }
 }
 
+.form-input-link__wrapper {
+  @apply flex justify-start items-stretch;
+
+  > .form-input__input {
+    margin-bottom: 0;
+  }
+
+  > .form-input-link__btn-open {
+    flex: 0 0 auto;
+    @apply flex justify-center items-center
+    px-4
+    bg-brand-blue;
+
+    > svg {
+      fill: white;
+      @apply w-auto h-5
+      object-contain object-center
+      pointer-events-none;
+    }
+
+    &:disabled,
+    &[disabled] {
+      @apply cursor-not-allowed bg-gray-300;
+    }
+  }
+}
+
 .form-input-container {
   @apply mb-10;
 
