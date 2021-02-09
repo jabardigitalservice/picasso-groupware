@@ -2,7 +2,7 @@
   <ValidationProvider
     rules="required"
     :custom-messages="{
-      required: 'Uraian tugas harus diisi'
+      required: 'Tupoksi jabatan harus diisi'
     }"
     #default="{errors}"
     tag="div"
@@ -11,7 +11,11 @@
       :label-for="name"
       :title="inputTitle"
       :required="isRequired"
-    />
+    >
+      <template #subtitle>
+        Silahkan pilih tupoksi anda dibawah ini sesuai dengan task yang Anda kerjakan.
+      </template>
+    </FormInputHeader>
     <FormInputRadioGroup
       :name="name"
       :options="listOfTupoksi"
@@ -61,7 +65,7 @@ export default {
   data () {
     return {
       isRequired: true,
-      inputTitle: 'Uraian Tugas',
+      inputTitle: 'Tupoksi Jabatan',
       inputValue: null
     }
   },
