@@ -84,33 +84,11 @@
         </template>
       </FormInputEvidence>
       <br />
-      <FormInput
+      <FormInputLink
         ref="formInputDocumentLink"
-        type="text"
-        name="documentTask"
-        title="Lampiran Link Hasil Kerja*"
-        placeholder="https://"
-        :disabled="!isEditable"
-        :rules="{ required: true, regex: /^https?:\/\//}"
-        :custom-messages="{
-          required: 'Lampiran hasil kerja harus diisi',
-          regex: 'Lampiran hasil kerja harus dalam bentuk URL yang valid'
-        }"
+        :show-as-readonly-link="!isEditable"
         v-model="documentTaskLink"
-      >
-        <template #subtitle>
-          <p class="text-gray-700">
-            Jika file hasil kerja berbentuk <i>offline</i> ataupun <i>private</i>, silakan terlebih dahulu
-            di <i>screenshot</i> hasil kerja lalu diupload ke
-            <a class="underline text-brand-blue"
-              :href="jdsGoogleDriveLink"
-              target="_blank">
-              <i>cloud storage JDS</i>
-            </a>
-            , dan simpan <i>link</i>-nya dibawah ini:
-          </p>
-        </template>
-      </FormInput>
+      />
       <br />
       <FormInput
         name="workPlace"
@@ -162,6 +140,7 @@
 
 <script>
 import FormInputTupoksi from './InputTupoksi'
+import FormInputLink from './InputLink'
 import FormInputProject from './InputProjectAutocomplete'
 import FormInput from '../Form/Input'
 import FormInputEvidence from '../Form/EvidenceImageInput'
@@ -196,6 +175,7 @@ const ACTIONS = [
 export default {
   components: {
     FormInputTupoksi,
+    FormInputLink,
     FormInputProject,
     FormInput,
     FormInputEvidence,
@@ -219,25 +199,13 @@ export default {
   },
   data () {
     const {
-      VUE_APP_JDS_PUBLIC_DRIVE: jdsGoogleDriveLink,
       VUE_APP_ADMIN_WHATSAPP_NUMBER: adminWhatsappNumber
     } = process.env
     const adminWhatsappBacklink = `https://api.whatsapp.com/send?phone=${adminWhatsappNumber}&text=Usulan nama project/product anda`
     return {
       adminWhatsappBacklink,
-      jdsGoogleDriveLink,
       originalData: null,
       payload: Object.assign({}, modelData),
-      mainTaskOptions: [
-        {
-          value: true,
-          label: 'Tugas Pokok'
-        },
-        {
-          value: false,
-          label: 'Tugas Tambahan'
-        }
-      ],
       documentTaskLink: null,
 
       maxDateTime: new Date().toISOString()
