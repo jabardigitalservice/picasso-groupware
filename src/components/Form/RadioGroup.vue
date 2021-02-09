@@ -21,7 +21,7 @@
         type="text"
         :name="name"
         :title="title"
-        :value="selectedOptionLabel"
+        :value="selectedOptionLabel || '-'"
       />
     </template>
     <template v-else>
