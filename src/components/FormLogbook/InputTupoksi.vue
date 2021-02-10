@@ -12,7 +12,9 @@
       :title="inputTitle"
       :required="isRequired"
     >
-      <template #subtitle>
+      <template
+        #subtitle
+        v-if="!showAsReadonlyInput">
         Silahkan pilih tupoksi anda dibawah ini sesuai dengan task yang Anda kerjakan.
       </template>
     </FormInputHeader>
