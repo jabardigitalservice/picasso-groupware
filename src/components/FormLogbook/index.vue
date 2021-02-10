@@ -1,19 +1,14 @@
 <template>
   <div>
-    <ValidationObserver #default="{handleSubmit}">
-      <FormInputTupoksi
-        name="tupoksiJabatanId"
-        :show-as-readonly-input="isViewingOnly"
-        v-model="payload.tupoksiJabatanId" />
-      <br />
+    <ValidationObserver ref="validationObserver">
       <FormInputProject
         name="projectId"
-        title="Nama Proyek"
+        title="Nama Project"
         type="text"
         :disabled="!isEditable"
         rules="required"
         :custom-messages="{
-          required: 'Nama proyek harus diisi'
+          required: 'Nama project harus diisi'
         }"
         :value="payload.projectName"
         @change="onSelectedProjectChanged"
@@ -24,7 +19,7 @@
         >
           <p>
             <i class="text-gray-600">
-              Nama proyek/produk tidak ada? Kontak admin via
+              Nama project Anda tidak ada? Kontak admin via
             </i>
             <a
               class="cursor-pointer hover:underline"
@@ -39,93 +34,45 @@
       <br />
       <FormInput
         name="nameTask"
-        title="Nama Tugas"
+        title="Nama Task"
         type="text"
         :disabled="!isEditable"
         rules="required"
         :custom-messages="{
-          required: 'Nama tugas harus diisi'
+          required: 'Nama task harus diisi'
         }"
         v-model="payload.nameTask"
       />
       <br />
+      <FormInputTupoksi
+        name="tupoksiJabatanId"
+        :show-as-readonly-input="isViewingOnly"
+        v-model="payload.tupoksiJabatanId" />
+      <br />
       <FormInputDateTime
         name="dateTask"
-        title="Tanggal"
+        title="Tanggal Pengerjaan"
         type="date"
         :disabled="!isEditable"
         :max-datetime="maxDateTime"
         rules="required"
         :custom-messages="{
-          required: 'Tanggal harus diisi'
+          required: 'Tanggal pengerjaan harus diisi'
         }"
         v-model="payload.dateTask"
-      />
-      <br />
-      <FormInput
-        name="workPlace"
-        title="Tempat"
-        type="text"
-        placeholder="Tempat bekerja"
-        :disabled="!isEditable"
-        rules="required"
-        :custom-messages="{
-          required: 'Tempat bekerja harus diisi'
-        }"
-        v-model="payload.workPlace"
-      />
-      <br />
-      <div class="relative">
-        <FormRadioButtonGroup
-          name="difficultyTask"
-          title="Tingkat Kesulitan"
-          :options="[1,2,3,4,5]"
-          :disabled="!isEditable"
-          rules="required"
-          :custom-messages="{
-            required: 'Tingkat kesulitan harus diisi'
-          }"
-          v-model="payload.difficultyTask"
-        >
-          <template #subtitle>
-            <div class="flex justify-between font-bold text-gray-500">
-              <small>
-                Sangat Mudah
-              </small>
-              <small>
-                Sangat Sulit
-              </small>
-            </div>
-          </template>
-        </FormRadioButtonGroup>
-      </div>
-      <br />
-      <FormRadioButtonGroup
-        class="mb-2"
-        name="isMainTask"
-        title="Jenis Tugas"
-        :block="true"
-        :options="mainTaskOptions"
-        :disabled="!isEditable"
-        :required="true"
-        rules="required"
-        :custom-messages="{
-          required: 'Jenis tugas harus diisi'
-        }"
-        v-model="payload.isMainTask"
       />
       <br />
       <FormInputEvidence
         ref="formInputEvidence"
         name="evidenceTask"
-        title="Screenshot / Foto Hasil Kerja"
+        title="Foto Hasil Kerja/Foto Kegiatan*"
         :url.sync="payload.evidenceTaskURL"
         :path="payload.evidenceTaskPath"
         :disabled="!isEditable"
         rules="required|mimes:image/*|size:5120"
         accept="image/*"
         :custom-messages="{
-          required: 'Evidence harus diisi',
+          required: 'Foto harus diisi',
           mimes: 'File harus berupa gambar',
           size: 'Gambar tidak boleh lebih dari 5MB'
         }"
@@ -137,75 +84,24 @@
         </template>
       </FormInputEvidence>
       <br />
-      <!-- temporarily disable document upload -->
-      <FormRadioButtonGroup
-        v-if="false"
-        class="mb-2"
-        name="selectedDocumentType"
-        title="Dokumen"
-        :disabled="!isEditable"
-        :block="false"
-        :options="documentTypeOptions"
-        :required="true"
-        :value="selectedDocumentType"
-        @change="onDocumentTypeSelectionChanged"
-      >
-        <template #subtitle>
-          <span
-            v-if="!isViewingOnly"
-            class="font-bold text-gray-500"
-          >
-            *Pilih salah satu
-          </span>
-        </template>
-      </FormRadioButtonGroup>
-      <!-- temporarily disable document upload -->
-      <FormInputDocument
-        v-if="false"
-        ref="formInputDocumentFile"
-        name="documentTask"
-        title="File Dokumen"
-        placeholder="Pilih file"
-        rules="required"
-        :disabled="!isEditable"
-        :url.sync="payload.documentTaskURL"
-        :path="payload.documentTaskPath"
-        :required="true"
-        :custom-messages="{
-          required: 'Dokumen harus diisi',
-        }"
-      >
-        <template #title>
-          <span></span>
-        </template>
-      </FormInputDocument>
-      <FormInput
+      <FormInputLink
         ref="formInputDocumentLink"
-        type="text"
-        name="documentTask"
-        title="Link Dokumen"
-        placeholder="https://"
-        :disabled="!isEditable"
-        :rules="{ regex: /^https?:\/\//}"
-        :custom-messages="{
-          regex: 'Link harus dalam bentuk URL yang valid'
-        }"
-        :required="false"
+        :show-as-readonly-link="!isEditable"
         v-model="documentTaskLink"
-      >
-        <template #subtitle>
-          <p class="text-gray-700">
-            Silahkan <i>attach link</i> hasil kerja disini. Jika file yang dikerjakan dalam
-            bentuk <i>offline</i>, maka silahkan <i>upload</i> terlebih dahulu ke
-            <a
-              class="underline text-brand-blue"
-              :href="jdsGoogleDriveLink"
-              target="_blank">
-              <b>Google Drive JDS</b>
-            </a> atau <i>storage online</i> lain untuk kemudian di <i>attach</i> disini.
-          </p>
-        </template>
-      </FormInput>
+      />
+      <br />
+      <FormInput
+        name="workPlace"
+        title="Tempat Pengerjaan"
+        type="text"
+        placeholder="Tempat pengerjaan"
+        :disabled="!isEditable"
+        rules="required"
+        :custom-messages="{
+          required: 'Tempat pengerjaan harus diisi'
+        }"
+        v-model="payload.workPlace"
+      />
       <br />
       <FormInput
         type="text"
@@ -233,7 +129,7 @@
         <button
           class="button focus:outline-none
                  bg-brand-blue hover:bg-brand-blue-lighter text-white"
-          @click="handleSubmit(beforeSave)"
+          @click="beforeSave"
         >
           Save
         </button>
@@ -244,18 +140,12 @@
 
 <script>
 import FormInputTupoksi from './InputTupoksi'
+import FormInputLink from './InputLink'
 import FormInputProject from './InputProjectAutocomplete'
 import FormInput from '../Form/Input'
 import FormInputEvidence from '../Form/EvidenceImageInput'
-import FormInputDocument from '../Form/DocumentFileInput'
 import FormInputDateTime from '../Form/InputDateTime'
-import FormRadioButtonGroup from '../Form/RadioButtonGroup'
 import _cloneDeep from 'lodash/cloneDeep'
-
-const DOCUMENT_TYPE = {
-  FILE: 'FILE',
-  LINK: 'LINK'
-}
 
 const modelData = {
   'dateTask': new Date().toISOString(), // timestamptz '2020-06-11T06:55:24.698Z'
@@ -285,12 +175,11 @@ const ACTIONS = [
 export default {
   components: {
     FormInputTupoksi,
+    FormInputLink,
     FormInputProject,
     FormInput,
     FormInputEvidence,
-    FormInputDocument,
-    FormInputDateTime,
-    FormRadioButtonGroup
+    FormInputDateTime
   },
   props: {
     action: {
@@ -310,36 +199,13 @@ export default {
   },
   data () {
     const {
-      VUE_APP_JDS_PUBLIC_DRIVE: jdsGoogleDriveLink,
       VUE_APP_ADMIN_WHATSAPP_NUMBER: adminWhatsappNumber
     } = process.env
     const adminWhatsappBacklink = `https://api.whatsapp.com/send?phone=${adminWhatsappNumber}&text=Usulan nama project/product anda`
     return {
       adminWhatsappBacklink,
-      jdsGoogleDriveLink,
       originalData: null,
       payload: Object.assign({}, modelData),
-      mainTaskOptions: [
-        {
-          value: true,
-          label: 'Tugas Pokok'
-        },
-        {
-          value: false,
-          label: 'Tugas Tambahan'
-        }
-      ],
-      documentTypeOptions: [
-        {
-          value: DOCUMENT_TYPE.LINK,
-          label: 'Link'
-        },
-        {
-          value: DOCUMENT_TYPE.FILE,
-          label: 'File'
-        }
-      ],
-      selectedDocumentType: DOCUMENT_TYPE.LINK,
       documentTaskLink: null,
 
       maxDateTime: new Date().toISOString()
@@ -357,12 +223,6 @@ export default {
     },
     projectOptions () {
       return this.$store.getters['organizations/listOfProjects']
-    },
-    isUsingFileAsDocument () {
-      return this.selectedDocumentType === DOCUMENT_TYPE.FILE
-    },
-    isUsingLinkAsDocument () {
-      return this.selectedDocumentType === DOCUMENT_TYPE.LINK
     }
   },
   watch: {
@@ -380,7 +240,6 @@ export default {
         const { documentTaskURL, isDocumentLink } = logbook
         this.originalData = _cloneDeep(logbook)
         this.payload = logbook
-        this.selectedDocumentType = logbook.isDocumentLink === true ? DOCUMENT_TYPE.LINK : DOCUMENT_TYPE.FILE
         this.documentTaskLink = isDocumentLink ? documentTaskURL : null
       }
     }
@@ -414,15 +273,11 @@ export default {
         this.$set(this.payload, 'projectName', opt.name)
       }
     },
-    onDocumentTypeSelectionChanged (type) {
-      this.selectedDocumentType = type
-      this.$set(this.payload, 'isDocumentLink', type === DOCUMENT_TYPE.LINK)
-    },
     onCancel () {
       if (typeof this.onCancelCallback === 'function') {
         return this.onCancelCallback()
       }
-      this.resetPayload()
+      return this.resetPayload()
     },
     createFormDataToPost () {
       const {
@@ -441,12 +296,7 @@ export default {
       try {
         const evidenceFile = this.$refs.formInputEvidence.getSelectedFile()
         formData.append('evidenceTask', evidenceFile)
-        if (this.isUsingLinkAsDocument) {
-          formData.append('documentTask', this.documentTaskLink)
-        } else if (this.isUsingFileAsDocument) {
-          const documentFile = this.$refs.formInputDocumentFile.getSelectedFile()
-          formData.append('documentTask', documentFile)
-        }
+        formData.append('documentTask', this.documentTaskLink)
         return formData
       } catch (e) {
         return null
@@ -473,12 +323,7 @@ export default {
       try {
         const evidenceFile = this.$refs.formInputEvidence.getSelectedFile()
         formData.append('evidenceTask', evidenceFile)
-        if (this.isUsingLinkAsDocument) {
-          formData.append('documentTask', this.documentTaskLink)
-        } else if (this.isUsingFileAsDocument) {
-          const documentFile = this.$refs.formInputDocumentFile.getSelectedFile()
-          formData.append('documentTask', documentFile)
-        }
+        formData.append('documentTask', this.documentTaskLink)
         return formData
       } catch (e) {
         return null
@@ -513,7 +358,37 @@ export default {
         confirmButtonText: 'Tutup'
       })
     },
-    async beforeSave () {
+    async validateAllInputFields () {
+      const observer = this.$refs.validationObserver
+      if (!observer) {
+        throw new Error('validation observer not found')
+      }
+      const isValid = await observer.validate()
+      if (!isValid) {
+        // scroll viewport onto first error field
+        this.$nextTick(() => {
+          try {
+            const firstError = this.$el.querySelector('.form-input__error-hint')
+            if (firstError) {
+              const { y } = firstError.parentElement.getBoundingClientRect()
+              window.scrollTo({
+                // scroll to error field, with 64px margin top
+                top: window.scrollY + y - 64,
+                behavior: 'smooth'
+              })
+            }
+          } catch (e) {
+            // silent error
+          }
+        })
+      }
+      return isValid
+    },
+    async beforeSave (handler) {
+      const canProceed = await this.validateAllInputFields()
+      if (!canProceed) {
+        return Promise.resolve()
+      }
       const { value: confirm } = await this.$swal.fire({
         title: 'Simpan data?',
         type: 'question',
@@ -524,7 +399,7 @@ export default {
       })
 
       if (!confirm) {
-        return
+        return Promise.resolve()
       }
       return this.onSave()
     },

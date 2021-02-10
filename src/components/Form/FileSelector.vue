@@ -21,7 +21,9 @@
         :disabled="disabled"
         @click="onChooseFile"
       >
-        Pilih
+        <slot name="choose-file-button-text">
+          Pilih
+        </slot>
       </button>
     </div>
     <input
