@@ -77,7 +77,9 @@
           size: 'Gambar tidak boleh lebih dari 5MB'
         }"
       >
-        <template #subtitle>
+        <template
+          v-if="!isViewingOnly"
+          #subtitle>
           <span class="text-gray-700">
             File tidak boleh lebih dari 5MB
           </span>
@@ -152,7 +154,7 @@ const modelData = {
   'projectId': null, // ?
   'projectName': null, // ?
   'nameTask': null, // ?
-  'difficultyTask': null, // number in range of [1, 5],
+  'difficultyTask': '', // must be empty string!
   'organizerTask': null, // ?,
   'isMainTask': null,
   'isDocumentLink': true,
@@ -312,10 +314,12 @@ export default {
         evidenceTaskURL,
         documentTaskPath,
         documentTaskURL,
+        difficultyTask,
         ...rest
       } = this.payload
 
       const formData = new FormData()
+      formData.append('difficultyTask', '')
       Object.entries(rest).forEach(([key, value]) => {
         formData.append(key, value)
       })
