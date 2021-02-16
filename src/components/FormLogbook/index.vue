@@ -314,10 +314,12 @@ export default {
         evidenceTaskURL,
         documentTaskPath,
         documentTaskURL,
+        difficultyTask,
         ...rest
       } = this.payload
 
       const formData = new FormData()
+      formData.append('difficultyTask', '')
       Object.entries(rest).forEach(([key, value]) => {
         formData.append(key, value)
       })
