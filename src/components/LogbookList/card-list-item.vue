@@ -1,50 +1,49 @@
 <template>
   <component :is="tag" class="logbook-cards__card">
-    <div class="logbook-cards__card__main">
-      <div class="logbook-cards__card__header">
-        <i class="block w-16 h-2 rounded-full bg-brand-green"></i>
-        <div class="whitespace-no-wrap">
-          <p class="text-xs">
-            <button
-              class="action-button text-blue-500 border-blue-500 hover:text-white hover:bg-blue-500"
-              @click="onOpenLogbookDetail">
-              <i class="fa fa-eye"></i>
-              <span class="hidden sm:inline-block">
-                Detail
-              </span>
-            </button>
-            <button
-              class="action-button text-green-500 border-green-500 hover:text-white hover:bg-green-500"
-              @click="onEditLogbook">
-              <i class="fa fa-pencil-alt"></i>
-              <span class="hidden sm:inline-block">
-                Edit
-              </span>
-            </button>
-            <button
-              class="action-button text-red-500 border-red-500 hover:text-white hover:bg-red-500"
-              @click="beforeDeleteLogbook">
-              <i class="fa fa-trash"></i>
-              <span class="hidden sm:inline-block">
-                Delete
-              </span>
-            </button>
-          </p>
-        </div>
-        <div class="w-full flex-none">
-          <h3 class="logbook-cards__card__project-name">
-            {{ logbook.projectName }}
-          </h3>
-          <p class="logbook-cards__card__task-date">
-            <span>
-              {{ formatDateLong(logbook.dateTask) }}
-            </span>
-          </p>
-        </div>
+    <div class="logbook-cards__card__header">
+      <div>
+        <i class="logbook-cards__card__index">
+          {{ index }}
+        </i>
       </div>
-      <br/>
-      <p class="logbook-cards__card__task-name">
-        {{ logbook.nameTask }}
+      <div class="whitespace-no-wrap">
+        <button
+          v-for="(action, index) in actions"
+          :key="index"
+          :title="action.title"
+          :class="action.btnClassName"
+          @click="action.clickHandler">
+          <i :class="action.iconClassName"></i>
+        </button>
+      </div>
+    </div>
+    <p class="logbook-cards__card__task-date">
+      <span>
+        {{ formatDateLong(logbook.dateTask, 'eeee, PPP') }}
+      </span>
+    </p>
+    <div class="logbook-cards__card__info-wrapper">
+      <label>Nama Project</label>
+      <p><b>{{ logbook.projectName }}</b></p>
+
+      <label>Nama Task</label>
+      <p>{{ logbook.nameTask }}</p>
+
+      <label>Status Tupoksi</label>
+      <p class="text-xs">
+        <span
+          v-if="hasTupoksi"
+          title="Tupoksi sudah diisi"
+          class="data-status-chip is-success">
+          Sudah Diisi
+        </span>
+        <span
+          v-else
+          title="Tupoksi belum diisi"
+          class="data-status-chip is-danger"
+          @click="onEditLogbook">
+          Belum Diisi
+        </span>
       </p>
     </div>
   </component>
@@ -68,7 +67,28 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      actions: [
+        {
+          btnClassName: 'action-button is-info',
+          iconClassName: 'fa fa-eye',
+          title: 'Detail',
+          clickHandler: this.onOpenLogbookDetail
+        },
+        {
+          btnClassName: 'action-button is-success',
+          iconClassName: 'fa fa-pencil-alt',
+          title: 'Edit',
+          clickHandler: this.onEditLogbook
+        },
+        {
+          btnClassName: 'action-button is-danger',
+          iconClassName: 'fa fa-trash',
+          title: 'Hapus',
+          clickHandler: this.beforeDeleteLogbook
+        }
+      ]
+    }
   }
 }
 </script>
@@ -77,23 +97,15 @@ export default {
 .logbook-cards__card {
   // display: grid;
   // grid-template-columns: auto 1fr;
-  @apply rounded
+  @apply p-4 rounded
   border border-solid border-gray-300;
 
   &__index {
-    min-width: 5ch;
-    @apply
-    p-4
-    border-r border-solid border-gray-300
-    text-2xl text-gray-600;
-  }
-
-  &__main {
-    @apply p-4;
+    @apply mb-2 text-base text-gray-500 font-bold not-italic;
   }
 
   &__header {
-    @apply flex flex-wrap justify-between items-center;
+    @apply flex flex-wrap justify-between items-start;
   }
 
   &__project-name {
@@ -104,33 +116,17 @@ export default {
   }
 
   &__task-date {
-    @apply flex-none text-sm text-gray-600;
-  }
-
-  &__task-name {
-    @apply text-gray-800 text-base;
+    @apply my-2 flex-none text-sm text-gray-700;
   }
 
   &__info-wrapper {
     display: grid;
-    grid-template-columns: auto auto;
-    gap: 1rem 0.5rem;
-    @apply -mx-2;
-  }
+    grid-template-columns: auto 1fr;
+    gap: 1rem 1rem;
+    @apply mt-4 text-sm;
 
-  &__info {
-    @apply p-2 rounded;
-
-    &.is-clickable {
-      @apply cursor-pointer;
-
-      &:hover {
-        @apply bg-gray-200;
-      }
-    }
-
-    & > label {
-      @apply block text-xs text-blue-400 font-bold;
+    > label {
+      @apply text-gray-700;
     }
   }
 
@@ -142,7 +138,7 @@ export default {
     @apply border border-solid
     h-8 mx-1 px-3 py-1
     rounded
-    font-bold;
+    text-xs font-bold;
 
     > span {
       @apply ml-1;
@@ -151,6 +147,27 @@ export default {
     &:hover,
     &:focus {
       @apply outline-none;
+    }
+
+    &.is-info {
+      @apply text-blue-500 border-blue-500;
+      &:hover {
+        @apply  text-white bg-blue-500;
+      }
+    }
+
+    &.is-success {
+      @apply text-green-500 border-green-500;
+      &:hover {
+        @apply  text-white bg-green-500;
+      }
+    }
+
+    &.is-danger {
+      @apply text-red-500 border-red-500;
+      &:hover {
+        @apply  text-white bg-red-500;
+      }
     }
   }
 }
