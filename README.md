@@ -1,7 +1,7 @@
-[![Quality Gate Status](https://sonarqube.rover.digitalservice.id/api/project_badges/measure?project=digiteam-front-office&metric=alert_status)](https://sonarqube.rover.digitalservice.id/dashboard?id=digiteam-front-office)
-[![Maintainability Rating](https://sonarqube.rover.digitalservice.id/api/project_badges/measure?project=digiteam-front-office&metric=sqale_rating)](https://sonarqube.rover.digitalservice.id/dashboard?id=digiteam-front-office)
-[![Reliability Rating](https://sonarqube.rover.digitalservice.id/api/project_badges/measure?project=digiteam-front-office&metric=reliability_rating)](https://sonarqube.rover.digitalservice.id/dashboard?id=digiteam-front-office)
-[![Security Rating](https://sonarqube.rover.digitalservice.id/api/project_badges/measure?project=digiteam-front-office&metric=security_rating)](https://sonarqube.rover.digitalservice.id/dashboard?id=digiteam-front-office)
+[![Quality Gate Status](https://sonar.digitalservice.id/api/project_badges/measure?project=digiteam-front-office&metric=alert_status)](https://sonar.digitalservice.id/dashboard?id=digiteam-front-office)
+[![Maintainability Rating](https://sonar.digitalservice.id/api/project_badges/measure?project=digiteam-front-office&metric=sqale_rating)](https://sonar.digitalservice.id/dashboard?id=digiteam-front-office)
+[![Reliability Rating](https://sonar.digitalservice.id/api/project_badges/measure?project=digiteam-front-office&metric=reliability_rating)](https://sonar.digitalservice.id/dashboard?id=digiteam-front-office)
+[![Security Rating](https://sonar.digitalservice.id/api/project_badges/measure?project=digiteam-front-office&metric=security_rating)](https://sonar.digitalservice.id/dashboard?id=digiteam-front-office)
 
 
 # Digiteam
