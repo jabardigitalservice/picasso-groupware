@@ -2,6 +2,7 @@
   <ValidationProvider
     :rules="rules"
     :custom-messages="customMessages"
+    :disabled="isValidationDisabled"
     #default="{failed, errors}"
     tag="div"
     ref="validator"
@@ -71,6 +72,14 @@ export default {
     }
   },
   computed: {
+    isValidationDisabled () {
+      const { mUrl } = this
+      if (typeof mUrl !== 'string' || !mUrl.length) {
+        return false
+      }
+      // if mUrl starts with these string, assume file either has already been uploaded or changed
+      return ['http', 'blob:'].some((str) => mUrl.startsWith(str))
+    },
     filename () {
       if (this.mFile instanceof File) {
         return this.mFile.name
