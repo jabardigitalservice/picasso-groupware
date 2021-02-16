@@ -154,7 +154,7 @@ const modelData = {
   'projectId': null, // ?
   'projectName': null, // ?
   'nameTask': null, // ?
-  'difficultyTask': '', // number in range of [1, 5],
+  'difficultyTask': '', // must be empty string!
   'organizerTask': null, // ?,
   'isMainTask': null,
   'isDocumentLink': true,
