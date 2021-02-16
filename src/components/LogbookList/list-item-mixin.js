@@ -33,11 +33,20 @@ export default {
       } catch (e) {
         return false
       }
+    },
+    hasTupoksi () {
+      try {
+        const { tupoksiJabatanName } = this.logbook
+        return typeof tupoksiJabatanName === 'string' &&
+          tupoksiJabatanName.length
+      } catch (e) {
+        return false
+      }
     }
   },
   methods: {
-    formatDateLong (value) {
-      return __formatDateLong(new Date(value))
+    formatDateLong (value, format = 'eeee, PP') {
+      return __formatDateLong(new Date(value), format)
     },
     formatTime (value) {
       return __formatTime(new Date(value))
