@@ -86,7 +86,7 @@ const menuItems = Object.freeze([
   },
   {
     name: 'Booking',
-    href: ['https://bit.ly/SkeddaBooking-JDS', '_blank'],
+    href: ['http://s.id/SkeddaBooking-JDS', '_blank'],
     icon: 'fa fa-book'
   },
   {
