@@ -13,60 +13,85 @@
         <slot name="subtitle"></slot>
       </template>
     </FormInputHeader>
-    <div
-      v-for="(opt, index) in options"
-      :key="index"
-      class="mb-2 flex flex-row justify-start items-baseline"
-    >
-      <template v-if="index === 0">
-        <ValidationProvider
-          :rules="rules"
-          :custom-messages="customMessages"
-          ref="validator"
-          tag="div"
-          @hook:mounted="onValidatorMounted"
-        >
+    <template v-if="showAsReadonlyInput">
+      <FormInputTextarea
+        disabled
+        readonly
+        rows="3"
+        type="text"
+        :name="name"
+        :title="title"
+        :value="selectedOptionLabel || '-'"
+      />
+    </template>
+    <template v-else>
+      <div
+        v-for="(opt, index) in options"
+        :key="index"
+        class="mb-2 flex flex-row justify-start items-baseline"
+      >
+        <template v-if="index === 0">
+          <ValidationProvider
+            :rules="rules"
+            :custom-messages="customMessages"
+            ref="validator"
+            tag="div"
+            @hook:mounted="onValidatorMounted"
+          >
+            <input
+              :id="getOptionId(opt)"
+              type="radio"
+              :value="getOptionValue(opt)"
+              :checked="getOptionValue(opt) === value"
+              :name="name"
+              class="mr-2"
+              @change="onChange(opt, $event)"
+            >
+          </ValidationProvider>
+        </template>
+        <template v-else>
           <input
+            :id="getOptionId(opt)"
             type="radio"
-            :value="opt"
-            :checked="opt === value"
+            :value="getOptionValue(opt)"
+            :checked="getOptionValue(opt) === value"
             :name="name"
             class="mr-2"
             @change="onChange(opt, $event)"
           >
-        </ValidationProvider>
-      </template>
-      <template v-else>
-        <input
-          type="radio"
-          :value="opt"
-          :checked="opt === value"
-          :name="name"
-          class="mr-2"
-          @change="onChange(opt, $event)"
-        >
-      </template>
-      <label :for="opt">
-        {{opt}}
-      </label>
-    </div>
-    <p
-      v-if="errors.length"
-      class="form-input__error-hint"
-    >
-      <slot name="error">
-        {{errors[0]}}
-      </slot>
-    </p>
+        </template>
+        <label
+          :for="getOptionId(opt)"
+          class="cursor-pointer">
+          <slot
+            name="option-label"
+            v-bind="{ option: opt, index }">
+            <p class="text-gray-700 ml-2 mb-2">
+              {{ getOptionLabel(opt) }}
+            </p>
+          </slot>
+        </label>
+      </div>
+      <p
+        v-if="errors.length"
+        class="form-input__error-hint"
+      >
+        <slot name="error">
+          {{errors[0]}}
+        </slot>
+      </p>
+    </template>
   </div>
 </template>
 
 <script>
 import { props, components } from './input-mixin'
+import FormInputTextarea from './Textarea'
 
 export default {
   components: {
-    ...components
+    ...components,
+    FormInputTextarea
   },
   model: {
     prop: 'value',
@@ -74,6 +99,10 @@ export default {
   },
   props: {
     ...props,
+    showAsReadonlyInput: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: [String, Number],
       default: null
@@ -82,10 +111,10 @@ export default {
       type: Array,
       default: () => []
     },
-    idKey: {
+    valueKey: {
       type: String
     },
-    valueKey: {
+    labelKey: {
       type: String
     }
   },
@@ -94,7 +123,38 @@ export default {
       errors: []
     }
   },
+  computed: {
+    selectedOptionLabel () {
+      const selectedOpt = this.options.find((opt) => {
+        return this.getOptionValue(opt) === this.value
+      })
+      return this.getOptionLabel(selectedOpt)
+    }
+  },
   methods: {
+    getOptionId (option) {
+      return `opt-${this.name}-${this.getOptionValue(option)}`
+    },
+    getOptionProperty (option, propertyKey) {
+      if (!option || typeof option !== 'object') {
+        throw new TypeError('option is not object like')
+      }
+      return option[propertyKey]
+    },
+    getOptionValue (option) {
+      try {
+        return this.getOptionProperty(option, this.valueKey)
+      } catch (e) {
+        return option
+      }
+    },
+    getOptionLabel (option) {
+      try {
+        return this.getOptionProperty(option, this.labelKey)
+      } catch (e) {
+        return option
+      }
+    },
     onValidatorMounted () {
       this.$watch(
         function () {
@@ -108,7 +168,8 @@ export default {
     },
     onChange (option, event) {
       if (event.target.checked) {
-        this.$emit('change', option)
+        const value = this.getOptionValue(option)
+        this.$emit('change', value)
       }
     }
   }

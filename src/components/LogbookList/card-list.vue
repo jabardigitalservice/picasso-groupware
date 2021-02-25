@@ -8,19 +8,18 @@
       :per-page="perPage"
     >
       <template #default="{ data: logbookListData }">
-        <template v-if="logbookListData.length">
-          <ul class="logbook-cards">
-            <CardListItem
-              v-for="(data, index) in logbookListData"
-              :key="index"
-              tag="li"
-              class="mb-6"
-              :logbook="data"
-              :index="getAbsoluteIndex(index)"
-              @delete:success="onRefreshList"/>
-          </ul>
-        </template>
-        <template v-else> </template>
+        <ul
+          v-if="logbookListData.length"
+          class="logbook-cards">
+          <CardListItem
+            v-for="(data, index) in logbookListData"
+            :key="index"
+            tag="li"
+            class="mb-6"
+            :logbook="data"
+            :index="getAbsoluteIndex(index)"
+            @delete:success="onRefreshList"/>
+        </ul>
       </template>
       <template #pending>
         <CardListItemSkeleton class="my-2" />
@@ -76,7 +75,8 @@ export default {
       totalPage: 0,
       totalCount: 0,
       startDate: null,
-      endDate: null
+      endDate: null,
+      startIndex: 0
     }
   },
   methods: {

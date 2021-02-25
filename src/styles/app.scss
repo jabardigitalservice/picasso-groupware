@@ -151,3 +151,31 @@ i.app-logo {
     animation: anim-shimmering infinite 1.5s linear reverse;
   }
 }
+
+.data-status-chip {
+  min-width: 48px;
+  height: 36px;
+  @apply cursor-pointer
+  inline-flex
+  justify-center items-center
+  px-3 py-1
+  border-solid border
+  rounded-md
+  select-none;
+
+  &:hover {
+    @apply opacity-50;
+  }
+
+  &.is-danger {
+    @apply bg-red-100 border-red-200 text-red-500;
+  }
+
+  &.is-success {
+    @apply bg-green-100 border-green-200 text-green-500;
+  }
+
+  &.is-info {
+    @apply bg-blue-100 border-blue-200 text-blue-500;
+  }
+}

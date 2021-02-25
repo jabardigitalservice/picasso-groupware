@@ -4,7 +4,7 @@
       <div class="v-pagination-container">
         <VPagination v-bind="pagination" />
       </div>
-      <header class="mb-8 flex justify-between items-center">
+      <header class="mb-4 flex justify-between items-center">
         <p class="text-sm text-gray-600">
           <template v-if="totalCount">
             Menampilkan {{ startIndex + 1 }} - {{ endIndex + 1 }} dari total {{ totalCount }} data
@@ -18,23 +18,24 @@
           </button>
         </p>
       </header>
-      <div class="flex justify-center overflow-x-auto overflow-y-hidden">
+      <div class="overflow-x-auto overflow-y-hidden">
         <table class="logbook-table">
           <thead>
             <tr>
-              <th>No.</th>
-              <th>Proyek</th>
-              <th>Tanggal dan Jam</th>
-              <th>Tugas</th>
-              <th>Evidence</th>
-              <th>Dokumen Lainnya</th>
-              <th>Actions</th>
+              <th style="width: 1%;">No.</th>
+              <th style="width: 1%;">Tanggal</th>
+              <th style="width: 1%;">Project</th>
+              <th style="width: 50%;">Task</th>
+              <th style="width: 1%;">Tupoksi</th>
+              <th style="width: 1%;">Foto Kegiatan</th>
+              <th style="width: 1%;">Lampiran</th>
+              <th style="width: 1%;">Action</th>
             </tr>
           </thead>
           <tbody>
             <template v-if="isLoadingLogbookList">
               <tr v-for="i in perPage" :key="`skeleton:${i}`">
-                <td v-for="j in 7" :key="`col:${j}`" class="p-4">
+                <td v-for="j in 8" :key="`col:${j}`" class="p-4">
                   <div class="w-full h-2 rounded-full bg-shimmering" />
                 </td>
               </tr>
@@ -174,7 +175,7 @@ export default {
   @apply w-full text-sm select-text overflow-auto;
 
   th {
-    vertical-align: middle;
+    vertical-align: top;
     &:not([class*="px-0"]) {
       @apply px-4;
     }
