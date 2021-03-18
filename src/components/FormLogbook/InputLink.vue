@@ -16,14 +16,14 @@
   >
     <template #subtitle>
       <p class="text-gray-700">
-        Jika file hasil kerja berbentuk <i>offline</i> ataupun <i>private</i>, silakan terlebih dahulu
-        di <i>screenshot</i> hasil kerja lalu diupload ke
+        Jika file hasil kerja berbentuk <em>offline</em> ataupun <em>private</em>, silakan terlebih dahulu
+        di <em>screenshot</em> hasil kerja lalu diupload ke
         <a class="underline text-brand-blue"
           :href="jdsGoogleDriveLink"
           target="_blank">
-          <i>cloud storage JDS</i>
+          <em>cloud storage JDS</em>
         </a>
-        , dan simpan <i>link</i>-nya dibawah ini:
+        , dan simpan <em>link</em>-nya dibawah ini:
       </p>
     </template>
   </FormInput>

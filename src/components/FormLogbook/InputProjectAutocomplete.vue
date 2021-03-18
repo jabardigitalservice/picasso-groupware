@@ -36,7 +36,7 @@
         <ul>
           <template v-if="isSearching">
             <li key="isSearching" class="form-input-project__result-item text-center">
-              <i class="fa fa-2x fa-circle-notch text-gray-300" />
+              <i aria-hidden="true" class="fa fa-2x fa-circle-notch text-gray-300" />
             </li>
           </template>
           <template v-else-if="results && results.length">

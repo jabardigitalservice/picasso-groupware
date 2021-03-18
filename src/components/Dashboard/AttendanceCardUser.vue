@@ -10,7 +10,7 @@
       <dl class="mx-0 pt-1 grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-2">
         <div class="bg-green-500 overflow-hidden grid grid-cols-2 shadow antialiased rounded-lg">
           <div class="text-center text-white text-7xl ml-4 mr-2 my-8 lg:my-4">
-            <i class="fa fa-user-check fa-2x lg:fa-3x" />
+            <i aria-hidden="true" class="fa fa-user-check fa-2x lg:fa-3x" />
           </div>
           <div class="text-center mr-2 sm:pl-8 lg:pr-8">
             <b class="text-sm text-justify text-white">Sudah Presensi</b>
@@ -24,7 +24,7 @@
         </div>
         <div class="bg-red-600 overflow-hidden grid grid-cols-2 shadow antialiased rounded-lg">
           <div class="text-center text-white text-7xl ml-4 mr-2 my-8 lg:my-4">
-            <i class="fa fa-user-times fa-2x lg:fa-3x" />
+            <i aria-hidden="true" class="fa fa-user-times fa-2x lg:fa-3x" />
           </div>
           <div class="text-center mr-2 sm:pl-8 lg:pr-8">
             <b class="text-sm text-justify text-white">Belum Presensi</b>
@@ -40,7 +40,7 @@
       <dl class="mx-0 pt-1 grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-2">
         <div class="bg-orange-500 overflow-hidden grid grid-cols-2 shadow antialiased rounded-lg">
           <div class="text-center text-white text-7xl ml-4 mr-2 my-8 lg:my-4">
-            <i class="fa fa-running fa-5x lg:fa-3x" />
+            <i aria-hidden="true" class="fa fa-running fa-5x lg:fa-3x" />
           </div>
           <div class="relative">
             <div class="absolute bottom-0 right-0 text-center text-xl mb-2 sm:my-12 lg:my-10 lg:mr-16" style="right: 5%;">
@@ -57,7 +57,7 @@
         <dl class="mx-0 pt-1 grid grid-row-2 gap-2 sm:grid-row-2 lg:grid-row-2">
             <div class="bg-blue-800 overflow-hidden grid grid-cols-2 shadow antialiased rounded-lg">
             <div class="text-center text-white text-7xl ml-4 mr-2 my-8 lg:my-4">
-                <i class="fa fa-building fa-2x lg:fa-3x" />
+                <i aria-hidden="true" class="fa fa-building fa-2x lg:fa-3x" />
             </div>
             <div class="text-center mr-2 sm:pl-8 lg:pr-8">
                 <b class="text-sm text-justify text-white">Ada di Kantor</b>
@@ -71,7 +71,7 @@
             </div>
             <div class="bg-blue-500 overflow-hidden grid grid-cols-2 shadow antialiased rounded-lg">
             <div class="text-center text-white text-7xl ml-4 mr-2 my-8 lg:my-4">
-                <i class="fa fa-book fa-2x lg:fa-3x" />
+                <i aria-hidden="true" class="fa fa-book fa-2x lg:fa-3x" />
             </div>
             <div class="text-center mr-2 sm:pl-8 lg:pr-8">
                 <b class="text-sm text-justify text-white">Izin tidak Masuk</b>
@@ -88,7 +88,7 @@
       <dl class="mx-0 pt-1 grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-2">
         <div class="bg-red-500 overflow-hidden grid grid-cols-2 shadow antialiased rounded-lg">
           <div class="text-center text-white text-7xl ml-4 mr-2 my-8 lg:my-4">
-            <i class="fa fa-calendar-day fa-2x lg:fa-3x" />
+            <i aria-hidden="true" class="fa fa-calendar-day fa-2x lg:fa-3x" />
           </div>
           <div class="text-center mr-2 sm:pl-8 lg:pr-8">
             <b class="text-sm text-justify text-white">Presensi akhir Pekan</b>
@@ -102,7 +102,7 @@
         </div>
         <div class="bg-blue-600 overflow-hidden grid grid-cols-2 shadow antialiased rounded-lg">
           <div class="text-center text-white text-7xl ml-4 mr-2 my-8 lg:my-4">
-            <i class="fa fa-car-side fa-2x lg:fa-3x" />
+            <i aria-hidden="true" class="fa fa-car-side fa-2x lg:fa-3x" />
           </div>
           <div class="text-center mr-2 sm:pl-8 lg:pr-8">
             <b class="text-sm text-justify text-white">Perjadin</b>

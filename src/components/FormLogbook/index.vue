@@ -18,7 +18,7 @@
           #subtitle
         >
           <p>
-            <i class="text-gray-600">
+            <i aria-hidden="true" class="text-gray-600">
               Nama project Anda tidak ada? Kontak admin via
             </i>
             <a

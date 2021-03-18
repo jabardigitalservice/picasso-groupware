@@ -9,6 +9,7 @@
           :class="['profile-section-list__item', isSectionActive(sect) && 'is-active']"
           @click.capture="$emit('click', sect)">
         <i v-if="isSectionActive(sect)"
+           aria-hidden="true"
            class="inline-block align-baseline w-3 h-3 mr-2 rounded-full bg-brand-yellow-darkest"></i>
         <span class="inline align-baseline font-bold"
               style="color: currentColor">
