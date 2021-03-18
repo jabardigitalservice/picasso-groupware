@@ -2,13 +2,14 @@
   <div class="form-input__file-preview">
     <figcaption class="mr-4">
       <img v-if="isImage && url"
-           :src="url"
-           class="form-input__file-preview__image"
-           @click.prevent="onPreviewDocument">
+        alt="Evidence Image"
+        :src="url"
+        class="form-input__file-preview__image"
+        @click.prevent="onPreviewDocument">
       <a v-else
-         class="form-input__file-preview__icon"
-         title="Lihat Dokumen"
-         @click.prevent="onPreviewDocument">
+        class="form-input__file-preview__icon"
+        title="Lihat Dokumen"
+        @click.prevent="onPreviewDocument">
         {{mFileExtension}}
       </a>
     </figcaption>

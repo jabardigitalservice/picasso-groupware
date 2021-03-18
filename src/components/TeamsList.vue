@@ -5,7 +5,7 @@
         <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6">
           <router-link :to="`/users/${item['id']}`">
             <div class="flex items-center">
-              <img class="w-10 h-10 rounded-full mr-4" :src="item['photo']" />
+              <img alt="Photo" class="w-10 h-10 rounded-full mr-4" :src="item['photo']" />
 
               <div class="flex-auto">
                 <p class="text-sm leading-normal">{{ item['name'] }}</p>

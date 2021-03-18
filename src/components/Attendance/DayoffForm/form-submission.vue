@@ -31,7 +31,11 @@
         <p>{{ payload.note || '-' }}</p>
 
         <label>Evidence</label>
-        <img :src="payload.imageURL" class="dayoff-confirmation__evidence" @click="onPreviewImage">
+        <img
+          alt="Dayoff Evidence"
+          :src="payload.imageURL"
+          class="dayoff-confirmation__evidence"
+          @click="onPreviewImage">
       </div>
       <div class="dayoff-confirmation__actions">
         <button class="dayoff-confirmation__btn btn-confirm" @click="onSubmit">
