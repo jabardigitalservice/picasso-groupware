@@ -16,14 +16,13 @@
   >
     <template #subtitle>
       <p class="text-gray-700">
-        Jika file hasil kerja berbentuk <i>offline</i> ataupun <i>private</i>, silakan terlebih dahulu
-        di <i>screenshot</i> hasil kerja lalu diupload ke
-        <a class="underline text-brand-blue"
-          :href="jdsGoogleDriveLink"
-          target="_blank">
-          <i>cloud storage JDS</i>
-        </a>
-        , dan simpan <i>link</i>-nya dibawah ini:
+        Jika file hasil kerja berbentuk offline, silakan masukan file terlebih
+        dahulu ke dalam google drive pada folder khusus yang diberikan aksesnya kepada
+        <a
+          class="underline text-brand-blue"
+          :href="`mailto:${jdsAccessRequestEmail}`">
+          {{ jdsAccessRequestEmail }}</a>.
+        Kemudian lampirkan link dari file tersebut di bawah ini:
       </p>
     </template>
   </FormInput>
@@ -97,12 +96,14 @@ export default {
   },
   data () {
     const {
-      VUE_APP_JDS_PUBLIC_DRIVE: jdsGoogleDriveLink
+      VUE_APP_JDS_PUBLIC_DRIVE: jdsGoogleDriveLink,
+      VUE_APP_JDS_ACCESS_REQUEST_EMAIL: jdsAccessRequestEmail
     } = process.env
     return {
       inputName: 'documentTask',
       inputTitle: 'Lampiran Link Hasil Kerja',
-      jdsGoogleDriveLink
+      jdsGoogleDriveLink,
+      jdsAccessRequestEmail
     }
   },
   computed: {
