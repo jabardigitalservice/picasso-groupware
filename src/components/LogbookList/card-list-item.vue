@@ -24,7 +24,7 @@
     </p>
     <div class="logbook-cards__card__info-wrapper">
       <label>Nama Project</label>
-      <p><b>{{ logbook.projectName }}</b></p>
+      <p><strong>{{ logbook.projectName }}</strong></p>
 
       <label>Nama Task</label>
       <p>{{ logbook.nameTask }}</p>

@@ -12,7 +12,9 @@
       <slot name="actions"></slot>
     </header>
     <div class="flex justify-center overflow-x-auto overflow-y-hidden">
-      <table class="datatable__table">
+      <table
+        class="datatable__table"
+        :aria-describedby="description">
         <thead>
           <tr>
             <th>No.</th>
@@ -72,6 +74,10 @@ export default {
     VPagination
   },
   props: {
+    description: {
+      type: String,
+      default: 'Data Table'
+    },
     pagination: {
       type: Object,
       validator: (obj) => {

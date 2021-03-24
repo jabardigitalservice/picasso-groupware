@@ -8,9 +8,9 @@
         class="cursor-pointer text-sm px-4 py-1 rounded-full text-brand-green border border-solid border-brand-green hover:bg-green-100"
         @click="onEdit">
         <i aria-hidden="true" class="fa fa-pencil-alt mr-2"></i>
-        <b class="uppercase">
+        <strong class="uppercase">
           Edit
-        </b>
+        </strong>
       </button>
     </header>
     <hr class="my-8"/>

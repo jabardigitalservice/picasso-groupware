@@ -26,7 +26,7 @@
               :href="adminWhatsappBacklink"
               target="_blank"
             >
-              <b class="text-green-500">Whatsapp</b>
+              <strong class="text-green-500">Whatsapp</strong>
             </a>
           </p>
         </template>
