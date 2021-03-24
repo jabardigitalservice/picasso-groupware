@@ -5,7 +5,7 @@
       <div  v-if="user && showStatus"
             class="px-4 py-8 sm:p-8">
         <h3 class="relative text-xl pr-12">
-          Hai, <b>{{user.name}}</b>!
+          Hai, <strong>{{user.name}}</strong>!
           <button class="appearance-none absolute right-0"
                   @click.capture="showStatus = false">
             <i class="fas fa-times fa-lg text-gray-600 hover:text-red-400"></i>

@@ -13,7 +13,7 @@
             <i class="fa fa-user-check fa-2x lg:fa-3x" />
           </div>
           <div class="text-center mr-2 sm:pl-8 lg:pr-8">
-            <b class="text-sm text-justify text-white">Sudah Presensi</b>
+            <strong class="text-sm text-justify text-white">Sudah Presensi</strong>
             <div class="text-center text-white text-2xl">
               {{ itemsAttendanceUser.total_presence }}
             </div>
@@ -27,7 +27,7 @@
             <i class="fa fa-user-times fa-2x lg:fa-3x" />
           </div>
           <div class="text-center mr-2 sm:pl-8 lg:pr-8">
-            <b class="text-sm text-justify text-white">Belum Presensi</b>
+            <strong class="text-sm text-justify text-white">Belum Presensi</strong>
             <div class="text-center text-white text-2xl">
               {{ itemsAttendanceUser.total_no_presence }}
             </div>
@@ -44,7 +44,7 @@
           </div>
           <div class="relative">
             <div class="absolute bottom-0 right-0 text-center text-xl mb-2 sm:my-12 lg:my-10 lg:mr-16" style="right: 5%;">
-                <b class="text-white">Terlambat</b>
+                <strong class="text-white">Terlambat</strong>
                 <div class="text-white">
                 {{ itemsAttendanceUser.total_late_presence }}
                 </div>
@@ -60,7 +60,7 @@
                 <i class="fa fa-building fa-2x lg:fa-3x" />
             </div>
             <div class="text-center mr-2 sm:pl-8 lg:pr-8">
-                <b class="text-sm text-justify text-white">Ada di Kantor</b>
+                <strong class="text-sm text-justify text-white">Ada di Kantor</strong>
                 <div class="text-center text-white text-2xl">
                 {{ itemsAttendanceUser.total_wfo }}
                 </div>
@@ -74,7 +74,7 @@
                 <i class="fa fa-book fa-2x lg:fa-3x" />
             </div>
             <div class="text-center mr-2 sm:pl-8 lg:pr-8">
-                <b class="text-sm text-justify text-white">Izin tidak Masuk</b>
+                <strong class="text-sm text-justify text-white">Izin tidak Masuk</strong>
                 <div class="text-center text-white text-2xl">
                 {{ itemsAttendanceUser.total_permit }}
                 </div>
@@ -91,7 +91,7 @@
             <i class="fa fa-calendar-day fa-2x lg:fa-3x" />
           </div>
           <div class="text-center mr-2 sm:pl-8 lg:pr-8">
-            <b class="text-sm text-justify text-white">Presensi akhir Pekan</b>
+            <strong class="text-sm text-justify text-white">Presensi akhir Pekan</strong>
             <div class="text-center text-white text-2xl">
               {{ itemsAttendanceUser.total_weekend_presence }}
             </div>
@@ -105,7 +105,7 @@
             <i class="fa fa-car-side fa-2x lg:fa-3x" />
           </div>
           <div class="text-center mr-2 sm:pl-8 lg:pr-8">
-            <b class="text-sm text-justify text-white">Perjadin</b>
+            <strong class="text-sm text-justify text-white">Perjadin</strong>
             <div class="text-center text-white text-2xl">
               {{ itemsAttendanceUser.total_perjadin }}
             </div>
