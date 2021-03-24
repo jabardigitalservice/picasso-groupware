@@ -20,14 +20,14 @@
         v-if="hasTupoksi"
         title="Tupoksi sudah diisi"
         class="data-status-chip is-success">
-        <i class="fa fa-check-circle"></i>
+        <i aria-hidden="true" class="fa fa-check-circle"></i>
       </span>
       <span
         v-else
         title="Tupoksi belum diisi"
         class="data-status-chip is-danger"
         @click="onEditLogbook">
-        <i class="fa fa-question-circle"></i>
+        <i aria-hidden="true" class="fa fa-question-circle"></i>
       </span>
     </td>
     <td>
@@ -37,7 +37,7 @@
           target="_blank"
           class="data-status-chip is-info"
           @click.prevent="onClickEvidence">
-          <i class="fa fa-file"></i>
+          <i aria-hidden="true" class="fa fa-file"></i>
         </a>
       </template>
       <i
@@ -53,21 +53,21 @@
         title="Lampiran sudah diisi"
         class="data-status-chip is-info"
         @click.prevent="onClickDocument">
-        <i class="fa fa-file"></i>
+        <i aria-hidden="true" class="fa fa-file"></i>
       </a>
       <span
         v-else
         title="Lampiran belum diisi"
         class="data-status-chip is-danger"
         @click="onEditLogbook">
-        <i class="fa fa-question-circle"></i>
+        <i aria-hidden="true" class="fa fa-question-circle"></i>
       </span>
     </td>
     <td class="whitespace-no-wrap">
       <button
         class="action-button is-success"
         @click="onEditLogbook">
-        <i class="fa fa-pencil-alt"></i>
+        <i aria-hidden="true" class="fa fa-pencil-alt"></i>
         <span class="text-xs">
           Edit
         </span>
@@ -75,7 +75,7 @@
       <button
         class="action-button is-danger"
         @click="beforeDeleteLogbook">
-        <i class="fa fa-trash"></i>
+        <i aria-hidden="true" class="fa fa-trash"></i>
         <span class="text-xs">
           Hapus
         </span>

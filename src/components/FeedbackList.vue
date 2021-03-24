@@ -10,7 +10,7 @@
             <div class="flex items-center block mx-auto mr-4">
               <span class="text-sm mr-2">{{ item['votes_count'] }}</span>
               <span @click="vote(item.id)">
-                <i class="fas fa-heart text-red-500" />
+                <i aria-hidden="true" class="fas fa-heart text-red-500" />
               </span>
             </div>
           </div>

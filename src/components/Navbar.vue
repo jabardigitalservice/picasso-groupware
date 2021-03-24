@@ -4,19 +4,19 @@
       <div class="flex items-center w-full lg:max-w-sm lg:mx-auto justify-around flex-wrap">
         <div class="text-center px-2 py-1">
           <router-link class="no-underline text-gray-700 block" to="/">
-            <i class="fas fa-home text-lg" />
+            <i aria-hidden="true" class="fas fa-home text-lg" />
             <p class="text-xs">Home</p>
           </router-link>
         </div>
         <div v-if="user" class="text-center px-2 py-1">
           <router-link class="no-underline text-gray-700 block" to="/profile">
-            <i class="far fa-user text-lg" />
+            <i aria-hidden="true" class="far fa-user text-lg" />
             <p class="text-xs">Profile</p>
           </router-link>
         </div>
         <div v-if="user" class="text-center px-2 py-1">
           <router-link class="no-underline text-gray-700 block" to="/messages">
-            <i class="far fa-bell text-lg" />
+            <i aria-hidden="true" class="far fa-bell text-lg" />
             <p class="text-xs">Messages</p>
           </router-link>
         </div>

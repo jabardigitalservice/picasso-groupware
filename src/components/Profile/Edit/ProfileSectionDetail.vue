@@ -4,7 +4,7 @@
       <template #pending>
         <div class="w-full h-full flex justify-center items-center bg-gray-200"
              style="min-height: 200px;">
-          <i class="app-logo is-rounded is-beating"></i>
+          <i aria-hidden="true" class="app-logo is-rounded is-beating"></i>
         </div>
       </template>
       <template #error="{error}">

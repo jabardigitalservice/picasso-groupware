@@ -5,7 +5,7 @@
         <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6">
           <div class="flex">
             <div class="flex items-center block mx-auto mr-4">
-              <i class="fas fa-heart text-red-500 text-lg" />
+              <i aria-hidden="true" class="fas fa-heart text-red-500 text-lg" />
             </div>
             <div class="text-left flex-grow">
               <p class="text-sm leading-normal">{{ item['message'] }}</p>

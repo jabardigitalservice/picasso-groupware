@@ -29,7 +29,7 @@
         <template v-else>
           <div class="w-full shadow bg-white mb-2 p-4">
             <div class="text-center">
-              <i class="far fa-4x fa-sad-tear mb-4 text-gray-600" />
+              <i aria-hidden="true" class="far fa-4x fa-sad-tear mb-4 text-gray-600" />
               <p class="text-sm">Belum ada yang checkin. Kantor sepi.</p>
             </div>
           </div>

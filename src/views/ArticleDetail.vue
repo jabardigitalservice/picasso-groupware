@@ -9,7 +9,7 @@
         <template v-if="!loading">
           <div class="flex">
             <div class="flex items-center block mx-auto mr-4">
-              <i class="fas fa-check-circle text-brand-green text-lg" />
+              <i aria-hidden="true" class="fas fa-check-circle text-brand-green text-lg" />
             </div>
             <div class="text-left flex-grow">
               <p class="text-sm leading-normal">{{ item['title'] }}</p>

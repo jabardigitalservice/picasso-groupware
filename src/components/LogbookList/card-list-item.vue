@@ -2,9 +2,9 @@
   <component :is="tag" class="logbook-cards__card">
     <div class="logbook-cards__card__header">
       <div>
-        <i class="logbook-cards__card__index">
+        <span class="logbook-cards__card__index">
           {{ index }}
-        </i>
+        </span>
       </div>
       <div class="whitespace-no-wrap">
         <button
@@ -13,7 +13,7 @@
           :title="action.title"
           :class="action.btnClassName"
           @click="action.clickHandler">
-          <i :class="action.iconClassName"></i>
+          <i aria-hidden="true" :class="action.iconClassName"></i>
         </button>
       </div>
     </div>

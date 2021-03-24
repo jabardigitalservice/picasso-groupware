@@ -7,7 +7,7 @@
             <div class="text-left flex-grow">
               <p class="text-sm leading-normal">{{ item['title'] }}</p>
               <p class="text-sm text-gray-600">{{ getDateTime(item) }}</p>
-              <p class="text-sm text-gray-600 mt-1"><i class="fas fa-map-marker-alt text-red-500 mr-1" /> Bandung</p>
+              <p class="text-sm text-gray-600 mt-1"><i aria-hidden="true" class="fas fa-map-marker-alt text-red-500 mr-1" /> Bandung</p>
             </div>
           </div>
         </div>
