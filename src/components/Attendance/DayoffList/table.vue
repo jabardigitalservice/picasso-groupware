@@ -1,5 +1,6 @@
 <template>
   <DataTable
+    description="Dayoff List"
     :is-loading="isLoading"
     :data="tableData"
     :error="error"
