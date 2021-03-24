@@ -31,6 +31,7 @@
     </template>
     <template #column-file_url="{ row }">
       <img
+        alt="Dayoff Evidence"
         :src="row.file_url"
         class="dayoff-table__evidence">
     </template>

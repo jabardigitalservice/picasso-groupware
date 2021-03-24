@@ -2,6 +2,7 @@
   <div class="form-input__file-preview">
     <figcaption>
       <img
+        alt="Evidence Image"
         :src="url"
         class="form-input__file-preview__image"
         @click.prevent="onDownload"

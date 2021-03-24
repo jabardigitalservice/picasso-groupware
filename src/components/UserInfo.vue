@@ -5,6 +5,7 @@
         <div class="flex items-center">
           <router-link :to="`/profile`">
             <img
+              alt="User Avatar"
               class="w-10 h-10 rounded-full mr-4"
               :src="user.photo || AVATAR_PLACEHOLDER">
           </router-link>

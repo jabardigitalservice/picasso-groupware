@@ -17,7 +17,7 @@
     <template v-if="loading">
       <div class="w-screen h-screen flex justify-center items-center flex-wrap bg-brand-green">
         <i class="block p-8 rounded-full bg-white shadow">
-          <img class="block h-32 -ml-1 -mt-1" src="/img/icons/android-chrome-512x512.png" alt>
+          <img alt="Chrome Icon" class="block h-32 -ml-1 -mt-1" src="/img/icons/android-chrome-512x512.png">
         </i>
       </div>
     </template>
