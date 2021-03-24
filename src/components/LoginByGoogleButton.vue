@@ -2,9 +2,9 @@
   <div>
     <button @click="signIn" class="login-with-google-button">
       <img alt="Google Logo" src="/img/logo-google.svg" class="w-4 h-4 object-contain object-center mr-2">
-      <b>
+      <strong>
         Login with Google
-      </b>
+      </strong>
     </button>
   </div>
 </template>
