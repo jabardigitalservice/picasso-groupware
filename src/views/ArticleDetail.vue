@@ -21,7 +21,13 @@
 
           <template v-if="item['action_url']">
             <div class="my-2">
-              <a :href="item['action_url']" target="_blank" @click="clickAction" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Baca Selengkapnya</a>
+              <a
+                :href="item['action_url']"
+                target="_blank"
+                class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded"
+                @click="clickAction">
+                Lihat Lebih Lanjut
+              </a>
             </div>
           </template>
         </template>
