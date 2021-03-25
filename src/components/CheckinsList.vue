@@ -5,8 +5,6 @@
         <template v-if="items.length > 0">
           <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6" :class="getRowClass(item)">
             <div class="flex items-center">
-              <img alt="User Profile Picture" class="w-10 h-10 rounded-full mr-4" :src="item['user_photo']" />
-
               <div class="flex-auto text-sm">
                 <p class="text-gray-900 font-bold">
                     {{ item['fullname'] }}
