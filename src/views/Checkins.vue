@@ -83,10 +83,6 @@ export default {
     }
   },
 
-  created () {
-    this.fetchItems(this.selectedDate)
-  },
-
   methods: {
     format,
     formatDateLong,
