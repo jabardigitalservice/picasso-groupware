@@ -24,6 +24,10 @@ export const listMonths = [
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ]
 
+const currentYear = new Date().getFullYear()
+const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step))
+export const listYear = range(currentYear, currentYear - 2, -1)
+
 export const ASSETS = {
   AVATAR_PLACEHOLDER: '/img/user.svg'
 }
