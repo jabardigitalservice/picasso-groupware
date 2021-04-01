@@ -6,7 +6,8 @@
             <FormSelect name="has_previous_job"
                 :options="listYear"
                 prompt="Pilih tahun"
-                v-model="year"/>
+                v-model="year"
+                @change="onChangeYear"/>
           </div>
           <div>
             <FormSelect name="has_previous_job"
@@ -168,16 +169,7 @@ export default {
       immediate: true,
       handler (v) {
         const monthNum = this.monthNameToNum(v)
-        if (monthNum !== 0) {
-          this.loadData(monthNum, this.year)
-        }
-      }
-    },
-    year: {
-      immediate: true,
-      handler (v) {
-        const monthNum = this.monthNameToNum(this.month)
-        this.loadData(monthNum, v)
+        if (monthNum !== 0) this.loadData(monthNum, this.year)
       }
     }
   },
@@ -186,7 +178,6 @@ export default {
     const d = new Date()
     this.year = d.getFullYear()
     this.month = this.listMonths[d.getMonth()]
-    this.loadData(d.getMonth(), this.year)
   },
 
   methods: {
@@ -207,6 +198,10 @@ export default {
       } catch (e) {
         this.$emit('error')
       }
+    },
+    onChangeYear (v) {
+      const monthNum = this.monthNameToNum(this.month)
+      if (monthNum !== 0) this.loadData(monthNum, v)
     },
     monthNameToNum (monthname) {
       const month = this.listMonths.indexOf(monthname)
