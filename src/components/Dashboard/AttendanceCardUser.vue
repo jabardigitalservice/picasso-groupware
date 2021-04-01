@@ -1,12 +1,20 @@
 <template>
   <div>
     <template v-if="!isLoading">
-      <div>
-        <FormSelect name="has_previous_job"
-            :options="listMonths"
-            prompt="Pilih bulan"
-            v-model="month"/>
-      </div>
+      <dl class="mx-0 pt-1 grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-2">
+          <div>
+            <FormSelect name="has_previous_job"
+                :options="listYear"
+                prompt="Pilih tahun"
+                v-model="year"/>
+          </div>
+          <div>
+            <FormSelect name="has_previous_job"
+                :options="listMonths"
+                prompt="Pilih bulan"
+                v-model="month"/>
+          </div>
+      </dl>
       <dl class="mx-0 pt-1 grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-2">
         <div class="bg-green-500 overflow-hidden grid grid-cols-2 shadow antialiased rounded-lg">
           <div class="text-center text-white text-7xl ml-4 mr-2 my-8 lg:my-4">
@@ -131,7 +139,7 @@
 
 <script>
 import { ContentLoader } from 'vue-content-loader'
-import { listMonths } from '../../lib/constants'
+import { listMonths, listYear } from '../../lib/constants'
 import { mapState } from 'vuex'
 
 export default {
@@ -144,7 +152,9 @@ export default {
     return {
       item: null,
       month: null,
-      listMonths: listMonths
+      year: null,
+      listMonths: listMonths,
+      listYear: listYear
     }
   },
 
@@ -159,21 +169,34 @@ export default {
       handler (v) {
         const monthNum = this.monthNameToNum(v)
         if (monthNum !== 0) {
-          this.loadData(monthNum)
+          this.loadData(monthNum, this.year)
         }
+      }
+    },
+    year: {
+      immediate: true,
+      handler (v) {
+        const monthNum = this.monthNameToNum(this.month)
+        this.loadData(monthNum, v)
       }
     }
   },
 
   mounted () {
     const d = new Date()
-    this.loadData(d.getMonth() + 1)
+    this.year = d.getFullYear()
+    this.month = this.listMonths[d.getMonth()]
+    this.loadData(d.getMonth(), this.year)
   },
 
   methods: {
-    async loadData (month) {
+    async loadData (month, year) {
+      const query = {
+        month: month,
+        year: year
+      }
       try {
-        await this.$store.dispatch('users-dashboard/getDashboardAttendanceUser', { month: month })
+        await this.$store.dispatch('users-dashboard/getDashboardAttendanceUser', query)
         if (Array.isArray(this.itemsAttendanceUser)) {
           if (this.itemsAttendanceUser.length) {
             this.$emit('found')
@@ -187,7 +210,7 @@ export default {
     },
     monthNameToNum (monthname) {
       const month = this.listMonths.indexOf(monthname)
-      return month ? month + 1 : null
+      return month + 1
     }
   }
 }
