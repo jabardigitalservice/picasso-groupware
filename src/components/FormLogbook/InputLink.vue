@@ -7,7 +7,8 @@
     :title="inputTitle"
     placeholder="https://"
     :disabled="showAsReadonlyLink"
-    :rules="{ required: true, regex: /^https?:\/\//}"
+    :required="isLinkRequired"
+    :rules="{ required: isLinkRequired, regex: /^https?:\/\//}"
     :custom-messages="{
       required: 'Lampiran hasil kerja harus diisi',
       regex: 'Lampiran hasil kerja harus dalam bentuk URL yang valid'
@@ -30,7 +31,7 @@
     <FormInputHeader
       :label-for="inputName"
       :title="inputTitle"
-      :required="true"
+      :required="isLinkRequired"
     >
     </FormInputHeader>
     <div class="form-input-link__wrapper">
@@ -73,6 +74,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import FormInput from '../Form/Input'
 import FormInputHeader from '../Form/InputHeader'
 export default {
@@ -85,6 +87,9 @@ export default {
     event: 'change'
   },
   props: {
+    tupoksiId: {
+      type: String
+    },
     value: {
       type: [String, Number],
       default: ''
@@ -107,6 +112,21 @@ export default {
     }
   },
   computed: {
+    ...mapState('organizations', [
+      'listOfTupoksi'
+    ]),
+    isLinkRequired () {
+      const { listOfTupoksi } = this
+      if (!Array.isArray(listOfTupoksi) || !listOfTupoksi.length) {
+        return false
+      }
+      /**
+       * NOTE: it is confirmed that last element of query result
+       * will always represent "Diluar tupoksi jabatan" item
+       */
+      const lastElement = listOfTupoksi[listOfTupoksi.length - 1]
+      return this.tupoksiId !== lastElement.id
+    },
     syncedValue: {
       get () {
         return this.value
