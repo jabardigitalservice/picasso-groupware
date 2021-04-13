@@ -275,8 +275,12 @@ export default {
       }
       return Promise.resolve(null)
     },
-    getLogbookFromDatabase (id) {
-      return this.$store.dispatch('logbook-list/getLogbookById', { id })
+    async getLogbookFromDatabase (id) {
+      const logbook = await this.$store.dispatch('logbook-list/getLogbookById', { id })
+      if (logbook) {
+        this.$store.commit('logbook-list/setLogbookInView', logbook)
+      }
+      return logbook
     },
     resetPayload () {
       this.payload = Object.assign({}, modelData)
