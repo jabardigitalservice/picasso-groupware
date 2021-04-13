@@ -89,7 +89,9 @@
       <FormInputLink
         ref="formInputDocumentLink"
         :show-as-readonly-link="!isEditable"
-        v-model="documentTaskLink"
+        :tupoksi-id="payload.tupoksiJabatanId"
+        :value="documentTaskLink"
+        @change="onDocumentTaskLinkChanged"
       />
       <br />
       <FormInput
@@ -239,10 +241,10 @@ export default {
           this.$emit('logbook:not-found', id)
           return
         }
-        const { documentTaskURL, isDocumentLink } = logbook
+        const { documentTaskURL } = logbook
         this.originalData = _cloneDeep(logbook)
         this.payload = logbook
-        this.documentTaskLink = isDocumentLink ? documentTaskURL : null
+        this.onDocumentTaskLinkChanged(documentTaskURL)
       }
     }
   },
@@ -275,6 +277,16 @@ export default {
         this.$set(this.payload, 'projectName', opt.name)
       }
     },
+    onDocumentTaskLinkChanged (link) {
+      this.documentTaskLink = link
+      if (typeof link !== 'string' || !link.length) {
+        this.payload.isDocumentLink = false
+        this.documentTaskLink = null
+      } else {
+        this.payload.isDocumentLink = /^https?:\/\//.test(link)
+        this.documentTaskLink = link
+      }
+    },
     onCancel () {
       if (typeof this.onCancelCallback === 'function') {
         return this.onCancelCallback()
@@ -298,7 +310,7 @@ export default {
       try {
         const evidenceFile = this.$refs.formInputEvidence.getSelectedFile()
         formData.append('evidenceTask', evidenceFile)
-        formData.append('documentTask', this.documentTaskLink)
+        formData.append('documentTask', this.documentTaskLink || '')
         return formData
       } catch (e) {
         return null
@@ -327,7 +339,7 @@ export default {
       try {
         const evidenceFile = this.$refs.formInputEvidence.getSelectedFile()
         formData.append('evidenceTask', evidenceFile)
-        formData.append('documentTask', this.documentTaskLink)
+        formData.append('documentTask', this.documentTaskLink || '')
         return formData
       } catch (e) {
         return null
