@@ -8,7 +8,7 @@
 
           <user-info class="mx-0 sm:mx-2 bg-white shadow" />
 
-          <div class="mx-0 sm:mx-2 flex flex-wrap shadow bg-white">
+          <div class="mx-0 sm:mx-2 shadow bg-white">
             <template v-if="!user">
               <div class="w-full pt-4 text-center">
                 <div class="">
@@ -22,15 +22,17 @@
               </div>
             </template>
             <template v-else>
-              <ReportCardUser class="w-full flex-col" />
-              <AttendanceButton class="w-full"/>
-              <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
-                <component :is="getMenuLinkComponent(m)" v-bind="getMenuLinkProps(m)" >
-                  <div class="h-full p-3 py-4 text-center text-gray-700">
-                    <i aria-hidden="true" :class="[m.icon, 'text-2xl'] " />
-                    <p class="text-xs mt-1">{{m.name}}</p>
-                  </div>
-                </component>
+              <TaskReportHeatmap class="p-3 pt-6" />
+              <AttendanceButton />
+              <div class="flex flex-row flex-wrap">
+                <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
+                  <component :is="getMenuLinkComponent(m)" v-bind="getMenuLinkProps(m)" >
+                    <div class="h-full p-3 py-4 text-center text-gray-700">
+                      <i aria-hidden="true" :class="[m.icon, 'text-2xl'] " />
+                      <p class="text-xs mt-1">{{m.name}}</p>
+                    </div>
+                  </component>
+                </div>
               </div>
             </template>
           </div>
@@ -56,7 +58,7 @@
 import { mapGetters } from 'vuex'
 import LoginButton from '@/components/LoginButton'
 import LoginByGoogleButton from '@/components/LoginByGoogleButton'
-import ReportCardUser from '@/components/Dashboard/ReportCardUser'
+import TaskReportHeatmap from '@/components/Dashboard/TaskReportHeatmap/index'
 import HomeBannerList from '@/components/HomeBannerList'
 import AnnouncementList from '@/components/Announcement/AnnouncementList'
 import HomeArticleList from '@/components/HomeArticleList'
@@ -102,7 +104,7 @@ export default {
     HomeBannerList,
     AnnouncementList,
     HomeArticleList,
-    ReportCardUser,
+    TaskReportHeatmap,
     LoginButton,
     LoginByGoogleButton,
     UserInfo,
