@@ -9,7 +9,7 @@
         <template v-if="!loading">
           <div class="flex">
             <div class="flex items-center block mx-auto mr-4">
-              <i class="fas fa-check-circle text-brand-green text-lg" />
+              <i aria-hidden="true" class="fas fa-check-circle text-brand-green text-lg" />
             </div>
             <div class="text-left flex-grow">
               <p class="text-sm leading-normal">{{ item['title'] }}</p>
@@ -21,7 +21,13 @@
 
           <template v-if="item['action_url']">
             <div class="my-2">
-              <a :href="item['action_url']" target="_blank" @click="clickAction" class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded">Baca Selengkapnya</a>
+              <a
+                :href="item['action_url']"
+                target="_blank"
+                class="w-full text-center shadow block bg-brand-blue text-white font-bold py-2 px-4 rounded"
+                @click="clickAction">
+                Lihat Lebih Lanjut
+              </a>
             </div>
           </template>
         </template>

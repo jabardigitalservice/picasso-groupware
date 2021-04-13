@@ -1,13 +1,13 @@
 <template>
   <div v-if="state === STATE.LOADING" class="dialog-loading">
-    <img :src="assets.loading" />
+    <img alt="Loading Icon" :src="assets.loading" />
     <p class="dialog-loading__text text-gray-500">
       Tunggu sebentar ya...
     </p>
   </div>
   <div v-else class="dialog-loading">
     <template v-if="state === STATE.SUCCESS">
-      <img :src="assets.successMark" />
+      <img alt="Success Icon"  :src="assets.successMark" />
       <p class="dialog-loading__text text-green-600">
         <slot name="message-success">
           Data berhasil disimpan
@@ -15,7 +15,7 @@
       </p>
     </template>
     <template v-else-if="state === STATE.ERROR">
-      <img :src="assets.crossMark" />
+      <img alt="Error Icon"  :src="assets.crossMark" />
       <p class="dialog-loading__text text-red-600">
         Terjadi kesalahan
         <br />

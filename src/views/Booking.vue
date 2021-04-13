@@ -3,7 +3,7 @@
     <div class="container mx-auto">
       <div class="w-full pt-4">
         <div class="text-center">
-          <i class="far fa-4x fa-building mb-4 text-gray-600" />
+          <i aria-hidden="true" class="far fa-4x fa-building mb-4 text-gray-600" />
           <p class="text-sm">Reservasi Ruangan Rapat</p>
         </div>
 

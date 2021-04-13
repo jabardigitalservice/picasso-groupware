@@ -17,18 +17,22 @@
       <EvidenceImagePreview
         :url="mUrl"
         :disabled="disabled"
-        @delete="onDelete"
+        @replace="onReplaceFile"
       />
     </template>
-    <template v-else>
-      <FileSelector
-        :url="mUrl"
-        accept="image/*"
-        v-bind="$props"
-        @preview="onPreview"
-        @change="onSelectedFileChange"
-      />
-    </template>
+    <FileSelector
+      ref="fileSelector"
+      v-show="!mUrl"
+      :url="mUrl"
+      accept="image/*"
+      v-bind="$props"
+      @preview="onPreview"
+      @change="onSelectedFileChange"
+    >
+      <template #choose-file-button-text>
+        Upload
+      </template>
+    </FileSelector>
   </div>
 </template>
 
@@ -77,10 +81,12 @@ export default {
     }
   },
   methods: {
-    onDelete () {
-      this.mUrl = null
-      this.mFile = null
-      this.emitChanges()
+    onReplaceFile () {
+      const selector = this.$refs.fileSelector
+      if (!selector) {
+        return
+      }
+      selector.onChooseFile()
     },
     onPreview () {
       window.open(this.mUrl, '_blank')

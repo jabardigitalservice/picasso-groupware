@@ -3,10 +3,10 @@
     <div class="flex-1">
       <div class="w-full flex justify-between items-center">
         <p class="block w-1/2 h-3 mb-2 rounded-full bg-shimmering" />
-        <i class="flex-1" />
-        <i class="ml-2 flex-none inline-block w-8 h-8 rounded bg-shimmering" />
-        <i class="ml-2 flex-none inline-block w-8 h-8 rounded bg-shimmering" />
-        <i class="ml-2 flex-none inline-block w-8 h-8 rounded bg-shimmering" />
+        <em class="flex-1" />
+        <em class="ml-2 flex-none inline-block w-8 h-8 rounded bg-shimmering" />
+        <em class="ml-2 flex-none inline-block w-8 h-8 rounded bg-shimmering" />
+        <em class="ml-2 flex-none inline-block w-8 h-8 rounded bg-shimmering" />
       </div>
       <p class="block w-1/3 h-3 mb-2 rounded-full bg-shimmering" />
       <br />

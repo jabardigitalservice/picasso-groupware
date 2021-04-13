@@ -8,7 +8,7 @@
         <router-link :to="`/announcement/${item.id}`">
           <div class="flex">
             <div class="flex items-center mx-auto mr-4">
-              <i class="fas fa-star text-yellow-500 text-lg" />
+              <i aria-hidden="true" class="fas fa-star text-yellow-500 text-lg" />
             </div>
             <div class="text-left flex-grow">
               <p class="text-sm leading-normal">{{ item.title }}</p>

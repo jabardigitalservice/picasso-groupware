@@ -5,10 +5,10 @@
       <div  v-if="user && showStatus"
             class="px-4 py-8 sm:p-8">
         <h3 class="relative text-xl pr-12">
-          Hai, <b>{{user.name}}</b>!
+          Hai, <strong>{{user.name}}</strong>!
           <button class="appearance-none absolute right-0"
                   @click.capture="showStatus = false">
-            <i class="fas fa-times fa-lg text-gray-600 hover:text-red-400"></i>
+            <i aria-hidden="true" class="fas fa-times fa-lg text-gray-600 hover:text-red-400"></i>
           </button>
         </h3>
         <template v-if="completionPercentage >= 100">
@@ -23,7 +23,7 @@
                             to="/profile/edit/personal"
                             class="font-bold text-brand-blue hover:text-blue-900 hover:underline">sini</router-link>
               <span v-else>sini</span>
-              &nbsp;&nbsp;<i class="far fa-smile"></i>
+              &nbsp;&nbsp;<i aria-hidden="true" class="far fa-smile"></i>
             </p>
             <br>
             <figcaption class="max-w-sm">
@@ -31,7 +31,8 @@
                 Seberapa lengkap data kamu?
               </caption>
               <div class="w-full flex flex-row items-center">
-                <i  role="progress bar"
+                <i  aria-hidden="true"
+                    role="progress bar"
                     class="progress-bar flex-1"
                     :style="progressBarStyle">
                 </i>

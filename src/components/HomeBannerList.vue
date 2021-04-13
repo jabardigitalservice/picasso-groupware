@@ -3,7 +3,7 @@
     <template v-if="!loading">
       <carousel class="shadow sm:mx-2" :autoplay="true" :autoplayTimeout="4000" :pagination-enabled="false" :per-page="1" :mouse-drag="false" :loop="true">
         <slide v-for="item in items" :key="item.id" class="item">
-          <img class="w-full" :src="item.url" />
+          <img alt="Banner Image" class="w-full" :src="item.url" />
         </slide>
       </carousel>
     </template>

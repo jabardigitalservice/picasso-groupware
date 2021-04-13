@@ -96,15 +96,13 @@
 
 .form-input {
   &__file-preview {
-    @apply my-4 flex flex-col justify-start items-start;
-    @screen md {
-      @apply flex-row;
-    }
+    @apply my-4;
+
     &__image,
     &__icon {
       font-style: normal;
       @apply cursor-pointer
-      inline-block w-32 h-32 rounded-lg 
+      w-full h-64 rounded-lg 
       flex flex-row justify-center items-center;
 
       &:hover {
@@ -113,7 +111,9 @@
     }
 
     &__image {
-      @apply object-cover object-left-top;
+      @apply rounded-md overflow-hidden
+      border border-solid border-gray-300
+      object-cover object-center;
     }
 
     &__icon {
@@ -140,6 +140,33 @@
       vertical-align: baseline;
       color: currentColor;
       font-size: 0.85em;
+    }
+  }
+}
+
+.form-input-link__wrapper {
+  @apply flex justify-start items-stretch;
+
+  > .form-input__input {
+    margin-bottom: 0;
+  }
+
+  > .form-input-link__btn-open {
+    flex: 0 0 auto;
+    @apply flex justify-center items-center
+    px-4
+    bg-brand-blue;
+
+    > svg {
+      fill: white;
+      @apply w-auto h-5
+      object-contain object-center
+      pointer-events-none;
+    }
+
+    &:disabled,
+    &[disabled] {
+      @apply cursor-not-allowed bg-gray-300;
     }
   }
 }

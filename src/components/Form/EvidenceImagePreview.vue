@@ -1,16 +1,17 @@
 <template>
   <div class="form-input__file-preview">
-    <figcaption class="mr-4">
+    <figcaption>
       <img
+        alt="Evidence Image"
         :src="url"
         class="form-input__file-preview__image"
         @click.prevent="onDownload"
       >
     </figcaption>
-    <div class="mt-4 md:mt-0 self-stretch md:flex-auto flex flex-col justify-between">
+    <div class="mt-6 self-stretch md:flex-auto flex flex-col justify-between">
       <p
         v-if="!disabled"
-        class="mt-2 inline-block self-end text-sm"
+        class="inline-block self-end text-sm"
       >
         <button
           class="w-auto py-2 px-4 mr-4 rounded border border-solid border-blue-500 text-blue-500 hover:opacity-50 hover:bg-blue-100"
@@ -20,9 +21,9 @@
         </button>
         <button
           class="w-24 py-2 px-4 rounded border border-solid border-red-600 text-red-500 hover:opacity-50 hover:bg-red-100"
-          @click="$emit('delete')"
+          @click="$emit('replace')"
         >
-          Hapus
+          Ubah
         </button>
       </p>
     </div>

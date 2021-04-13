@@ -2,13 +2,14 @@
   <div class="form-input__file-preview">
     <figcaption class="mr-4">
       <img v-if="isImage && url"
-           :src="url"
-           class="form-input__file-preview__image"
-           @click.prevent="onPreviewDocument">
+        alt="Evidence Image"
+        :src="url"
+        class="form-input__file-preview__image"
+        @click.prevent="onPreviewDocument">
       <a v-else
-         class="form-input__file-preview__icon"
-         title="Lihat Dokumen"
-         @click.prevent="onPreviewDocument">
+        class="form-input__file-preview__icon"
+        title="Lihat Dokumen"
+        @click.prevent="onPreviewDocument">
         {{mFileExtension}}
       </a>
     </figcaption>
@@ -22,7 +23,7 @@
                             #default="{errors}">
           <label class="inline-block align-middle text-gray-700">
             Nama File
-            <i class="relative fa fa-pen float-right ml-2 text-gray-400" style="transform: translateY(2px);"></i>
+            <i aria-hidden="true" class="relative fa fa-pen float-right ml-2 text-gray-400" style="transform: translateY(2px);"></i>
           </label>
           <div class="mb-2 relative flex flex-row justify-start items-stretch border-b border-solid border-brand-blue">
               <input  class="block flex-auto text-gray-700 font-bold"

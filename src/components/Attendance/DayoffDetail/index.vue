@@ -24,7 +24,11 @@
       <p>{{ data.note || '-' }}</p>
 
       <label>Evidence</label>
-      <img :src="data.file_url" class="dayoff-detail__evidence" @click="onPreviewImage">
+      <img
+        alt="Dayoff Evidence"
+        :src="data.file_url"
+        class="dayoff-detail__evidence"
+        @click="onPreviewImage">
       <button class="dayoff-detail__btn-close" @click="onClose">
         Tutup
       </button>

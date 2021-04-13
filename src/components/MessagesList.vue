@@ -6,7 +6,7 @@
           <router-link :to="`/messages/${item.id}`">
             <div class="flex">
               <div class="flex items-center block mx-auto mr-4">
-                <i class="fas fa-envelope text-brand-green text-lg" />
+                <i aria-hidden="true" class="fas fa-envelope text-brand-green text-lg" />
               </div>
               <div class="text-left flex-grow">
                 <p class="text-sm leading-normal">{{ item['title'] }}</p>

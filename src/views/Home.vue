@@ -12,7 +12,7 @@
             <template v-if="!user">
               <div class="w-full pt-4 text-center">
                 <div class="">
-                  <i class="far fa-4x fa-check-circle mb-4 text-gray-600" />
+                  <i aria-hidden="true" class="far fa-4x fa-check-circle mb-4 text-gray-600" />
                   <p class="text-sm">Silahkan login terlebih dahulu</p>
                 </div>
                 <div class="mx-2 my-2">
@@ -27,7 +27,7 @@
               <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
                 <component :is="getMenuLinkComponent(m)" v-bind="getMenuLinkProps(m)" >
                   <div class="h-full p-3 py-4 text-center text-gray-700">
-                    <i :class="[m.icon, 'text-2xl'] " />
+                    <i aria-hidden="true" :class="[m.icon, 'text-2xl'] " />
                     <p class="text-xs mt-1">{{m.name}}</p>
                   </div>
                 </component>
@@ -86,13 +86,13 @@ const menuItems = Object.freeze([
   },
   {
     name: 'Booking',
-    href: ['https://digitalservice.skedda.com/booking', '_blank'],
+    href: [process.env.VUE_APP_SKEDDA_URL, '_blank'],
     icon: 'fa fa-book'
   },
   {
-    name: 'Administrasi',
-    href: ['https://forms.gle/Mw8uMqKKXS4bWMqW9', '_blank'],
-    icon: 'fa fa-id-card-alt'
+    name: 'Wiki',
+    href: ['https://wiki.digitalservice.id/', '_blank'],
+    icon: 'far fa-file-word'
   }
 ])
 

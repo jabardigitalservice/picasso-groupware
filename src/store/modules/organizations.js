@@ -1,11 +1,17 @@
-import { SET_PROJECT_LIST, SET_ORGANIZATION_JOBS, SET_EDUCATIONS } from '../mutation-types'
+import {
+  SET_PROJECT_LIST,
+  SET_ORGANIZATION_JOBS,
+  SET_EDUCATIONS,
+  SET_TUPOKSI_LIST
+} from '../mutation-types'
 import { GroupwareAPI } from '../../lib/axios'
 import _orderBy from 'lodash/orderBy'
 
 export const state = () => ({
   projects: [],
   jobs: [],
-  educations: []
+  educations: [],
+  listOfTupoksi: []
 })
 
 export const getters = {
@@ -27,10 +33,22 @@ export const mutations = {
   },
   [SET_EDUCATIONS] (state, educations) {
     state.educations = educations
+  },
+  [SET_TUPOKSI_LIST] (state, list) {
+    state.listOfTupoksi = list
   }
 }
 
 export const actions = {
+  fetchListOfTupoksi ({ state, commit }) {
+    if (!Array.isArray(state.listOfTupoksi) || !state.listOfTupoksi.length) {
+      return GroupwareAPI.get('/tupoksi-jabatan/by-user')
+        .then(r => r.data.results)
+        .then(arr => commit(SET_TUPOKSI_LIST, arr))
+        .catch(e => commit(SET_TUPOKSI_LIST, []))
+    }
+    return state.listOfTupoksi
+  },
   fetchProjects ({ state, commit }) {
     if (!Array.isArray(state.projects) || !state.projects.length) {
       return GroupwareAPI.get('/project/', {
