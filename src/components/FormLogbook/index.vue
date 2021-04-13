@@ -47,7 +47,8 @@
       <FormInputTupoksi
         name="tupoksiJabatanId"
         :show-as-readonly-input="isViewingOnly"
-        v-model="payload.tupoksiJabatanId" />
+        v-model="payload.tupoksiJabatanId"
+        @change="onTupoksiJabatanChanged" />
       <br />
       <FormInputDateTime
         name="dateTask"
@@ -89,6 +90,7 @@
       <FormInputLink
         ref="formInputDocumentLink"
         :show-as-readonly-link="!isEditable"
+        :required="isDocumentTaskLinkMandatory"
         v-model="documentTaskLink"
       />
       <br />
@@ -209,6 +211,7 @@ export default {
       originalData: null,
       payload: Object.assign({}, modelData),
       documentTaskLink: null,
+      isDocumentTaskLinkMandatory: false,
 
       maxDateTime: new Date().toISOString()
     }
@@ -274,6 +277,18 @@ export default {
         this.$set(this.payload, 'projectId', opt.id)
         this.$set(this.payload, 'projectName', opt.name)
       }
+    },
+    onTupoksiJabatanChanged (tupoksiJabatanId) {
+      const { listOfTupoksi } = this.$store.state.organizations
+      if (!Array.isArray(listOfTupoksi) || !listOfTupoksi.length) {
+        return
+      }
+      /**
+       * NOTE: it is confirmed that last element of query result
+       * will always represent "Diluar tupoksi jabatan" item
+       */
+      const lastElement = listOfTupoksi[listOfTupoksi.length - 1]
+      this.isDocumentTaskLinkMandatory = tupoksiJabatanId !== lastElement.id
     },
     onCancel () {
       if (typeof this.onCancelCallback === 'function') {
