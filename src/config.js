@@ -1,8 +1,6 @@
-export const appConfig = {
-  version: process.env.VUE_APP_VERSION
-}
+export const isProduction = process.env.VUE_APP_MODE === 'production'
 
-const map = [
+const firebaseEnvMap = [
   ['apiKey', 'VUE_APP_FIREBASE_API_KEY'],
   ['authDomain', 'VUE_APP_FIREBASE_AUTH_DOMAIN'],
   ['databaseURL', 'VUE_APP_FIREBASE_DB_URL'],
@@ -14,19 +12,37 @@ const map = [
   ['publicVapidKey', 'VUE_APP_FIREBASE_PUBLIC_VAPID_KEY']
 ]
 
-const mapToObject = ({ isStaging = true } = {}) => map.reduce((obj, [configKey, envKey]) => {
-  const value = isStaging ? process.env[`${envKey}_STAGING`] : process.env[envKey]
-  Object.assign(obj, {
-    [configKey]: value
-  })
-  return obj
-}, {})
+function createFirebaseConfig ({ isStaging } = {}) {
+  return firebaseEnvMap
+    .reduce((obj, [configKey, envKey]) => {
+      const value = isProduction
+        ? process.env[envKey]
+        : process.env[`${envKey}_STAGING`]
+
+      Object.assign(obj, {
+        [configKey]: value
+      })
+      return obj
+    }, {})
+}
 
 export function getFirebaseConfig () {
-  if (process.env.VUE_APP_MODE !== 'production') {
-    return mapToObject({
+  if (isProduction) {
+    return createFirebaseConfig({
       isStaging: true
     })
   }
-  return mapToObject()
+  return createFirebaseConfig({
+    isStaging: false
+  })
+}
+
+export function getAxiosConfig () {
+  let baseURL = isProduction
+    ? process.env.VUE_APP_BASE_API_API
+    : process.env.VUE_APP_BASE_API_API_STAGING
+
+  return {
+    baseURL
+  }
 }
