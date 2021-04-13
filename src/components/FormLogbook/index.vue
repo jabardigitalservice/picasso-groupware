@@ -1,6 +1,7 @@
 <template>
   <div>
-    <ValidationObserver ref="validationObserver">
+    <FormLogbookSkeleton v-if="isLoadingLogbook" />
+    <ValidationObserver v-if="!isLoadingLogbook" ref="validationObserver">
       <FormInputProject
         name="projectId"
         title="Nama Project"
@@ -141,6 +142,7 @@
 </template>
 
 <script>
+import FormLogbookSkeleton from './Skeleton'
 import FormInputTupoksi from './InputTupoksi'
 import FormInputLink from './InputLink'
 import FormInputProject from './InputProjectAutocomplete'
@@ -181,7 +183,8 @@ export default {
     FormInputProject,
     FormInput,
     FormInputEvidence,
-    FormInputDateTime
+    FormInputDateTime,
+    FormLogbookSkeleton
   },
   props: {
     action: {
@@ -206,6 +209,7 @@ export default {
     const adminWhatsappBacklink = `https://api.whatsapp.com/send?phone=${adminWhatsappNumber}&text=Usulan nama project/product anda`
     return {
       adminWhatsappBacklink,
+      isLoadingLogbook: true,
       originalData: null,
       payload: Object.assign({}, modelData),
       documentTaskLink: null,
@@ -248,23 +252,28 @@ export default {
   },
   methods: {
     async getLogbook (id) {
-      let logbook = await this.getLogbookFromVuex(id)
-      if (!logbook) {
-        logbook = await this.getLogbookFromDatabase(id)
+      this.isLoadingLogbook = true
+      try {
+        let logbook = await this.getLogbookFromVuex(id)
+        if (!logbook) {
+          logbook = await this.getLogbookFromDatabase(id)
+        }
+        return logbook
+      } catch (e) {
+        return null
+      } finally {
+        this.isLoadingLogbook = false
       }
-      return logbook
     },
     getLogbookFromVuex (id) {
       const logbook = this.$store.state['logbook-list'].logbookInView
-      if (logbook._id === id) {
+      if (logbook && logbook._id === id) {
         return Promise.resolve(logbook)
       }
       return Promise.resolve(null)
     },
     getLogbookFromDatabase (id) {
-      return Promise.resolve(null)
-      // TODO: bentukan API by id harusnya sama dengan keluaran list
-      // return this.$store.dispatch('logbook-list/getLogbookById', { id })
+      return this.$store.dispatch('logbook-list/getLogbookById', { id })
     },
     resetPayload () {
       this.payload = Object.assign({}, modelData)
