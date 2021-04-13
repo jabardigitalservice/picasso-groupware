@@ -90,7 +90,8 @@
         ref="formInputDocumentLink"
         :show-as-readonly-link="!isEditable"
         :tupoksi-id="payload.tupoksiJabatanId"
-        v-model="documentTaskLink"
+        :value="documentTaskLink"
+        @change="onDocumentTaskLinkChanged"
       />
       <br />
       <FormInput
@@ -242,11 +243,8 @@ export default {
         }
         const { documentTaskURL } = logbook
         this.originalData = _cloneDeep(logbook)
-        this.payload = {
-          ...logbook,
-          isDocumentLink: true
-        }
-        this.documentTaskLink = documentTaskURL
+        this.payload = logbook
+        this.onDocumentTaskLinkChanged(documentTaskURL)
       }
     }
   },
@@ -277,6 +275,16 @@ export default {
       if (opt) {
         this.$set(this.payload, 'projectId', opt.id)
         this.$set(this.payload, 'projectName', opt.name)
+      }
+    },
+    onDocumentTaskLinkChanged (link) {
+      this.documentTaskLink = link
+      if (typeof link !== 'string' || !link.length) {
+        this.payload.isDocumentLink = false
+        this.documentTaskLink = null
+      } else {
+        this.payload.isDocumentLink = /^https?:\/\//.test(link)
+        this.documentTaskLink = link
       }
     },
     onCancel () {
