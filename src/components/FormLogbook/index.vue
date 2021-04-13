@@ -252,18 +252,19 @@ export default {
   },
   methods: {
     async getLogbook (id) {
+      let logbook = null
       this.isLoadingLogbook = true
       try {
-        let logbook = await this.getLogbookFromVuex(id)
+        logbook = await this.getLogbookFromVuex(id)
         if (!logbook) {
           logbook = await this.getLogbookFromDatabase(id)
         }
-        return logbook
       } catch (e) {
-        return null
+        logbook = null
       } finally {
         this.isLoadingLogbook = false
       }
+      return logbook
     },
     getLogbookFromVuex (id) {
       const logbook = this.$store.state['logbook-list'].logbookInView
