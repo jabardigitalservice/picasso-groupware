@@ -28,6 +28,28 @@ export const actions = {
     }
     return GroupwareAPI.get(`logbook/${id}`)
       .then(r => r.data)
+      .then((logbook) => {
+        const {
+          documentTask = {},
+          evidenceTask = {},
+          blobTask,
+          createdBy,
+          updatedBy,
+          __v,
+          ...rest
+        } = logbook
+
+        return Object.assign(
+          {},
+          rest,
+          {
+            documentTaskPath: documentTask.filePath,
+            documentTaskURL: documentTask.fileURL,
+            evidenceTaskPath: evidenceTask.filePath,
+            evidenceTaskURL: evidenceTask.fileURL
+          }
+        )
+      })
   },
   insertLogbook (_, payload) {
     return GroupwareAPI.post('/logbook/', payload)
