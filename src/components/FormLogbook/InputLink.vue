@@ -7,7 +7,8 @@
     :title="inputTitle"
     placeholder="https://"
     :disabled="showAsReadonlyLink"
-    :rules="{ required: true, regex: /^https?:\/\//}"
+    :required="required"
+    :rules="{ required, regex: /^https?:\/\//}"
     :custom-messages="{
       required: 'Lampiran hasil kerja harus diisi',
       regex: 'Lampiran hasil kerja harus dalam bentuk URL yang valid'
@@ -30,7 +31,7 @@
     <FormInputHeader
       :label-for="inputName"
       :title="inputTitle"
-      :required="true"
+      :required="required"
     >
     </FormInputHeader>
     <div class="form-input-link__wrapper">
@@ -92,6 +93,10 @@ export default {
     showAsReadonlyLink: {
       type: Boolean,
       default: false
+    },
+    required: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
