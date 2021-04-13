@@ -1,7 +1,11 @@
 import GAuth from 'vue-google-oauth2'
 
+const googleSecret = process.env.VUE_APP_MODE === 'production'
+  ? process.env.VUE_APP_SECRET_CLIENT_GOOGLE
+  : process.env.VUE_APP_SECRET_CLIENT_GOOGLE_STAGING
+
 const opts = {
-  clientId: process.env.VUE_APP_SECRET_CLIENT_GOOGLE,
+  clientId: googleSecret,
   scope: 'profile email',
   prompt: 'select_account'
 }

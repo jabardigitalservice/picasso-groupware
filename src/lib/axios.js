@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getAxiosConfig } from '../config'
 
 import {
   getRefreshTokenFromCookie,
@@ -6,9 +7,10 @@ import {
   setTokenInCookie
 } from './js-cookie'
 
-export const GroupwareAPI = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API_API
-})
+export const GroupwareAPI = (function () {
+  const config = getAxiosConfig()
+  return axios.create(config)
+})()
 
 export function setToken (token) {
   if (token) {

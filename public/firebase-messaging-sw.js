@@ -4,7 +4,12 @@ importScripts('vue-env.js')
 importScripts('https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js')
 importScripts('https://www.gstatic.com/firebasejs/7.18.0/firebase-messaging.js')
 
-const firebaseConfig = JSON.parse(ENVERYWHERE_FIREBASE_CRED)
+let firebaseConfig
+if (VUE_APP_MODE !== 'production') {
+  firebaseConfig = JSON.parse(ENVERYWHERE_FIREBASE_CRED_STAGING)
+} else {
+  firebaseConfig = JSON.parse(ENVERYWHERE_FIREBASE_CRED)
+}
 
 firebase.initializeApp(firebaseConfig)
 

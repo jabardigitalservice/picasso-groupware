@@ -1,6 +1,6 @@
 [context.deploy-preview.environment]
-  VUE_APP_BASE_API_API = "https://groupware-api-staging.digitalservice.id"
+  VUE_APP_MODE = "development"
 [context.master.environment]
-  VUE_APP_BASE_API_API = "https://groupware-api.digitalservice.id"
+  VUE_APP_MODE = "production"
 [context.development.environment]
-  VUE_APP_BASE_API_API = "https://groupware-api-staging.digitalservice.id"
+  VUE_APP_MODE = "development"
