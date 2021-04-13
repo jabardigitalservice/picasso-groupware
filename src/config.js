@@ -12,7 +12,7 @@ const firebaseEnvMap = [
   ['publicVapidKey', 'VUE_APP_FIREBASE_PUBLIC_VAPID_KEY']
 ]
 
-function createFirebaseConfig ({ isStaging } = {}) {
+export function getFirebaseConfig () {
   return firebaseEnvMap
     .reduce((obj, [configKey, envKey]) => {
       const value = isProduction
@@ -24,17 +24,6 @@ function createFirebaseConfig ({ isStaging } = {}) {
       })
       return obj
     }, {})
-}
-
-export function getFirebaseConfig () {
-  if (isProduction) {
-    return createFirebaseConfig({
-      isStaging: true
-    })
-  }
-  return createFirebaseConfig({
-    isStaging: false
-  })
 }
 
 export function getAxiosConfig () {
