@@ -47,8 +47,7 @@
       <FormInputTupoksi
         name="tupoksiJabatanId"
         :show-as-readonly-input="isViewingOnly"
-        v-model="payload.tupoksiJabatanId"
-        @change="onTupoksiJabatanChanged" />
+        v-model="payload.tupoksiJabatanId" />
       <br />
       <FormInputDateTime
         name="dateTask"
@@ -90,7 +89,7 @@
       <FormInputLink
         ref="formInputDocumentLink"
         :show-as-readonly-link="!isEditable"
-        :required="isDocumentTaskLinkMandatory"
+        :tupoksi-id="payload.tupoksiJabatanId"
         v-model="documentTaskLink"
       />
       <br />
@@ -211,7 +210,6 @@ export default {
       originalData: null,
       payload: Object.assign({}, modelData),
       documentTaskLink: null,
-      isDocumentTaskLinkMandatory: false,
 
       maxDateTime: new Date().toISOString()
     }
@@ -242,10 +240,13 @@ export default {
           this.$emit('logbook:not-found', id)
           return
         }
-        const { documentTaskURL, isDocumentLink } = logbook
+        const { documentTaskURL } = logbook
         this.originalData = _cloneDeep(logbook)
-        this.payload = logbook
-        this.documentTaskLink = isDocumentLink ? documentTaskURL : null
+        this.payload = {
+          ...logbook,
+          isDocumentLink: true
+        }
+        this.documentTaskLink = documentTaskURL
       }
     }
   },
@@ -278,18 +279,6 @@ export default {
         this.$set(this.payload, 'projectName', opt.name)
       }
     },
-    onTupoksiJabatanChanged (tupoksiJabatanId) {
-      const { listOfTupoksi } = this.$store.state.organizations
-      if (!Array.isArray(listOfTupoksi) || !listOfTupoksi.length) {
-        return
-      }
-      /**
-       * NOTE: it is confirmed that last element of query result
-       * will always represent "Diluar tupoksi jabatan" item
-       */
-      const lastElement = listOfTupoksi[listOfTupoksi.length - 1]
-      this.isDocumentTaskLinkMandatory = tupoksiJabatanId !== lastElement.id
-    },
     onCancel () {
       if (typeof this.onCancelCallback === 'function') {
         return this.onCancelCallback()
@@ -313,7 +302,7 @@ export default {
       try {
         const evidenceFile = this.$refs.formInputEvidence.getSelectedFile()
         formData.append('evidenceTask', evidenceFile)
-        formData.append('documentTask', this.documentTaskLink)
+        formData.append('documentTask', this.documentTaskLink || '')
         return formData
       } catch (e) {
         return null
@@ -342,7 +331,7 @@ export default {
       try {
         const evidenceFile = this.$refs.formInputEvidence.getSelectedFile()
         formData.append('evidenceTask', evidenceFile)
-        formData.append('documentTask', this.documentTaskLink)
+        formData.append('documentTask', this.documentTaskLink || '')
         return formData
       } catch (e) {
         return null
