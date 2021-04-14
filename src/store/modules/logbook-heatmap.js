@@ -1,7 +1,4 @@
 import Vue from 'vue'
-import startOfMonth from 'date-fns/startOfMonth'
-import endOfMonth from 'date-fns/endOfMonth'
-import formatDate from 'date-fns/format'
 import { GroupwareAPI } from '../../lib/axios'
 
 const MINIMUM_FETCH_MILLIS = 30000
@@ -11,7 +8,10 @@ function getHeatmapDataKey (month, year) {
 }
 
 export const state = () => ({
-  dataByMonthYear: {}
+  allLogbookDataLastFetched: -1,
+  allLogbookData: [],
+  dataByMonthYear: {},
+  isLoading: false
 })
 
 export const getters = {
@@ -31,6 +31,37 @@ export const getters = {
 }
 
 export const mutations = {
+  toggleLoading (state, isLoading) {
+    state.isLoading = typeof isLoading === 'boolean'
+      ? isLoading
+      : !state.isLoading
+  },
+  setLogbookData (state, data) {
+    state.allLogbookData = Array.isArray(data) ? data : []
+    state.allLogbookDataLastFetched = Date.now()
+
+    const groupedByMonth = state.allLogbookData.reduce((groups, logbook) => {
+      const dateTask = new Date(logbook.dateTask)
+      const [dateNum, month, year] = [
+        dateTask.getDate(),
+        dateTask.getMonth(),
+        dateTask.getFullYear()
+      ]
+      const groupName = `${year}/${month}`
+      if (groupName in groups === false) {
+        groups[groupName] = {}
+      }
+      if (dateNum in groups[groupName] === false) {
+        groups[groupName][dateNum] = 1
+      } else {
+        groups[groupName][dateNum] += 1
+      }
+
+      return groups
+    }, {})
+
+    state.dataByMonthYear = groupedByMonth
+  },
   setHeatMapData (state, { month, year, data }) {
     const key = getHeatmapDataKey(month, year)
     const groupedByDate = data.reduce((groups, item) => {
@@ -48,50 +79,24 @@ export const mutations = {
 }
 
 export const actions = {
-  async checkIfDataStale ({ state }, { month, year }) {
-    const key = getHeatmapDataKey(month, year)
-    if (key in state.dataByMonthYear === false) {
-      return true
-    }
-    const { lastFetched } = state.dataByMonthYear[key]
-    if (typeof lastFetched !== 'number') {
-      return true
-    }
-    return Date.now() - lastFetched > MINIMUM_FETCH_MILLIS
+  async checkIfDataStale ({ state }) {
+    return Date.now() - state.allLogbookDataLastFetched > MINIMUM_FETCH_MILLIS
   },
-  async getHeatmapData ({ state, rootState, commit, dispatch }, { month, year } = {}) {
-    if (typeof month !== 'number' || month < 0) {
-      throw new Error('month must be a number greater than 0')
+  async fetchAllLogbookData ({ state, commit, dispatch }) {
+    if (state.isLoading) {
+      return
     }
-    if (typeof year !== 'number' || year < 2020) {
-      throw new Error('year must be a number greater than 2020')
-    }
-
-    const startDate = startOfMonth(new Date(year, month))
-    const endDate = endOfMonth(new Date(year, month))
-    const isDataStale = await dispatch('checkIfDataStale', { month, year })
-
+    commit('toggleLoading', true)
+    const isDataStale = await dispatch('checkIfDataStale')
     if (isDataStale) {
       try {
-        const response = await GroupwareAPI
-          .get('/logbook/', {
-            params: {
-              sort: 'dateTask',
-              start_date: formatDate(startDate, 'yyyy-MM-dd'),
-              end_date: formatDate(endDate, 'yyyy-MM-dd'),
-              pageSize: 9999
-            }
-          })
-        commit('setHeatMapData', {
-          month,
-          year,
-          data: response.data.results || []
-        })
+        const response = await GroupwareAPI.get('/logbook/batch')
+        commit('setLogbookData', response.data)
       } catch (e) {
-
+        // TODO: handle error
+      } finally {
+        commit('toggleLoading', false)
       }
     }
-    const key = getHeatmapDataKey(month, year)
-    return state.dataByMonthYear[key] || null
   }
 }
