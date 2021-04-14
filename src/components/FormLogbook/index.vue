@@ -211,7 +211,7 @@ export default {
     const adminWhatsappBacklink = `https://api.whatsapp.com/send?phone=${adminWhatsappNumber}&text=Usulan nama project/product anda`
     return {
       adminWhatsappBacklink,
-      isLoadingLogbook: true,
+      isLoadingLogbook: false,
       originalData: null,
       payload: Object.assign({}, modelData),
       documentTaskLink: null,
