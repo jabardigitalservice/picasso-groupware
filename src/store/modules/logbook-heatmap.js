@@ -1,14 +1,11 @@
 import Vue from 'vue'
 import { GroupwareAPI } from '../../lib/axios'
 
-const MINIMUM_FETCH_MILLIS = 30000
-
 function getHeatmapDataKey (month, year) {
   return `${parseInt(year)}/${parseInt(month)}`
 }
 
 export const state = () => ({
-  allLogbookDataLastFetched: -1,
   allLogbookData: [],
   dataByMonthYear: {},
   isLoading: false
@@ -38,7 +35,6 @@ export const mutations = {
   },
   setLogbookData (state, data) {
     state.allLogbookData = Array.isArray(data) ? data : []
-    state.allLogbookDataLastFetched = Date.now()
 
     const groupedByMonth = state.allLogbookData.reduce((groups, logbook) => {
       const dateTask = new Date(logbook.dateTask)
@@ -79,24 +75,18 @@ export const mutations = {
 }
 
 export const actions = {
-  async checkIfDataStale ({ state }) {
-    return Date.now() - state.allLogbookDataLastFetched > MINIMUM_FETCH_MILLIS
-  },
   async fetchAllLogbookData ({ state, commit, dispatch }) {
     if (state.isLoading) {
       return
     }
     commit('toggleLoading', true)
-    const isDataStale = await dispatch('checkIfDataStale')
-    if (isDataStale) {
-      try {
-        const response = await GroupwareAPI.get('/logbook/batch')
-        commit('setLogbookData', response.data)
-      } catch (e) {
-        // TODO: handle error
-      } finally {
-        commit('toggleLoading', false)
-      }
+    try {
+      const response = await GroupwareAPI.get('/logbook/batch')
+      commit('setLogbookData', response.data)
+    } catch (e) {
+      // TODO: handle error
+    } finally {
+      commit('toggleLoading', false)
     }
   }
 }
