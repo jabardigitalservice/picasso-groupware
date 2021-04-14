@@ -56,7 +56,7 @@ import getDaysInMonth from 'date-fns/getDaysInMonth'
 import differenceInDays from 'date-fns/differenceInDays'
 import startOfWeek from 'date-fns/startOfWeek'
 import { formatDateShort } from '../../../lib/date'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   inject: {
@@ -117,32 +117,7 @@ export default {
       return ((this.rectSize + this.rectGap) * 7) + this.rectGap
     }
   },
-  async mounted () {
-    this.$watch(
-      function () {
-        return `${this.year}/${this.month}`
-      },
-      function (newVal, oldVal) {
-        if (newVal !== oldVal) {
-          this.loadData()
-        }
-      },
-      { immediate: true, deep: true }
-    )
-  },
   methods: {
-    ...mapActions('logbook-heatmap', [
-      'getHeatmapData'
-    ]),
-    loadData () {
-      this.isLoading = true
-      this.getHeatmapData({
-        month: this.month,
-        year: this.year
-      }).finally(() => {
-        this.isLoading = false
-      })
-    },
     getRectY (itemIndex) {
       return ((itemIndex % 7)) * (this.rectSize + this.rectGap)
     },

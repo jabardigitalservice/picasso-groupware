@@ -13,6 +13,7 @@
 <script>
 import subMonths from 'date-fns/subMonths'
 import HeatmapMonthBlock from './HeatmapMonthBlock'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -62,6 +63,7 @@ export default {
     }
   },
   mounted () {
+    this.fetchAllLogbookData()
     this.listenToWindowResize()
     window.removeEventListener('resize', this.listenToWindowResize)
     setTimeout(() => {
@@ -72,6 +74,9 @@ export default {
     window.removeEventListener('resize', this.listenToWindowResize)
   },
   methods: {
+    ...mapActions('logbook-heatmap', [
+      'fetchAllLogbookData'
+    ]),
     listenToWindowResize () {
       const { innerWidth } = window
       if (innerWidth >= 768 && innerWidth < 1024) {
