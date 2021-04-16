@@ -59,11 +59,10 @@ body.loading {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 6rem;
-  height: 6rem;
-  padding: 1rem;
+  width: 96px;
+  height: 96px;
   
-  border-radius: 6rem;
+  border-radius: 96px;
   background-color: white;
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.15);
   overflow: hidden;
@@ -76,6 +75,8 @@ body.loading {
   display: block;
   object-fit: contain;
   object-position: center;
+  width: 80px;
+  height: 80px;
 }
 
 @keyframes anim-shimmering {
@@ -86,45 +87,3 @@ body.loading {
     background-position: 100% 0%;
   }
 }
-
-/* i.app-logo {
-  font-size: 6rem;
-  width: 6rem;
-  height: 6rem;
-  @apply inline-flex justify-center items-center; 
-
-  &::after {
-    content: '';
-    box-sizing: content-box;
-    display: block;
-    width: 1em;
-    height: 1em;
-    background-image: url('./assets/logo.png');
-    background-size: 0.6em 0.6em;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-
-  &.is-rounded {
-    @apply relative rounded-full border-2 border-solid border-gray-200 bg-gray-100;
-
-    &::before {
-      content: '';
-      width: 1em;
-      height: 1em;
-      @apply absolute block rounded-full bg-white shadow-xl;
-    }
-
-    &.is-beating::before {
-      will-change: opacity, transform;
-      animation: app-logo-shadow-heartbeat infinite alternate 0.5s ease-in-out;
-    }
-  }
-
-  &.is-beating {
-    &::after {
-      will-change: transform;
-      animation: app-logo-heartbeat infinite alternate 0.5s ease-in-out;
-    }
-  }
-} */
