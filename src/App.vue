@@ -13,15 +13,7 @@
         </div>
       </div>
     </div>
-
-    <template v-if="loading">
-      <div class="w-screen h-screen flex justify-center items-center flex-wrap bg-brand-green">
-        <i aria-hidden="true" class="block p-8 rounded-full bg-white shadow">
-          <img alt="Chrome Icon" class="block h-32 -ml-1 -mt-1" src="/img/icons/android-chrome-512x512.png">
-        </i>
-      </div>
-    </template>
-    <template v-else>
+    <template v-if="!loading">
       <transition name="page" mode="out-in">
         <component :is="layout" v-if="layout" />
       </transition>
@@ -85,6 +77,7 @@ export default {
     loading (value) {
       if (value === false) {
         document.body.classList.remove('loading')
+        document.getElementById('splashScreen').style.setProperty('display', 'none')
       }
     }
   },
