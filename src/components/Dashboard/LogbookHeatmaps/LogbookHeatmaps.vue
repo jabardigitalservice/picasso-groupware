@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     listOfMonths () {
-      const today = new Date(2021, 2)
+      const today = new Date()
       return new Array(this.numOfMonths)
         .fill(null)
         .map((_, index) => {
