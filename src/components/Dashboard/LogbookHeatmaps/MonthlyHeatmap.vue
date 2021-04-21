@@ -1,34 +1,23 @@
 <template>
-  <div class="heatmap-month-block">
+  <div class="monthly-heatmap">
+    <span
+      class="monthly-heatmap__month-name">
+      {{ monthName }}
+    </span>
     <div
       v-if="isLoading"
-      class="flex flex-col justify-center items-center"
-      :style="{ width: `${blockWidth}px`, height: `${blockHeight}px` }">
+      class="flex flex-col justify-center items-center">
       <!-- TODO: add loading hint here -->
     </div>
     <svg
       v-else
-      class="heatmap-month-block__day-blocks-wrapper"
-      :key="`${year}/${month}`"
-      :width="`${blockWidth}px`"
-      :height="`${blockHeight}px`"
-      x="0"
-      y="0">
-      <g v-for="i in startOfMonthOffsetInDays"
-        :key="`offset:${i}`"
-        role="offset"
-        class="heatmap-month-block__day-block">
-        <rect
-          fill="transparent"
-          :width="rectSize"
-          :height="rectSize"
-          :x="getRectX(i - 1)"
-          :y="getRectY(i - 1)" />
-      </g>
+      :viewBox="viewBoxRectSize"
+      class="monthly-heatmap__blocks"
+      :key="`${year}/${month}`">
       <g
         v-for="(dateNum, index) in numOfDays"
         :key="dateNum"
-        class="heatmap-month-block__day-block"
+        class="monthly-heatmap__block"
         fill="transparent">
         <rect
           :style="{
@@ -36,6 +25,8 @@
           }"
           :width="rectSize"
           :height="rectSize"
+          :rx="rectSize / 10"
+          :ry="rectSize / 10"
           :x="getRectX(index + startOfMonthOffsetInDays)"
           :y="getRectY(index + startOfMonthOffsetInDays)" />
         <title>
@@ -43,18 +34,19 @@
         </title>
       </g>
     </svg>
-    <span
-      class="heatmap-month-block__month-name">
-      {{ monthName }}
-    </span>
   </div>
 </template>
 
 <script>
+import isValid from 'date-fns/isValid'
 import formatDate from 'date-fns/format'
 import getDaysInMonth from 'date-fns/getDaysInMonth'
 import differenceInDays from 'date-fns/differenceInDays'
 import startOfWeek from 'date-fns/startOfWeek'
+import getWeeksInMonth from 'date-fns/getWeeksInMonth'
+import isWeekend from 'date-fns/isWeekend'
+import id from 'date-fns/locale/id'
+
 import { formatDateShort } from '../../../lib/date'
 import { mapGetters, mapState } from 'vuex'
 
@@ -75,64 +67,90 @@ export default {
   },
   data () {
     return {
-      rectGap: 2,
-      rectSize: 12,
+      rectGap: 6,
+      rectSize: 60,
       isLoading: false,
       defaultColor: '#ECEFF1'
     }
   },
   computed: {
+    isMonthAndYearDefined () {
+      const { month, year } = this
+      const isNumber = typeof month === 'number' && typeof year === 'number'
+      const isValidDate = isValid(new Date(year, month))
+      return isNumber && isValidDate
+    },
+    ...mapGetters('logbook-heatmap', [
+      'getTaskCountByDate'
+    ]),
     ...mapState('logbook-heatmap', {
       heatmapData (state) {
+        if (!this.isMonthAndYearDefined) {
+          return null
+        }
         const key = `${parseInt(this.year)}/${parseInt(this.month)}`
         return state.dataByMonthYear[key] || null
       }
     }),
-    ...mapGetters('logbook-heatmap', [
-      'getTaskCountByDate'
-    ]),
     startOfMonthOffsetInDays () {
-      const calendarStart = startOfWeek(
-        new Date(this.year, this.month),
-        {
-          weekStartsOn: 1
-        })
-      const monthStart = new Date(this.year, this.month, 1)
-      return differenceInDays(monthStart, calendarStart)
-    },
-    numOfDays () {
-      const { month, year } = this
-      if (typeof month !== 'number' || typeof year !== 'number') {
+      if (!this.isMonthAndYearDefined) {
         return 0
       }
-      return getDaysInMonth(new Date(year, month))
+      const monthStart = new Date(this.year, this.month, 1)
+      const calendarStart = startOfWeek(monthStart, {
+        weekStartsOn: 1
+      })
+      return differenceInDays(monthStart, calendarStart)
+    },
+    numOfWeeks () {
+      if (!this.isMonthAndYearDefined) {
+        return 0
+      }
+      return getWeeksInMonth(new Date(this.year, this.month))
+    },
+    numOfDays () {
+      if (!this.isMonthAndYearDefined) {
+        return 0
+      }
+      return getDaysInMonth(new Date(this.year, this.month))
+    },
+
+    viewBoxRectSize () {
+      if (!this.numOfWeeks) {
+        return `0 0 0 0`
+      }
+      const width = (this.rectSize * this.numOfWeeks) + (this.rectGap * (this.numOfWeeks + 1))
+      const height = (this.rectSize * 7) + (this.rectGap * 9)
+      return `0 0 ${width} ${height}`
     },
     monthName () {
-      return formatDate(new Date(this.year, this.month), 'MMMM')
-    },
-    blockWidth () {
-      return ((this.rectSize + this.rectGap) * 5) + this.rectGap
-    },
-    blockHeight () {
-      return ((this.rectSize + this.rectGap) * 7) + this.rectGap
+      return formatDate(new Date(this.year, this.month), 'MMMM', {
+        locale: id
+      })
     }
   },
   methods: {
     getRectY (itemIndex) {
-      return ((itemIndex % 7)) * (this.rectSize + this.rectGap)
+      return this.rectGap + ((itemIndex % 7)) * (this.rectSize + this.rectGap)
     },
     getRectX (itemIndex) {
       const colNum = Math.floor(itemIndex / 7)
-      return colNum * (this.rectSize + this.rectGap)
+      return this.rectGap + (colNum * (this.rectSize + this.rectGap))
     },
 
     getTooltipContentByDateNum (dateNum) {
       const dateObj = new Date(this.year, this.month, dateNum)
+      const dateString = formatDateShort(dateObj)
+
       const taskCount = this.getTaskCountByDate(dateObj)
       if (taskCount > 0) {
-        return `${taskCount} laporan pada ${formatDateShort(dateObj)}`
+        return `${taskCount} laporan pada ${dateString}`
       }
-      return `${formatDateShort(dateObj)}`
+
+      if (isWeekend(dateObj)) {
+        return dateString
+      }
+      return `Belum ada laporan pada ${dateString}`
     },
     getHeatColorByDateNum (dateNum) {
       if (this.isLoading) {
@@ -168,14 +186,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.heatmap-month-block {
+.monthly-heatmap {
+  max-width: 200px;
   @apply inline-flex flex-col justify-between items-stretch;
 
-  &__day-blocks-wrapper {
+  &__blocks {
     display: inline;
+    @apply w-full;
   }
 
-  &__day-block {
+  &__block {
     transform-origin: 0 0;
     @apply border-none bg-transparent;
 
@@ -185,18 +205,16 @@ export default {
       @apply border-none stroke-0;
 
       &:hover {
-        stroke: rgba(69,90,100,1);
-        stroke-width: 1px;
+        stroke: rgb(0, 0, 0, 0.2);
+        stroke-width: 6;
       }
     }
   }
 
   &__month-name {
-    @apply block mt-2
-    tracking-wide
-    uppercase
-    text-left text-xs
-    text-gray-500;
+    @apply block mb-2
+    text-left text-sm
+    text-green-600 font-bold;
   }
 }
 </style>

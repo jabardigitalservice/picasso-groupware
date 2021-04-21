@@ -22,8 +22,10 @@
               </div>
             </template>
             <template v-else>
-              <TaskReportHeatmap class="p-3 pt-6" />
-              <AttendanceButton />
+              <div class="p-3">
+                <AttendanceButton />
+              </div>
+              <LogbookHeatmaps class="p-3" />
               <div class="flex flex-row flex-wrap">
                 <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
                   <component :is="getMenuLinkComponent(m)" v-bind="getMenuLinkProps(m)" >
@@ -58,7 +60,7 @@
 import { mapGetters } from 'vuex'
 import LoginButton from '@/components/LoginButton'
 import LoginByGoogleButton from '@/components/LoginByGoogleButton'
-import TaskReportHeatmap from '@/components/Dashboard/TaskReportHeatmap/index'
+import LogbookHeatmaps from '@/components/Dashboard/LogbookHeatmaps/LogbookHeatmaps'
 import HomeBannerList from '@/components/HomeBannerList'
 import AnnouncementList from '@/components/Announcement/AnnouncementList'
 import HomeArticleList from '@/components/HomeArticleList'
@@ -104,7 +106,7 @@ export default {
     HomeBannerList,
     AnnouncementList,
     HomeArticleList,
-    TaskReportHeatmap,
+    LogbookHeatmaps,
     LoginButton,
     LoginByGoogleButton,
     UserInfo,
