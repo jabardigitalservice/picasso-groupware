@@ -69,7 +69,7 @@ export default {
 .workhour-progress-bar {
   &__desc {
     @apply inline-flex flex-wrap justify-start items-center
-    text-sm text-blue-700;
+    text-sm text-orange-500;
   }
 
   &__bar {
@@ -79,7 +79,7 @@ export default {
     justify-start items-center
     h-12
     rounded
-    bg-green-600;
+    bg-gray-200;
 
     &.is-loading {
       @apply bg-gray-300;
@@ -91,14 +91,21 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 1;
-    background-color: rgba(0, 0, 0, 0.25);
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAR0lEQVQoU2P0WR/wn4EA2CLJzMBISCFIkc/zv/gVwhSBLMRpIrIinArRFWFViE0RhkJcilAU4lMEV0hIEVghw4ng/6BwIgQAZewxv5repfoAAAAASUVORK5CYII=);
     @apply absolute;
+
+    &::after {
+      content: '';
+      background: linear-gradient(to right, rgba(255,255,255, 0), rgba(255,255,255, 0.5));
+      z-index: 1;
+      @apply absolute inset-0;
+    }
   }
 
   &__bar-count {
     z-index: 1;
     @apply relative px-4 py-2
-    text-lg font-bold text-white;
+    text-lg font-bold text-gray-700;
   }
 
   &__hint {

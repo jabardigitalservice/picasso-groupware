@@ -37,7 +37,7 @@ export default {
 <style lang="scss" scoped>
 .monthly-workhour {
   &__title {
-    @apply mb-3 text-base font-bold text-gray-700;
+    @apply mb-3 text-base font-bold text-gray-900;
   }
 }
 </style>

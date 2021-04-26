@@ -90,7 +90,7 @@ export default {
   &__title {
     @apply flex-none w-full
     text-base font-bold
-    text-gray-700;
+    text-gray-900;
   }
 
   &__btn-create {

@@ -2,13 +2,15 @@
   <div class="home">
     <div class="container mx-auto">
 
-      <div class="flex flex-col md:flex-row">
-        <div class="w-full md:w-1/3">
-          <home-banner-list class="mt-2" />
+      <div class="home-grid-layout">
+        <div class="home-grid-layout__first-column">
+          <div
+            v-if="user"
+            class="home-card mb-4">
+            <user-info />
+          </div>
 
-          <user-info class="mx-0 sm:mx-2 bg-white shadow" />
-
-          <div class="mx-0 sm:mx-2 shadow bg-white">
+          <div>
             <template v-if="!user">
               <div class="w-full pt-4 text-center">
                 <div class="">
@@ -22,17 +24,21 @@
               </div>
             </template>
             <template v-else>
-              <div class="flex-none w-full p-3">
-                <MonthlyWorkhour />
+              <div class="home-card mb-4">
+                <MonthlyWorkhour class="mb-12" />
                 <AttendanceButton />
               </div>
-              <div class="p-3">
+              <div class="home-card mb-4">
                 <LogbookHeatmaps />
               </div>
-              <div class="flex flex-row flex-wrap">
-                <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
-                  <component :is="getMenuLinkComponent(m)" v-bind="getMenuLinkProps(m)" >
-                    <div class="h-full p-3 py-4 text-center text-gray-700">
+              <div class="home-card mb-4">
+                <div class="grid grid-cols-3 gap-12">
+                  <component
+                    v-for="(m, index) in menuItems"
+                    :key="index"
+                    :is="getMenuLinkComponent(m)"
+                    v-bind="getMenuLinkProps(m)" >
+                    <div class="text-center text-gray-700">
                       <i aria-hidden="true" :class="[m.icon, 'text-2xl'] " />
                       <p class="text-xs mt-1">{{m.name}}</p>
                     </div>
@@ -42,7 +48,7 @@
             </template>
           </div>
         </div>
-        <div class="w-full md:w-2/3">
+        <div class="home-grid-layout__second-column">
           <div v-if="user" v-show="showAnnouncement">
             <h5 class="font-bold text-lg m-4">
               Pengumuman Penting
@@ -64,7 +70,6 @@ import { mapGetters } from 'vuex'
 import LoginButton from '@/components/LoginButton'
 import LoginByGoogleButton from '@/components/LoginByGoogleButton'
 import LogbookHeatmaps from '@/components/Dashboard/LogbookHeatmaps/LogbookHeatmaps'
-import HomeBannerList from '@/components/HomeBannerList'
 import AnnouncementList from '@/components/Announcement/AnnouncementList'
 import HomeArticleList from '@/components/HomeArticleList'
 import UserInfo from '@/components/UserInfo'
@@ -107,7 +112,6 @@ const menuItems = Object.freeze([
 export default {
   name: 'home',
   components: {
-    HomeBannerList,
     AnnouncementList,
     HomeArticleList,
     LogbookHeatmaps,
@@ -158,3 +162,35 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.home-card {
+  box-shadow: 0 8px 36px 0px rgba(120, 144, 156, 0.15);
+
+  @apply overflow-hidden p-6
+  border-none
+  rounded-none
+  bg-white;
+
+  @screen sm {
+    @apply rounded-lg;
+  }
+}
+
+.home-grid-layout {
+  @screen lg {
+    @apply gap-8 flex flex-row;
+  }
+
+  @screen lg {
+    &__first-column {
+      width: 375px;
+      @apply flex-none;
+    }
+
+    &__second-column {
+      @apply flex-auto;
+    }
+  }
+}
+</style>
