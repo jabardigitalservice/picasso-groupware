@@ -13,17 +13,9 @@
       </div>
     </div>
 
-    <div class="bg-brand-green-dark mb-8">
+    <div class="bg-brand-green-dark">
       <div class="container mx-auto px-4">
         <div class="relative bg-white mx-auto max-w-sm shadow rounded-lg overflow-hidden" style="top: 20px">
-          <div class="flex items-center px-6 py-4">
-            <img alt="Digiteam Logo" class="block h-12 mx-auto mr-4" src="@/assets/logo.png">
-            <div class="text-left flex-grow">
-              <p class="text-sm leading-normal">DigiTeam</p>
-              <p class="text-sm text-gray-600">Digital Together Everyone Achieve More</p>
-              <p class="text-sm text-gray-600">Jabar Digital Service</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

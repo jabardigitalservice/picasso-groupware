@@ -1,7 +1,26 @@
 <template>
   <div class="home">
+    <div class="bg-white mb-4">
+      <div class="container mx-auto">
+        <div class="home-grid-layout">
+          <div class="home-grid-layout__first-column">
+            <div class="home-card relative" style="box-shadow: none;" >
+              <div class="flex items-center">
+                <img alt="Digiteam Logo" class="block h-12 mx-auto mr-4" src="@/assets/logo.png">
+                <div class="text-left flex-grow">
+                  <p class="text-sm leading-normal">DigiTeam</p>
+                  <p class="text-xs md:text-sm text-gray-600">Digital Together Everyone Achieve More</p>
+                  <p class="text-xs md:text-sm text-gray-600">Jabar Digital Service</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="home-grid-layout__second-column">
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container mx-auto">
-
       <div class="home-grid-layout">
         <div class="home-grid-layout__first-column">
           <div
@@ -25,7 +44,7 @@
             </template>
             <template v-else>
               <div class="home-card mb-4">
-                <MonthlyWorkhour class="mb-12" />
+                <MonthlyWorkhour class="mb-8" />
                 <AttendanceButton />
               </div>
               <div class="home-card mb-4">
@@ -50,7 +69,7 @@
         </div>
         <div class="home-grid-layout__second-column">
           <div v-if="user" v-show="showAnnouncement">
-            <h5 class="font-bold text-lg m-4">
+            <h5 class="font-bold text-lg m-4 mt-0 leading-none">
               Pengumuman Penting
             </h5>
             <AnnouncementList class="mt-2" @found="showAnnouncement = true" />
