@@ -1,0 +1,220 @@
+<template>
+  <div class="monthly-heatmap">
+    <span
+      class="monthly-heatmap__month-name">
+      {{ monthName }}
+    </span>
+    <div
+      v-if="isLoading"
+      class="flex flex-col justify-center items-center">
+      <!-- TODO: add loading hint here -->
+    </div>
+    <svg
+      v-else
+      :viewBox="viewBoxRectSize"
+      class="monthly-heatmap__blocks"
+      :key="`${year}/${month}`">
+      <g
+        v-for="(dateNum, index) in numOfDays"
+        :key="dateNum"
+        class="monthly-heatmap__block"
+        fill="transparent">
+        <rect
+          :style="{
+            fill: getHeatColorByDateNum(dateNum)
+          }"
+          :width="rectSize"
+          :height="rectSize"
+          :rx="rectSize / 10"
+          :ry="rectSize / 10"
+          :x="getRectX(index + startOfMonthOffsetInDays)"
+          :y="getRectY(index + startOfMonthOffsetInDays)" />
+        <title>
+          {{ getTooltipContentByDateNum(dateNum) }}
+        </title>
+      </g>
+    </svg>
+  </div>
+</template>
+
+<script>
+import isValid from 'date-fns/isValid'
+import formatDate from 'date-fns/format'
+import getDaysInMonth from 'date-fns/getDaysInMonth'
+import differenceInDays from 'date-fns/differenceInDays'
+import startOfWeek from 'date-fns/startOfWeek'
+import getWeeksInMonth from 'date-fns/getWeeksInMonth'
+import isWeekend from 'date-fns/isWeekend'
+import id from 'date-fns/locale/id'
+
+import { formatDateShort } from '../../../lib/date'
+import { mapGetters, mapState } from 'vuex'
+
+export default {
+  inject: {
+    heatmapColorConfig: {
+      from: 'heatmapColorConfig',
+      default: () => []
+    }
+  },
+  props: {
+    month: {
+      type: Number
+    },
+    year: {
+      type: Number
+    }
+  },
+  data () {
+    return {
+      rectGap: 6,
+      rectSize: 60,
+      isLoading: false,
+      defaultColor: '#ECEFF1'
+    }
+  },
+  computed: {
+    isMonthAndYearDefined () {
+      const { month, year } = this
+      const isNumber = typeof month === 'number' && typeof year === 'number'
+      const isValidDate = isValid(new Date(year, month))
+      return isNumber && isValidDate
+    },
+    ...mapGetters('logbook-heatmap', [
+      'getTaskCountByDate'
+    ]),
+    ...mapState('logbook-heatmap', {
+      heatmapData (state) {
+        if (!this.isMonthAndYearDefined) {
+          return null
+        }
+        const key = `${parseInt(this.year)}/${parseInt(this.month)}`
+        return state.dataByMonthYear[key] || null
+      }
+    }),
+    startOfMonthOffsetInDays () {
+      if (!this.isMonthAndYearDefined) {
+        return 0
+      }
+      const monthStart = new Date(this.year, this.month, 1)
+      const calendarStart = startOfWeek(monthStart, {
+        weekStartsOn: 1
+      })
+      return differenceInDays(monthStart, calendarStart)
+    },
+    numOfWeeks () {
+      if (!this.isMonthAndYearDefined) {
+        return 0
+      }
+      return getWeeksInMonth(new Date(this.year, this.month))
+    },
+    numOfDays () {
+      if (!this.isMonthAndYearDefined) {
+        return 0
+      }
+      return getDaysInMonth(new Date(this.year, this.month))
+    },
+
+    viewBoxRectSize () {
+      if (!this.numOfWeeks) {
+        return `0 0 0 0`
+      }
+      const width = (this.rectSize * this.numOfWeeks) + (this.rectGap * (this.numOfWeeks + 1))
+      const height = (this.rectSize * 7) + (this.rectGap * 9)
+      return `0 0 ${width} ${height}`
+    },
+    monthName () {
+      return formatDate(new Date(this.year, this.month), 'MMMM', {
+        locale: id
+      })
+    }
+  },
+  methods: {
+    getRectY (itemIndex) {
+      return this.rectGap + ((itemIndex % 7)) * (this.rectSize + this.rectGap)
+    },
+    getRectX (itemIndex) {
+      const colNum = Math.floor(itemIndex / 7)
+      return this.rectGap + (colNum * (this.rectSize + this.rectGap))
+    },
+
+    getTooltipContentByDateNum (dateNum) {
+      const dateObj = new Date(this.year, this.month, dateNum)
+      const dateString = formatDateShort(dateObj)
+
+      const taskCount = this.getTaskCountByDate(dateObj)
+      if (taskCount > 0) {
+        return `${taskCount} laporan pada ${dateString}`
+      }
+
+      if (isWeekend(dateObj)) {
+        return dateString
+      }
+      return `Belum ada laporan pada ${dateString}`
+    },
+    getHeatColorByDateNum (dateNum) {
+      if (this.isLoading) {
+        return this.defaultColor
+      }
+      const dateObj = new Date(this.year, this.month, dateNum)
+      const taskCount = this.getTaskCountByDate(dateObj)
+      const color = this.getColorByTaskCount(taskCount)
+      return color
+    },
+    getColorByTaskCount (count) {
+      const { heatmapColorConfig } = this
+      if (!Array.isArray(heatmapColorConfig) || !heatmapColorConfig.length) {
+        return this.defaultColor
+      }
+
+      let color
+      for (let i = 0, len = heatmapColorConfig.length; i < len; i++) {
+        const minTask = heatmapColorConfig[i][0]
+        const maxTask = i < len - 1
+          ? heatmapColorConfig[i + 1][0]
+          : Number.MAX_SAFE_INTEGER
+
+        if (count >= minTask && count < maxTask) {
+          color = heatmapColorConfig[i][1]
+          break
+        }
+      }
+      return color || this.defaultColor
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.monthly-heatmap {
+  max-width: 200px;
+  @apply inline-flex flex-col justify-between items-stretch;
+
+  &__blocks {
+    display: inline;
+    @apply w-full;
+  }
+
+  &__block {
+    transform-origin: 0 0;
+    @apply border-none bg-transparent;
+
+    > rect {
+      transform-origin: 0 0;
+      cursor: pointer;
+      @apply border-none stroke-0;
+
+      &:hover {
+        stroke: rgb(0, 0, 0, 0.2);
+        stroke-width: 6;
+      }
+    }
+  }
+
+  &__month-name {
+    @apply block mb-2
+    text-left text-sm
+    text-green-600 font-bold;
+  }
+}
+</style>
