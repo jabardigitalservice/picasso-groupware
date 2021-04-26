@@ -3,13 +3,25 @@
     <p class="logbook-heatmaps__title">
       Laporan Kamu
     </p>
-    <template v-for="item in listOfMonths">
-      <MonthlyHeatmap
-        class="flex-1"
-        :key="`${item.year}/${item.month}`"
-        :month="item.month"
-        :year="item.year" />
-    </template>
+    <div class="logbook-heatmaps__wrapper">
+      <template v-for="item in listOfMonths">
+        <MonthlyHeatmap
+          class="flex-1"
+          :key="`${item.year}/${item.month}`"
+          :is-loading="isLoading"
+          :month="item.month"
+          :year="item.year" />
+      </template>
+      <div
+        v-show="hasError"
+        class="logbook-heatmaps__error-overlay">
+        <p>
+          Heatmap laporan sedang bermasalah.
+          <br>
+          Kami coba check dulu ya
+        </p>
+      </div>
+    </div>
     <button
       class="logbook-heatmaps__btn-create"
       @click="onCreateNewLogbook">
@@ -21,7 +33,7 @@
 <script>
 import subMonths from 'date-fns/subMonths'
 import MonthlyHeatmap from './MonthlyHeatmap'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -34,6 +46,7 @@ export default {
   },
   data () {
     return {
+      hasError: false,
       numOfMonths: 2,
       colorConfig: [
         [0, '#ECEFF1'],
@@ -47,6 +60,9 @@ export default {
     }
   },
   computed: {
+    ...mapState('logbook-heatmap', {
+      isLoading: 'isLoading'
+    }),
     listOfMonths () {
       const today = new Date()
       return new Array(this.numOfMonths)
@@ -67,6 +83,9 @@ export default {
   },
   mounted () {
     this.fetchAllLogbookData()
+      .catch(() => {
+        this.hasError = true
+      })
   },
   methods: {
     ...mapActions('logbook-heatmap', [
@@ -83,18 +102,14 @@ export default {
 
 <style lang="scss" scoped>
 .logbook-heatmaps {
-  gap: 1rem;
-  @apply flex flex-row flex-wrap
-  justify-start items-stretch;
 
   &__title {
-    @apply flex-none w-full
-    text-base font-bold
+    @apply mb-4 text-base font-bold
     text-gray-900;
   }
 
   &__btn-create {
-    @apply flex-none w-full
+    @apply w-full
     px-4 py-2
     rounded-md
     bg-green-600
@@ -103,6 +118,20 @@ export default {
     &:hover {
       @apply bg-green-500;
     }
+  }
+
+  &__wrapper {
+    gap: 1rem;
+    @apply mb-4 relative flex flex-row flex-wrap
+    justify-start items-stretch;
+  }
+
+  &__error-overlay {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: saturate(0%);
+    @apply absolute inset-0
+    flex justify-center items-center
+    text-center;
   }
 }
 </style>
