@@ -16,7 +16,7 @@ export const actions = {
   async getLogbookList ({ state, commit }, params = {}) {
     const get = await GroupwareAPI.get('/logbook/', {
       params: {
-        sort: 'dateTask',
+        sort: 'dateTask,_id',
         ...params
       }
     }).then(r => r.data)
