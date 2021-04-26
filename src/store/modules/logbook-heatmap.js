@@ -1,3 +1,4 @@
+import pMinDelay from 'p-min-delay'
 import Vue from 'vue'
 import { GroupwareAPI } from '../../lib/axios'
 
@@ -81,10 +82,10 @@ export const actions = {
     }
     commit('toggleLoading', true)
     try {
-      const response = await GroupwareAPI.get('/logbook/batch')
+      const response = await pMinDelay(GroupwareAPI.get('/logbook/batch'), 1500)
       commit('setLogbookData', response.data)
     } catch (e) {
-      // TODO: handle error
+      throw e
     } finally {
       commit('toggleLoading', false)
     }
