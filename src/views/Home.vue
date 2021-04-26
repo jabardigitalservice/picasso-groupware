@@ -22,10 +22,13 @@
               </div>
             </template>
             <template v-else>
-              <div class="p-3">
+              <div class="flex-none w-full p-3">
+                <MonthlyWorkhour />
                 <AttendanceButton />
               </div>
-              <LogbookHeatmaps class="p-3" />
+              <div class="p-3">
+                <LogbookHeatmaps />
+              </div>
               <div class="flex flex-row flex-wrap">
                 <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
                   <component :is="getMenuLinkComponent(m)" v-bind="getMenuLinkProps(m)" >
@@ -66,6 +69,7 @@ import AnnouncementList from '@/components/Announcement/AnnouncementList'
 import HomeArticleList from '@/components/HomeArticleList'
 import UserInfo from '@/components/UserInfo'
 import AttendanceButton from '@/components/AttendanceButton'
+import MonthlyWorkhour from '@/components/Dashboard/MonthlyWorkhour/MonthlyWorkhour'
 
 const menuItems = Object.freeze([
   {
@@ -110,7 +114,8 @@ export default {
     LoginButton,
     LoginByGoogleButton,
     UserInfo,
-    AttendanceButton
+    AttendanceButton,
+    MonthlyWorkhour
   },
 
   metaInfo: {
