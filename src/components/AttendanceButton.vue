@@ -1,9 +1,9 @@
 <template>
-  <div v-show="isCheckinButton || isCheckoutButton" class="m-3">
+  <div v-show="isCheckinButton || isCheckoutButton">
     <button
       :class="{
         'block w-full px-4 py-2 rounded text-white': true,
-        'bg-blue-500': isCheckinButton,
+        'bg-green-600 hover:bg-green-500': isCheckinButton,
         'bg-red-500': isCheckoutButton
       }"
       @click="onClick">
