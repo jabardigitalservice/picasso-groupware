@@ -14,7 +14,13 @@
         :custom-messages="{
           required: 'Username harus diisi'
         }"
-      />
+      >
+        <template #title>
+          <span class="text-sm text-gray-800">
+            Username
+          </span>
+        </template>
+      </FormInput>
       <br/>
       <div class="relative">
         <FormInput
@@ -26,20 +32,33 @@
           :custom-messages="{
             required: 'Password harus diisi'
           }"
-        />
+        >
+          <template #title>
+            <span class="text-sm text-gray-800">
+              Password
+            </span>
+          </template>
+        </FormInput>
       </div>
       <br />
       <div class="flex justify-end">
         <button
           type="submit"
-          :class="[
-            'appearance-none px-8 py-2 text-white rounded-md',
-            hasError(errors) || isPayloadEmpty
-              ? 'cursor-not-allowed bg-gray-400'
-              : 'bg-brand-green hover:bg-brand-green-light'
-          ]"
+          :class="{
+            'btn-login-uname-pwd': true,
+            'is-error': hasError(errors),
+            'is-disabled': isPayloadEmpty,
+            'is-pending': isPending
+          }"
         >
-          Login
+          <img
+            v-if="isPending"
+            src="@/assets/loading.gif"
+            class="inline-block w-auto object-contain object-center"
+            style="height: 24px;">
+          <span v-else>
+            Login
+          </span>
         </button>
       </div>
     </form>
@@ -54,6 +73,7 @@ export default {
   },
   data () {
     return {
+      isPending: false,
       showPassword: false,
       payload: {
         username: null,
@@ -73,6 +93,7 @@ export default {
       }
     },
     onSubmit () {
+      this.isPending = true
       this.$store.dispatch('auth/loginUsingUsernameAndPassword', this.payload)
         .then(() => {
           this.$emit('login:success')
@@ -86,7 +107,43 @@ export default {
           }
           this.$emit('login:error', msg)
         })
+        .finally(() => {
+          this.isPending = false
+        })
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.btn-login-uname-pwd {
+  @apply appearance-none
+  w-full px-8 py-2
+  border border-solid border-gray-300
+  rounded
+  text-center
+  shadow;
+
+  &.is-error,
+  &.is-disabled {
+    @apply text-white cursor-not-allowed bg-gray-400;
+  }
+
+  &.is-pending {
+    @apply bg-white text-transparent;
+  }
+
+  &:not(.is-error):not(.is-disabled):not(.is-pending) {
+    @apply text-white bg-brand-green-darker;
+
+    &:hover {
+      @apply bg-brand-green-light;
+    }
+  }
+
+  &:focus,
+  &:active {
+    @apply outline-none;
+  }
+}
+</style>
