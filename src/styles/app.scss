@@ -179,3 +179,20 @@ i.app-logo {
     @apply bg-blue-100 border-blue-200 text-blue-500;
   }
 }
+
+.app-grid-layout {
+  @screen lg {
+    @apply gap-8 flex flex-row;
+  }
+
+  @screen lg {
+    &__first-column {
+      width: 375px;
+      @apply flex-none;
+    }
+
+    &__second-column {
+      @apply flex-auto;
+    }
+  }
+}

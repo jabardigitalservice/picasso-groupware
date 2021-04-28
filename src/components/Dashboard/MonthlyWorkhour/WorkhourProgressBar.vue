@@ -68,8 +68,8 @@ export default {
 <style lang="scss" scoped>
 .workhour-progress-bar {
   &__desc {
-    @apply inline-flex flex-wrap justify-start items-center
-    text-sm text-orange-500;
+    @apply mb-2 inline-flex flex-wrap justify-start items-center
+    text-sm text-blue-600;
   }
 
   &__bar {

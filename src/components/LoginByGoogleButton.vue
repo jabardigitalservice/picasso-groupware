@@ -2,9 +2,9 @@
   <div>
     <button @click="signIn" class="login-with-google-button">
       <img alt="Google Logo" src="/img/logo-google.svg" class="w-4 h-4 object-contain object-center mr-2">
-      <strong>
-        Login with Google
-      </strong>
+      <span>
+        Login menggunakan Google
+      </span>
     </button>
   </div>
 </template>
@@ -36,8 +36,12 @@ export default {
   flex flex-no-wrap justify-center items-center
   border border-solid border-gray-300
   bg-white
-  text-gray-600
+  text-gray-500
   shadow
   py-2 px-4 rounded;
+
+  &:hover {
+    @apply bg-gray-100;
+  }
 }
 </style>

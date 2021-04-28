@@ -4,13 +4,7 @@
       class="monthly-heatmap__month-name">
       {{ monthName }}
     </span>
-    <div
-      v-if="isLoading"
-      class="flex flex-col justify-center items-center">
-      <!-- TODO: add loading hint here -->
-    </div>
     <svg
-      v-else
       :viewBox="viewBoxRectSize"
       class="monthly-heatmap__blocks"
       :key="`${year}/${month}`">
@@ -20,8 +14,14 @@
         class="monthly-heatmap__block"
         fill="transparent">
         <rect
+          :key="`rect:${index}`"
+          :class="{
+            'monthly-heatmap__block__rect': true,
+            'is-loading': isLoading
+          }"
           :style="{
-            fill: getHeatColorByDateNum(dateNum)
+            fill: getHeatColorByDateNum(dateNum),
+            animationDelay: `${randomizeDelay(index)}ms`
           }"
           :width="rectSize"
           :height="rectSize"
@@ -58,6 +58,10 @@ export default {
     }
   },
   props: {
+    isLoading: {
+      type: Boolean,
+      default: false
+    },
     month: {
       type: Number
     },
@@ -69,7 +73,6 @@ export default {
     return {
       rectGap: 6,
       rectSize: 60,
-      isLoading: false,
       defaultColor: '#ECEFF1'
     }
   },
@@ -180,12 +183,24 @@ export default {
         }
       }
       return color || this.defaultColor
+    },
+    randomizeDelay () {
+      return (Math.random() ** 4) * 5000
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@keyframes rotatingRect {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .monthly-heatmap {
   max-width: 200px;
   @apply inline-flex flex-col justify-between items-stretch;
@@ -199,14 +214,19 @@ export default {
     transform-origin: 0 0;
     @apply border-none bg-transparent;
 
-    > rect {
-      transform-origin: 0 0;
+    &__rect {
+      transform-origin: center;
+      transform-box: fill-box;
       cursor: pointer;
       @apply border-none stroke-0;
 
       &:hover {
         stroke: rgb(0, 0, 0, 0.2);
         stroke-width: 6;
+      }
+
+      &.is-loading {
+        animation: rotatingRect 1s infinite alternate ease-out;
       }
     }
   }
