@@ -9,7 +9,8 @@
           <img
             alt="User Avatar"
             class="object-cover object-center w-16 h-16 rounded-full mr-4"
-            :src="user.photo || AVATAR_PLACEHOLDER">
+            :src="user.photo || AVATAR_PLACEHOLDER"
+            @error="onImageError">
           <div class="inline-block flex-auto">
             <strong class="block text-gray-900 text-lg leading-normal">{{ user.fullname }}</strong>
             <p class="text-gray-600 text-sm">{{ user.jabatan }}</p>
@@ -48,6 +49,9 @@ export default {
       } finally {
         this[UNAUTHENTICATED]()
       }
+    },
+    onImageError (e) {
+      e.target.src = this.AVATAR_PLACEHOLDER
     }
   }
 }
