@@ -119,10 +119,8 @@ export default {
     },
 
     viewBoxRectSize () {
-      if (!this.numOfWeeks) {
-        return `0 0 0 0`
-      }
-      const width = (this.rectSize * this.numOfWeeks) + (this.rectGap * (this.numOfWeeks + 1))
+      const maxNumOfWeeks = 6
+      const width = (this.rectSize * maxNumOfWeeks) + (this.rectGap * (maxNumOfWeeks + 1))
       const height = (this.rectSize * 7) + (this.rectGap * 9)
       return `0 0 ${width} ${height}`
     },
