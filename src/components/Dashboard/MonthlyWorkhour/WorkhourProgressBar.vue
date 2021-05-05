@@ -30,7 +30,8 @@
       </span>
       <i
         aria-hidden="true"
-        class="absolute right-0 far fa-clock mr-2 text-white">
+        class="absolute right-0 fas fa-clock mr-2"
+        style="color: rgba(0,0,0, 0.25);">
       </i>
     </div>
     <p class="workhour-progress-bar__hint">

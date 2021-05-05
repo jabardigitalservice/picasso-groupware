@@ -105,7 +105,7 @@ const menuItems = Object.freeze([
   {
     name: 'Wiki',
     href: ['https://wiki.digitalservice.id/', '_blank'],
-    icon: 'far fa-file-word'
+    icon: 'fas fa-file-word'
   }
 ])
 

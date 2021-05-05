@@ -10,13 +10,13 @@
         </div>
         <div v-if="user" class="text-center px-2 py-1">
           <router-link class="no-underline text-gray-700 block" to="/profile">
-            <i aria-hidden="true" class="far fa-user text-lg" />
+            <i aria-hidden="true" class="fas fa-user text-lg" />
             <p class="text-xs">Profile</p>
           </router-link>
         </div>
         <div v-if="user" class="text-center px-2 py-1">
           <router-link class="no-underline text-gray-700 block" to="/messages">
-            <i aria-hidden="true" class="far fa-bell text-lg" />
+            <i aria-hidden="true" class="fas fa-bell text-lg" />
             <p class="text-xs">Messages</p>
           </router-link>
         </div>

@@ -4,7 +4,7 @@
       <template v-if="!user">
         <div class="w-full pt-4">
           <div class="text-center">
-            <i aria-hidden="true" class="far fa-4x fa-check-circle mb-4 text-gray-600" />
+            <i aria-hidden="true" class="fas fa-4x fa-check-circle mb-4 text-gray-600" />
             <p class="text-sm">Silahkan login untuk melakukan checkin.</p>
           </div>
 
