@@ -1,21 +1,21 @@
 <template>
   <div>
     <template v-if="user">
-      <div class="p-4">
-        <div class="flex items-center">
-          <router-link :to="`/profile`">
-            <img
-              alt="User Avatar"
-              class="w-10 h-10 rounded-full mr-4"
-              :src="user.photo || AVATAR_PLACEHOLDER">
-          </router-link>
-          <div class="flex-auto">
-            <div class="text-gray-900 text-sm leading-none">
-              <router-link :to="`/profile`">{{ user.fullname }}</router-link>
-            </div>
-            <div class="text-gray-600 text-xs">{{ user.jabatan }}</div>
+      <div>
+        <router-link
+          to="/profile"
+          class="flex flex-row justify-start items-center"
+          tag="a">
+          <img
+            alt="User Avatar"
+            class="object-cover object-center w-16 h-16 rounded-full mr-4"
+            :src="user.photo || AVATAR_PLACEHOLDER"
+            @error="onImageError">
+          <div class="inline-block flex-auto">
+            <strong class="block text-gray-900 text-lg leading-normal">{{ user.fullname }}</strong>
+            <p class="text-gray-600 text-sm">{{ user.jabatan }}</p>
           </div>
-        </div>
+        </router-link>
       </div>
     </template>
   </div>
@@ -49,6 +49,9 @@ export default {
       } finally {
         this[UNAUTHENTICATED]()
       }
+    },
+    onImageError (e) {
+      e.target.src = this.AVATAR_PLACEHOLDER
     }
   }
 }
