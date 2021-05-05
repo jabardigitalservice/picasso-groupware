@@ -6,11 +6,7 @@
           to="/profile"
           class="flex flex-row justify-start items-center"
           tag="a">
-          <img
-            alt="User Avatar"
-            class="object-cover object-center w-16 h-16 rounded-full mr-4"
-            :src="user.photo || AVATAR_PLACEHOLDER"
-            @error="onImageError">
+          <UserProfilePicture class="flex-none mr-4" />
           <div class="inline-block flex-auto">
             <strong class="block text-gray-900 text-lg leading-normal">{{ user.fullname }}</strong>
             <p class="text-gray-600 text-sm">{{ user.jabatan }}</p>
@@ -22,15 +18,13 @@
 </template>
 
 <script>
-import { ASSETS } from '@/lib/constants'
 import { UNAUTHENTICATED } from '../store/mutation-types'
 import { mapMutations, mapGetters } from 'vuex'
+import UserProfilePicture from './Profile/UserProfilePicture.vue'
 
 export default {
-  data () {
-    return {
-      AVATAR_PLACEHOLDER: ASSETS.AVATAR_PLACEHOLDER
-    }
+  components: {
+    UserProfilePicture
   },
   computed: mapGetters({
     // authLoading: 'auth/loading'
@@ -49,9 +43,6 @@ export default {
       } finally {
         this[UNAUTHENTICATED]()
       }
-    },
-    onImageError (e) {
-      e.target.src = this.AVATAR_PLACEHOLDER
     }
   }
 }
