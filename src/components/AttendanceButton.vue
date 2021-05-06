@@ -1,13 +1,21 @@
 <template>
-  <div v-show="isCheckinButton || isCheckoutButton" class="m-3">
+  <div v-show="isCheckinButton || isCheckoutButton">
     <button
       :class="{
-        'block w-full px-4 py-2 rounded text-white': true,
-        'bg-blue-500': isCheckinButton,
-        'bg-red-500': isCheckoutButton
+        'btn-attendance': true,
+        'btn-attendance--checkin': isCheckinButton,
+        'btn-attendance--checkout': isCheckoutButton,
+        'btn-attendance--spinner': showSpinner
       }"
       @click="onClick">
-    {{ buttonLabel }}
+    <img
+      v-if="showSpinner"
+      src="@/assets/loading.gif"
+      class="inline-block w-auto object-contain object-center"
+      style="height: 24px;">
+    <span v-else>
+      {{ buttonLabel }}
+    </span>
   </button>
   </div>
 </template>
@@ -16,6 +24,11 @@
 import _result from 'lodash/result'
 
 export default {
+  data () {
+    return {
+      showSpinner: false
+    }
+  },
   computed: {
     isCheckinState () {
       return this.$store.state['checkins-list'].isCheckin
@@ -76,6 +89,7 @@ export default {
         return
       }
       try {
+        this.showSpinner = true
         await this.$store.dispatch('checkins-list/checkout', {
           date: new Date()
         })
@@ -91,10 +105,44 @@ export default {
           text: message,
           confirmButtonText: 'Tutup'
         })
+      } finally {
+        this.showSpinner = false
       }
+      await this.$store.dispatch('users-dashboard/getDashboardReportUser')
       await this.$store.dispatch('checkins-list/getCheckinState', { refresh: true })
       await this.$store.dispatch('checkins-list/getCheckoutState', { refresh: true })
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.btn-attendance {
+  @apply block w-full px-4 py-2 rounded text-white;
+
+  &--checkin {
+    @apply bg-green-600;
+
+    &:hover {
+      @apply bg-green-500;
+    }
+  }
+
+  &--checkout {
+    @apply bg-red-500;
+
+    &:hover {
+      @apply bg-red-400;
+    }
+  }
+
+  &--spinner {
+    @apply bg-white text-transparent;
+  }
+
+  &:focus,
+  &:active {
+    @apply outline-none;
+  }
+}
+</style>

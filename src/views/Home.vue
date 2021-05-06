@@ -1,51 +1,64 @@
 <template>
-  <div class="home">
+  <div>
     <div class="container mx-auto">
+      <div class="app-grid-layout">
+        <div class="app-grid-layout__first-column">
+          <div
+            v-if="user"
+            class="home-card mb-4">
+            <user-info />
+          </div>
 
-      <div class="flex flex-col md:flex-row">
-        <div class="w-full md:w-1/3">
-          <home-banner-list class="mt-2" />
-
-          <user-info class="mx-0 sm:mx-2 bg-white shadow" />
-
-          <div class="mx-0 sm:mx-2 flex flex-wrap shadow bg-white">
-            <template v-if="!user">
-              <div class="w-full pt-4 text-center">
-                <div class="">
-                  <i aria-hidden="true" class="far fa-4x fa-check-circle mb-4 text-gray-600" />
-                  <p class="text-sm">Silahkan login terlebih dahulu</p>
-                </div>
-                <div class="mx-2 my-2">
-                  <login-button class="mb-2"/>
-                  <login-by-google-button/>
-                </div>
+          <div>
+            <div v-if="!user">
+              <h5 class="home-section-title">
+                Login
+              </h5>
+              <div
+                class="home-card">
+                <login-username-password />
+                <span class="login-button-separator">
+                  ATAU
+                </span>
+                <login-by-google-button />
               </div>
-            </template>
+            </div>
             <template v-else>
-              <ReportCardUser class="w-full flex-col" />
-              <AttendanceButton class="w-full"/>
-              <div v-for="(m, index) in menuItems" :key="index" class="w-1/3">
-                <component :is="getMenuLinkComponent(m)" v-bind="getMenuLinkProps(m)" >
-                  <div class="h-full p-3 py-4 text-center text-gray-700">
-                    <i aria-hidden="true" :class="[m.icon, 'text-2xl'] " />
-                    <p class="text-xs mt-1">{{m.name}}</p>
-                  </div>
-                </component>
+              <div class="home-card mb-4">
+                <MonthlyWorkhour />
+                <AttendanceButton class="mt-8"/>
+              </div>
+              <div class="home-card mb-4">
+                <LogbookHeatmaps />
+              </div>
+              <div class="home-card mb-4">
+                <div class="grid grid-cols-3 gap-12">
+                  <component
+                    v-for="(m, index) in menuItems"
+                    :key="index"
+                    :is="getMenuLinkComponent(m)"
+                    v-bind="getMenuLinkProps(m)" >
+                    <div class="text-center text-gray-700">
+                      <i aria-hidden="true" :class="[m.icon, 'text-2xl'] " />
+                      <p class="text-xs mt-1">{{m.name}}</p>
+                    </div>
+                  </component>
+                </div>
               </div>
             </template>
           </div>
         </div>
-        <div class="w-full md:w-2/3">
+        <div class="app-grid-layout__second-column">
           <div v-if="user" v-show="showAnnouncement">
-            <h5 class="font-bold text-lg m-4">
+            <h5 class="font-bold text-lg m-4 mt-0 leading-none">
               Pengumuman Penting
             </h5>
             <AnnouncementList class="mt-2" @found="showAnnouncement = true" />
           </div>
-          <h5 class="font-bold text-lg m-4">
+          <h5 class="home-section-title">
             Artikel
           </h5>
-          <HomeArticleList class="mt-2" />
+          <HomeArticleList />
         </div>
       </div>
     </div>
@@ -54,14 +67,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import LoginButton from '@/components/LoginButton'
 import LoginByGoogleButton from '@/components/LoginByGoogleButton'
-import ReportCardUser from '@/components/Dashboard/ReportCardUser'
-import HomeBannerList from '@/components/HomeBannerList'
+import LogbookHeatmaps from '@/components/Dashboard/LogbookHeatmaps/LogbookHeatmaps'
 import AnnouncementList from '@/components/Announcement/AnnouncementList'
 import HomeArticleList from '@/components/HomeArticleList'
 import UserInfo from '@/components/UserInfo'
 import AttendanceButton from '@/components/AttendanceButton'
+import MonthlyWorkhour from '@/components/Dashboard/MonthlyWorkhour/MonthlyWorkhour'
+import LoginUsernamePassword from '../components/LoginUsernamePassword.vue'
 
 const menuItems = Object.freeze([
   {
@@ -99,14 +112,14 @@ const menuItems = Object.freeze([
 export default {
   name: 'home',
   components: {
-    HomeBannerList,
     AnnouncementList,
     HomeArticleList,
-    ReportCardUser,
-    LoginButton,
+    LogbookHeatmaps,
     LoginByGoogleButton,
     UserInfo,
-    AttendanceButton
+    AttendanceButton,
+    MonthlyWorkhour,
+    LoginUsernamePassword
   },
 
   metaInfo: {
@@ -149,3 +162,34 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.home-card {
+  box-shadow: 0 8px 36px 0px rgba(120, 144, 156, 0.15);
+
+  @apply overflow-hidden p-6
+  border-none
+  rounded-none
+  bg-white;
+
+  @screen sm {
+    @apply rounded-lg;
+  }
+}
+
+.home-section-title {
+  @apply font-bold text-lg mx-6 my-4;
+}
+
+.login-button-separator {
+  @apply my-4 flex items-center
+  text-gray-500 text-xs font-bold;
+
+  &::before,
+  &::after {
+    content: '';
+    height: 1px;
+    @apply mx-4 flex-1 bg-gray-300;
+  }
+}
+</style>
