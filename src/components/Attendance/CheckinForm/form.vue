@@ -67,6 +67,10 @@
           />
       </div>
       <!-- END: NOTE INPUT -->
+
+      <div class="checkin-form__input-segment">
+        <MoodInput></MoodInput>
+      </div>
     </div>
     <button class="checkin-form__btn-submit" @click="handleSubmit(beforeSubmit)">
       Kirim
@@ -90,6 +94,7 @@ import setHours from 'date-fns/setHours'
 import setMinutes from 'date-fns/setMinutes'
 import { formatDateLong } from '../../../lib/date'
 import { ATTENDANCE } from '../../../lib/constants'
+import MoodInput from './mood-input'
 
 const LOCATION = {
   WFH: 'WFH',
@@ -120,6 +125,7 @@ const emptyPayload = {
 
 export default {
   components: {
+    MoodInput,
     InputHeader: () => import('../../Form/InputHeader'),
     InputSelect: () => import('../../Form/Select'),
     InputTextarea: () => import('../../Form/Textarea'),
