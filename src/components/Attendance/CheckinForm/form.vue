@@ -55,6 +55,13 @@
       </div>
       <!-- END: LOCATION INPUT -->
 
+      <div class="checkin-form__input-segment">
+        <MoodInput
+          name="mood"
+          v-model="payload.mood"
+        />
+      </div>
+
       <!-- START: NOTE INPUT -->
       <div class="checkin-form__input-segment">
         <InputTextarea
@@ -67,10 +74,6 @@
           />
       </div>
       <!-- END: NOTE INPUT -->
-
-      <div class="checkin-form__input-segment">
-        <MoodInput></MoodInput>
-      </div>
     </div>
     <button class="checkin-form__btn-submit" @click="handleSubmit(beforeSubmit)">
       Kirim
@@ -120,7 +123,8 @@ const emptyPayload = {
   date: null,
   location: null,
   message: ATTENDANCE.PRESENT,
-  note: null
+  note: null,
+  mood: null
 }
 
 export default {
