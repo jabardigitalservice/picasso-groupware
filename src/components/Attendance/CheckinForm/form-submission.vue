@@ -5,18 +5,25 @@
         <h3 class="text-xl font-bold">
           Konfirmasi Checkin
         </h3>
-        <br />
-        <p>
+        <p class="mb-3">
           Yuk cek lagi data checkin kamu hari ini.
         </p>
-        <br />
-        <strong class="text-green-600 text-lg">Hadir</strong>
+        <strong class="text-green-600 text-lg">Hadir ({{ payload.location }})</strong>
         <br />
         <label>Tanggal</label>
         <p>{{ formatDateLong(payload.date) }}</p>
 
         <label>Jam Hadir</label>
         <p>{{ formatTime(payload.date) }}</p>
+
+        <label>Mood</label>
+        <i
+          aria-hidden="true"
+          class="block w-12 my-2">
+          <component
+            :is="moodComponent"
+            :animate="true" />
+        </i>
 
         <label>Catatan</label>
         <p>{{ payload.note || '-' }}</p>
@@ -68,7 +75,9 @@ export default {
       STATUS,
       isFormSubmitted: false,
       formSubmissionStatus: null,
-      formSubmissionError: null
+      formSubmissionError: null,
+
+      moodComponent: null
     }
   },
   computed: {
@@ -81,9 +90,29 @@ export default {
       return payload
     }
   },
+  watch: {
+    'payload.mood': {
+      immediate: true,
+      handler (newVal) {
+        this.getMoodComponent(newVal)
+      }
+    }
+  },
   methods: {
     formatDateLong: date => date ? formatDateLong(date, 'eeee, PPP') : null,
     formatTime: time => time ? formatTime(time) : null,
+
+    getMoodComponent (name) {
+      if (typeof name !== 'string' || !name.length) {
+        return
+      }
+      import('../../Reactions')
+        .then((module) => module.default || module)
+        .then((exported) => {
+          const { moodMap } = exported
+          this.moodComponent = moodMap[name]
+        })
+    },
 
     onEditData () {
       this.$emit('cancel')
