@@ -40,15 +40,7 @@
 
 <script>
 import FormInputHeader from '../../Form/InputHeader.vue'
-import { Angry, Flat, Haha, Sad, Yay } from '../../Reactions'
-
-const moodVariants = {
-  worst: Angry,
-  sad: Sad,
-  neutral: Flat,
-  good: Haha,
-  excellent: Yay
-}
+import { moodMap } from '../../Reactions'
 
 export default {
   components: {
@@ -66,7 +58,7 @@ export default {
   data () {
     return {
       inputTitle: 'Bagaimana mood kamu hari ini?',
-      moodVariantNames: Object.keys(moodVariants),
+      moodVariantNames: Object.keys(moodMap),
       mValue: null
     }
   },
@@ -80,7 +72,7 @@ export default {
   },
   methods: {
     getMoodComponent (name) {
-      return moodVariants[name]
+      return moodMap[name]
     },
     onClick (name) {
       this.mValue = name
