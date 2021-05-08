@@ -1,5 +1,15 @@
 @import "./reaction-variables";
 
+@keyframes scale-up {
+	from {
+		transform: scale(1);
+	}
+
+	to {
+		transform: scale(1.1);
+	}
+}
+
 .emoji {
 	pointer-events: none;
 	user-select: none;
@@ -11,8 +21,6 @@
 	position: relative;
 	top: 0;
 	left: 0;
-	transition: filter 0.3s ease-in-out;
-	filter: grayscale(0) opacity(100%);
   
 	&:after {
 		text-align: center;
@@ -40,10 +48,13 @@
 }
 
 .emoji-responsive-wrapper {
+	transition: filter 0.3s ease-in-out;
+	filter: grayscale(0) opacity(100%);
+
 	@apply inline-block relative origin-top-left;
 
 	&:not(:hover) {
-		.emoji {
+		&.emoji-animation-disabled {
 			filter: grayscale(1) opacity(50%);
 		}
 
@@ -57,4 +68,11 @@
 		}
 	}
 
+	&:focus {
+		outline: none;
+
+		> .emoji {
+			animation: scale-up 0.2s 2 ease-out alternate;
+		}
+	} 
 }
