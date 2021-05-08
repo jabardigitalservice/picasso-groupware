@@ -9,6 +9,7 @@ export const reactionMixin = {
   },
   async mounted () {
     await this.$nextTick()
+    this.setAsFocusable()
     this.watchAnimationProp()
     this.watchWrapperWidth()
 
@@ -21,8 +22,12 @@ export const reactionMixin = {
     window.removeEventListener('resize', this.watchWrapperWidth)
   },
   methods: {
+    setAsFocusable () {
+      this.$el.setAttribute('tabindex', '0')
+    },
     watchAnimationProp () {
-      // disable animation unless icon is hovered
+      // animation is disabled as default,
+      // unless animate prop is truthy or icon is hovered
       this.$watch(
         'animate',
         function handler (shouldAnimate) {
