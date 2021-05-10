@@ -33,18 +33,26 @@
 	}
 }
 
-.emoji__face, .emoji__eyebrows, .emoji__eyes, .emoji__mouth, .emoji__tongue, .emoji__heart, .emoji__hand, .emoji__thumb {
-	position: absolute;
-	
-	&:before, &:after {
-		position: absolute;
-		content: '';
-	}  
+.emoji__face,
+.emoji__eyebrows,
+.emoji__eyes,
+.emoji__mouth,
+.emoji__tongue,
+.emoji__heart,
+.emoji__hand,
+.emoji__thumb {
+  position: absolute;
+
+  &:before,
+  &:after {
+    position: absolute;
+    content: "";
+  }
 }
 
 .emoji__face {
-	width: inherit;
-	height: inherit;
+  width: inherit;
+  height: inherit;
 }
 
 .emoji-responsive-wrapper {
