@@ -4,10 +4,30 @@ import Haha from './Variants/Haha.vue'
 import Sad from './Variants/Sad.vue'
 import Yay from './Variants/Yay.vue'
 
-export const moodMap = {
-  worst: Angry,
-  sad: Sad,
-  neutral: Flat,
-  good: Haha,
-  excellent: Yay
-}
+export const moods = [
+  {
+    value: 'worst',
+    label: 'Marah',
+    component: Angry
+  },
+  {
+    value: 'sad',
+    label: 'Sedih',
+    component: Sad
+  },
+  {
+    value: 'neutral',
+    label: 'Biasa Aja',
+    component: Flat
+  },
+  {
+    value: 'good',
+    label: 'Senang',
+    component: Haha
+  },
+  {
+    value: 'excellent',
+    label: 'Bersemangat',
+    component: Yay
+  }
+]
