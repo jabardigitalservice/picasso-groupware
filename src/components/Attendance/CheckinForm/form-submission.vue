@@ -53,6 +53,7 @@
 import pMinDelay from 'p-min-delay'
 import { GroupwareAPI } from '../../../lib/axios'
 import { formatDateLong, formatTime } from '../../../lib/date'
+import { moods } from '../../Reactions'
 
 const STATUS = {
   LOADING: 'LOADING',
@@ -102,16 +103,12 @@ export default {
     formatDateLong: date => date ? formatDateLong(date, 'eeee, PPP') : null,
     formatTime: time => time ? formatTime(time) : null,
 
-    getMoodComponent (name) {
-      if (typeof name !== 'string' || !name.length) {
+    getMoodComponent (moodValue) {
+      if (typeof moodValue !== 'string' || !moodValue.length) {
         return
       }
-      import('../../Reactions')
-        .then((module) => module.default || module)
-        .then((exported) => {
-          const { moodMap } = exported
-          this.moodComponent = moodMap[name]
-        })
+      const matched = moods.find((m) => m.value === moodValue)
+      this.moodComponent = matched ? matched.component : null
     },
 
     onEditData () {
