@@ -113,8 +113,12 @@ export default {
     &__label {
       bottom: -2rem;
       @apply absolute whitespace-no-wrap
-      text-sm text-gray-500 text-center
+      text-xs text-gray-500 text-center
       not-italic;
+
+      @screen sm {
+        @apply text-sm;
+      }
     }
   }
 }
