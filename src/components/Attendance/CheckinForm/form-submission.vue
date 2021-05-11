@@ -76,9 +76,7 @@ export default {
       STATUS,
       isFormSubmitted: false,
       formSubmissionStatus: null,
-      formSubmissionError: null,
-
-      moodComponent: null
+      formSubmissionError: null
     }
   },
   computed: {
@@ -89,24 +87,16 @@ export default {
         date: date instanceof Date ? date.toISOString() : null
       })
       return payload
-    }
-  },
-  watch: {
-    'payload.mood': {
-      immediate: true,
-      handler (newVal) {
-        this.getMoodComponent(newVal)
-      }
+    },
+    moodComponent () {
+      const { mood } = this.payload
+      const matched = moods.find((m) => m.value === mood)
+      return matched ? matched.component : null
     }
   },
   methods: {
     formatDateLong: date => date ? formatDateLong(date, 'eeee, PPP') : null,
     formatTime: time => time ? formatTime(time) : null,
-
-    getMoodComponent (moodValue) {
-      const matched = moods.find((m) => m.value === moodValue)
-      this.moodComponent = matched ? matched.component : null
-    },
 
     onEditData () {
       this.$emit('cancel')
