@@ -18,15 +18,15 @@
     />
     <div class="form-mood-input__option-list">
       <i
-        v-for="name in moodVariantNames"
-        :key="name"
+        v-for="moodValue in moodVariants"
+        :key="moodValue"
         aria-hidden="true"
         class="form-mood-input__option-list-item">
         <component
-          :is="getMoodComponent(name)"
-          :animate="name === mValue"
+          :is="getMoodComponent(moodValue)"
+          :animate="moodValue === mValue"
           class="emoji-animation-disabled"
-          @click.native="onClick(name)" />
+          @click.native="onClick(moodValue)" />
       </i>
     </div>
     <p v-if="errors.length"
@@ -40,7 +40,7 @@
 
 <script>
 import FormInputHeader from '../../Form/InputHeader.vue'
-import { moodMap } from '../../Reactions'
+import { moods } from '../../Reactions'
 
 export default {
   components: {
@@ -58,7 +58,7 @@ export default {
   data () {
     return {
       inputTitle: 'Bagaimana mood kamu hari ini?',
-      moodVariantNames: Object.keys(moodMap),
+      moodVariants: moods.map((m) => m.value),
       mValue: null
     }
   },
@@ -71,13 +71,14 @@ export default {
     }
   },
   methods: {
-    getMoodComponent (name) {
-      return moodMap[name]
+    getMoodComponent (value) {
+      const matched = moods.find((m) => m.value === value)
+      return matched ? matched.component : null
     },
-    onClick (name) {
-      this.mValue = name
-      this.$emit('input', name)
-      this.$emit('update:value', name)
+    onClick (value) {
+      this.mValue = value
+      this.$emit('input', value)
+      this.$emit('update:value', value)
     }
   }
 }
