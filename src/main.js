@@ -15,7 +15,6 @@ Vue.config.productionTip = false
 function importLib () {
   return Promise.all([
     import(/* webpackChunkName: "css-vue-datetime" */'vue-datetime/dist/vue-datetime.css'),
-    import(/* webpackChunkName: "js-fort-awesome" */'@fortawesome/fontawesome-free/js/all'),
     import(/* webpackChunkName: "css-sweetalert" */'sweetalert2/src/sweetalert2.scss')
   ])
 }

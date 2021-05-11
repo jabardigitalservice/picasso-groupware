@@ -5,23 +5,6 @@
 @import "./elements/form";
 @import "./elements//button";
 
-html {
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-
-body {
-  background-color: #F2F5F7;
-  padding-bottom: 60px;
-}
-
-body.loading {
-  background: #399F4F;
-}
-
-.no-pull-refresh {
-  overscroll-behavior-y: none;
-}
 
 button {
   &:active {
@@ -55,69 +38,6 @@ a.router-link-exact-active {
     color: #009BDA;
   }
 }
-
-@keyframes app-logo-heartbeat {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.1);
-  }
-}
-
-@keyframes app-logo-shadow-heartbeat {
-  from {
-    opacity: 0;
-    transform: scale(1);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-}
-
-i.app-logo {
-  font-size: 6rem;
-  width: 6rem;
-  height: 6rem;
-  @apply inline-flex justify-center items-center; 
-
-  &::after {
-    content: '';
-    box-sizing: content-box;
-    display: block;
-    width: 1em;
-    height: 1em;
-    background-image: url('./assets/logo.png');
-    background-size: 0.6em 0.6em;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-
-  &.is-rounded {
-    @apply relative rounded-full border-2 border-solid border-gray-200 bg-gray-100;
-
-    &::before {
-      content: '';
-      width: 1em;
-      height: 1em;
-      @apply absolute block rounded-full bg-white shadow-xl;
-    }
-
-    &.is-beating::before {
-      will-change: opacity, transform;
-      animation: app-logo-shadow-heartbeat infinite alternate 0.5s ease-in-out;
-    }
-  }
-
-  &.is-beating {
-    &::after {
-      will-change: transform;
-      animation: app-logo-heartbeat infinite alternate 0.5s ease-in-out;
-    }
-  }
-}
-
 
 @keyframes anim-shimmering {
   0% {

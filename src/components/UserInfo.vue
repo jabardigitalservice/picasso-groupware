@@ -43,6 +43,9 @@ export default {
       } finally {
         this[UNAUTHENTICATED]()
       }
+    },
+    onImageError (e) {
+      e.target.src = this.AVATAR_PLACEHOLDER
     }
   }
 }
