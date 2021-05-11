@@ -21,7 +21,7 @@
 	position: relative;
 	top: 0;
 	left: 0;
-  
+
 	&:after {
 		text-align: center;
 		position: absolute;
@@ -29,7 +29,7 @@
 		font-size: 18px;
 		width: 60px;
 		left: calc(50% - 30px);
-		color: $emoji-text-color;  
+		color: $emoji-text-color;
 	}
 }
 
@@ -41,18 +41,18 @@
 .emoji__heart,
 .emoji__hand,
 .emoji__thumb {
-  position: absolute;
+	position: absolute;
 
-  &:before,
-  &:after {
-    position: absolute;
-    content: "";
-  }
+	&:before,
+	&:after {
+		position: absolute;
+		content: "";
+	}
 }
 
 .emoji__face {
-  width: inherit;
-  height: inherit;
+	width: inherit;
+	height: inherit;
 }
 
 .emoji-responsive-wrapper {
@@ -82,5 +82,5 @@
 		> .emoji {
 			animation: scale-up 0.2s 2 ease-out alternate;
 		}
-	} 
+	}
 }
