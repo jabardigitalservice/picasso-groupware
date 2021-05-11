@@ -27,6 +27,9 @@
           :animate="moodValue === mValue"
           class="emoji-animation-disabled"
           @click.native="onClick(moodValue)" />
+        <span class="form-mood-input__option-list-item__label">
+          {{ getMoodLabel(moodValue) }}
+        </span>
       </i>
     </div>
     <p v-if="errors.length"
@@ -75,6 +78,10 @@ export default {
       const matched = moods.find((m) => m.value === value)
       return matched ? matched.component : null
     },
+    getMoodLabel (value) {
+      const matched = moods.find((m) => m.value === value)
+      return matched ? matched.label : null
+    },
     onClick (value) {
       this.mValue = value
       this.$emit('input', value)
@@ -89,7 +96,7 @@ export default {
 
   &__option-list {
     grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
-    gap: 1.5rem 2rem;
+    gap: 3rem 2rem;
 
     @apply grid mt-2;
 
@@ -100,7 +107,14 @@ export default {
 
   &__option-list-item {
     @apply cursor-pointer
-    relative inline-block;
+    relative inline-flex flex-col items-center;
+
+    &__label {
+      bottom: -2rem;
+      @apply absolute whitespace-no-wrap
+      text-sm text-gray-500 text-center
+      not-italic;
+    }
   }
 }
 </style>
