@@ -104,9 +104,6 @@ export default {
     formatTime: time => time ? formatTime(time) : null,
 
     getMoodComponent (moodValue) {
-      if (typeof moodValue !== 'string' || !moodValue.length) {
-        return
-      }
       const matched = moods.find((m) => m.value === moodValue)
       this.moodComponent = matched ? matched.component : null
     },
