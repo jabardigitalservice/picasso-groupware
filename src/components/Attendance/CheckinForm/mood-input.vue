@@ -1,5 +1,6 @@
 <template>
   <ValidationProvider
+    tag="div"
     :name="name"
     class="form-mood-input"
     rules="required"
