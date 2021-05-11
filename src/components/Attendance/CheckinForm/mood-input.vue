@@ -1,44 +1,84 @@
 <template>
-  <div class="form-mood-input">
+  <ValidationProvider
+    :name="name"
+    class="form-mood-input"
+    rules="required"
+    :custom-messages="{
+      required: 'Bagian ini harus diisi'
+    }"
+    #default="{ errors }"
+    >
     <FormInputHeader
-      :title="inputTitle"
-      :required="false">
+      :title="inputTitle">
     </FormInputHeader>
+    <input
+      type="hidden"
+      :name="name"
+      v-model="mValue"
+    />
     <div class="form-mood-input__option-list">
       <i
-        v-for="name in moodVariantNames"
-        :key="name"
+        v-for="moodValue in moodVariants"
+        :key="moodValue"
         aria-hidden="true"
         class="form-mood-input__option-list-item">
-        <component :is="name" />
+        <component
+          :is="getMoodComponent(moodValue)"
+          :animate="moodValue === mValue"
+          class="emoji-animation-disabled"
+          @click.native="onClick(moodValue)" />
       </i>
     </div>
-  </div>
+    <p v-if="errors.length"
+       class="mt-3 form-input__error-hint">
+      <slot name="error">
+        {{ errors[0] }}
+      </slot>
+    </p>
+  </ValidationProvider>
 </template>
 
 <script>
 import FormInputHeader from '../../Form/InputHeader.vue'
-import { Angry, Haha, Like, Love, Sad, Wow, Yay } from '../../Reactions'
-
-const moodVariants = {
-  Angry,
-  Haha,
-  Like,
-  Love,
-  Sad,
-  Wow,
-  Yay
-}
+import { moods } from '../../Reactions'
 
 export default {
   components: {
-    ...moodVariants,
     FormInputHeader
+  },
+  props: {
+    name: {
+      type: String,
+      required: true
+    },
+    value: {
+      type: String
+    }
   },
   data () {
     return {
       inputTitle: 'Bagaimana mood kamu hari ini?',
-      moodVariantNames: Object.keys(moodVariants)
+      moodVariants: moods.map((m) => m.value),
+      mValue: null
+    }
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler (v) {
+        this.mValue = v
+      }
+    }
+  },
+  methods: {
+    getMoodComponent (value) {
+      const matched = moods.find((m) => m.value === value)
+      return matched ? matched.component : null
+    },
+    onClick (value) {
+      this.mValue = value
+      this.$emit('input', value)
+      this.$emit('update:value', value)
     }
   }
 }
@@ -51,7 +91,7 @@ export default {
     grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
     gap: 1.5rem 2rem;
 
-    @apply grid mt-3;
+    @apply grid mt-2;
 
     @media screen and (min-width: 360px) {
 

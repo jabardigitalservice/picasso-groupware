@@ -175,7 +175,7 @@ export default {
   }
 }
 
-.emoji-animation-disabled .emoji__eyes::after {
+.emoji-animation-disabled:not(:hover) .emoji__eyes::after {
   display: none;
 }
 </style>
