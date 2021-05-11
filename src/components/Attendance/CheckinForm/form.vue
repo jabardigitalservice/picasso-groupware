@@ -57,6 +57,7 @@
 
       <div class="checkin-form__input-segment">
         <MoodInput
+          class="mb-12"
           name="mood"
           v-model="payload.mood"
         />

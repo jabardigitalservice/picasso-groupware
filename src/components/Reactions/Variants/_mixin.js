@@ -55,6 +55,7 @@ export const reactionMixin = {
 
       const scale = parentWidth / DEFAULT_EMOJI_WIDTH_PX
       this.$el.style.setProperty('transform', `scale(${scale})`)
+      this.$el.style.setProperty('transform-origin', `top center`)
       parentEl.style.setProperty('height', `${parentWidth}px`)
     }
   }
