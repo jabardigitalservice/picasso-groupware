@@ -27,6 +27,7 @@
           :is="getMoodComponent(moodValue)"
           :animate="moodValue === mValue"
           class="emoji-animation-disabled"
+          style="transform-origin: top center;"
           @click.native="onClick(moodValue)" />
         <span class="form-mood-input__option-list-item__label">
           {{ getMoodLabel(moodValue) }}
