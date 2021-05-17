@@ -7,7 +7,7 @@
             <div class="flex items-center">
               <div class="flex-none w-12 h-12 mr-4 md:mr-6">
                 <component
-                  v-if="!hasValidMoodValue(item.mood)"
+                  v-if="hasValidMoodValue(item.mood)"
                   :is="getMoodComponent(item.mood)"
                   :css-filter="false" />
                 <i
