@@ -26,7 +26,7 @@
         <component
           :is="getMoodComponent(moodValue)"
           :animate="moodValue === mValue"
-          class="emoji-animation-disabled"
+          class="emoji-animation-disabled with-css-filter"
           style="transform-origin: top center;"
           @click.native="onClick(moodValue)" />
         <span class="form-mood-input__option-list-item__label">
