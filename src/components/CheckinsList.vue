@@ -9,10 +9,15 @@
                 <p class="text-gray-900 font-bold">
                     {{ item['fullname'] }}
                 </p>
-                <p v-if="item['message']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['message'])">{{ getStatusLabel(item['message']) }}</span></p>
-                <p class="text-gray-900">{{ item['location'] }}</p>
+                <p v-if="hasDivisionAndRole(item)"
+                  class="text-gray-900 text-opacity-50 text-sm">
+                  {{ item['divisi'] }} - {{ item['jabatan'] }}
+                </p>
+                <p v-if="item['message']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['message'])">{{ getStatusLabel(item['message'], item['location']) }}</span></p>
                 <p v-if="item['note']" class="text-gray-900">{{ item['note'] }}</p>
-                <p class="text-gray-600">
+                <p
+                  v-if="isPresent(item)"
+                  class="text-gray-800">
                   <template v-if="hasCheckout(item)">
                     {{ getCheckInDate(item) }} - {{ getCheckOutDate(item) }}
                   </template>
@@ -69,20 +74,23 @@ export default {
   methods: {
     formatTime,
 
-    getStatusLabel (value) {
-      if (value === ATTENDANCE.PRESENT) {
-        return 'Hadir'
+    getStatusLabel (attendanceType, locationType) {
+      if (attendanceType === ATTENDANCE.PRESENT) {
+        let label = 'Hadir'
+        return locationType
+          ? `${label} - ${locationType}`
+          : label
       }
 
-      if (value === ATTENDANCE.LEAVE) {
+      if (attendanceType === ATTENDANCE.LEAVE) {
         return 'Izin'
       }
 
-      if (value === ATTENDANCE.SICK_LEAVE) {
+      if (attendanceType === ATTENDANCE.SICK_LEAVE) {
         return 'Sakit'
       }
 
-      if (value === ATTENDANCE.PAID_LEAVE) {
+      if (attendanceType === ATTENDANCE.PAID_LEAVE) {
         return 'Cuti'
       }
 
@@ -127,6 +135,12 @@ export default {
       }
 
       return 'bg-white'
+    },
+    hasDivisionAndRole (item) {
+      return !!item.divisi && !!item.jabatan
+    },
+    isPresent (item) {
+      return item.message === ATTENDANCE.PRESENT
     },
     hasCheckout (item) {
       return item.endDate !== null
