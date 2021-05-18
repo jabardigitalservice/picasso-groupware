@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { parseQuery } from '../../lib/pagination-query-utils'
+import { parseQuery } from '../../lib/querystring-parser'
 
 export default {
   components: {
