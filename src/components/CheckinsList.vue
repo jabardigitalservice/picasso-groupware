@@ -3,10 +3,11 @@
     <template v-if="!loading">
       <div class="flex flex-wrap">
         <template v-if="items.length > 0">
-          <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 md:px-6" :class="getRowClass(item)">
+          <div
+            v-for="item in items" :key="item.id"
+            :class="['w-full bg-white shadow p-4 md:px-6', getRowClass(item)]">
             <div class="flex items-center">
-              <div
-                class="flex-none w-12 h-12 mr-4 md:mr-6">
+              <div class="flex-none w-12 h-12 mr-4 md:mr-6">
                 <component
                   v-if="hasValidMoodValue(item.mood)"
                   :is="getMoodComponent(item.mood)"
@@ -20,12 +21,24 @@
                 <p class="text-gray-900 font-bold">
                     {{ item['fullname'] }}
                 </p>
-                <p v-if="hasDivisionAndRole(item)"
+                <p
+                  v-if="hasDivisionAndRole(item)"
                   class="text-gray-900 text-opacity-50 text-sm">
                   {{ item['divisi'] }} - {{ item['jabatan'] }}
                 </p>
-                <p v-if="item['message']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['message'])">{{ getStatusLabel(item['message'], item['location']) }}</span></p>
-                <p v-if="item['note']" class="text-gray-900">{{ item['note'] }}</p>
+                <p
+                  v-if="item['message']"
+                  class="my-1">
+                  <span
+                    :class="['inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white', getStatusColor(item['message'])]">
+                    {{ getStatusLabel(item['message'], item['location']) }}
+                    </span>
+                  </p>
+                <p
+                  v-if="item['note']"
+                  class="text-gray-900">
+                  {{ item['note'] }}
+                </p>
                 <p
                   v-if="isPresent(item)"
                   class="text-gray-800">
