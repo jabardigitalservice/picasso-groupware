@@ -65,7 +65,9 @@ export default {
   },
   render (h) {
     if (this.component) {
-      return h(this.component)
+      return h(this.component, {
+        props: this.$attrs || {}
+      })
     }
     return null
   }
