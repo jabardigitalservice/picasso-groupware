@@ -55,6 +55,14 @@
       </div>
       <!-- END: LOCATION INPUT -->
 
+      <div class="checkin-form__input-segment">
+        <MoodInput
+          class="mb-12"
+          name="mood"
+          v-model="payload.mood"
+        />
+      </div>
+
       <!-- START: NOTE INPUT -->
       <div class="checkin-form__input-segment">
         <InputTextarea
@@ -90,6 +98,7 @@ import setHours from 'date-fns/setHours'
 import setMinutes from 'date-fns/setMinutes'
 import { formatDateLong } from '../../../lib/date'
 import { ATTENDANCE } from '../../../lib/constants'
+import MoodInput from './mood-input'
 
 const LOCATION = {
   WFH: 'WFH',
@@ -115,11 +124,13 @@ const emptyPayload = {
   date: null,
   location: null,
   message: ATTENDANCE.PRESENT,
-  note: null
+  note: null,
+  mood: null
 }
 
 export default {
   components: {
+    MoodInput,
     InputHeader: () => import('../../Form/InputHeader'),
     InputSelect: () => import('../../Form/Select'),
     InputTextarea: () => import('../../Form/Textarea'),
