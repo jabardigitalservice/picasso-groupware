@@ -7,7 +7,7 @@ import Yay from './Variants/Yay.vue'
 export const moods = [
   {
     value: 'worst',
-    label: 'Marah',
+    label: 'Terpuruk',
     component: Angry
   },
   {
