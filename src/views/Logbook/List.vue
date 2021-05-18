@@ -21,18 +21,34 @@
         </a>
       </div>
     </div>
-    <LogbookList/>
+    <LogbookList :query="logbookListQuery" />
   </div>
 </template>
 
 <script>
+import { parseQuery } from '../../lib/pagination-query-utils'
+
 export default {
   components: {
     LogbookList: () => import('../../components/LogbookList')
   },
   data () {
     return {
-      showDetail: true
+      showDetail: true,
+      logbookListQuery: null
+    }
+  },
+  watch: {
+    '$route.query': {
+      immediate: true,
+      deep: true,
+      handler (newObject) {
+        this.logbookListQuery = parseQuery(newObject, {
+          page: Number,
+          start_date: String,
+          end_date: String
+        })
+      }
     }
   },
   beforeRouteEnter (to, from, next) {
