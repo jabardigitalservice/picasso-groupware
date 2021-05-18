@@ -1,4 +1,4 @@
-import Angry from './Variants/Angry.vue'
+import Miserable from './Variants/Miserable.vue'
 import Flat from './Variants/Flat.vue'
 import Haha from './Variants/Haha.vue'
 import Sad from './Variants/Sad.vue'
@@ -8,7 +8,7 @@ export const moods = [
   {
     value: 'worst',
     label: 'Terpuruk',
-    component: Angry
+    component: Miserable
   },
   {
     value: 'sad',
