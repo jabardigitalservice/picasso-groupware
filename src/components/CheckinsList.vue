@@ -3,8 +3,18 @@
     <template v-if="!loading">
       <div class="flex flex-wrap">
         <template v-if="items.length > 0">
-          <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 px-6" :class="getRowClass(item)">
+          <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 md:px-6" :class="getRowClass(item)">
             <div class="flex items-center">
+              <div class="flex-none w-12 h-12 mr-4 md:mr-6">
+                <component
+                  v-if="hasValidMoodValue(item.mood)"
+                  :is="getMoodComponent(item.mood)"
+                  :css-filter="false" />
+                <i
+                  v-else
+                  aria-hidden="true"
+                  class="block w-full h-full rounded-full bg-gray-400 opacity-25" />
+              </div>
               <div class="flex-auto text-sm">
                 <p class="text-gray-900 font-bold">
                     {{ item['fullname'] }}
@@ -60,6 +70,9 @@ import { mapGetters } from 'vuex'
 import { formatTime } from '@/lib/date'
 import { isBefore, isAfter, set } from 'date-fns'
 import { ATTENDANCE } from '../lib/constants'
+import { moods } from '../components/Reactions'
+
+const moodValues = moods.map((m) => m.value)
 
 export default {
   components: {
@@ -152,6 +165,13 @@ export default {
     getCheckOutDate (item) {
       const date = new Date(item.endDate)
       return formatTime(date)
+    },
+    hasValidMoodValue (moodValue) {
+      return moodValues.includes(moodValue)
+    },
+    getMoodComponent (moodValue) {
+      const matched = moods.find((m) => m.value === moodValue)
+      return matched ? matched.component : null
     }
   }
 }

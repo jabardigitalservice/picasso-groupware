@@ -5,18 +5,25 @@
         <h3 class="text-xl font-bold">
           Konfirmasi Checkin
         </h3>
-        <br />
-        <p>
+        <p class="mb-3">
           Yuk cek lagi data checkin kamu hari ini.
         </p>
-        <br />
-        <strong class="text-green-600 text-lg">Hadir</strong>
+        <strong class="text-green-600 text-lg">Hadir ({{ payload.location }})</strong>
         <br />
         <label>Tanggal</label>
         <p>{{ formatDateLong(payload.date) }}</p>
 
         <label>Jam Hadir</label>
         <p>{{ formatTime(payload.date) }}</p>
+
+        <label>Mood</label>
+        <i
+          aria-hidden="true"
+          class="block w-12 my-2">
+          <component
+            :is="moodComponent"
+            :animate="true" />
+        </i>
 
         <label>Catatan</label>
         <p>{{ payload.note || '-' }}</p>
@@ -46,6 +53,7 @@
 import pMinDelay from 'p-min-delay'
 import { GroupwareAPI } from '../../../lib/axios'
 import { formatDateLong, formatTime } from '../../../lib/date'
+import { moods } from '../../Reactions'
 
 const STATUS = {
   LOADING: 'LOADING',
@@ -79,6 +87,11 @@ export default {
         date: date instanceof Date ? date.toISOString() : null
       })
       return payload
+    },
+    moodComponent () {
+      const { mood } = this.payload
+      const matched = moods.find((m) => m.value === mood)
+      return matched ? matched.component : null
     }
   },
   methods: {

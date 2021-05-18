@@ -1,0 +1,93 @@
+@import "./reaction-variables";
+
+@keyframes scale-up {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.1);
+  }
+}
+
+.emoji {
+  pointer-events: none;
+  user-select: none;
+  width: 120px;
+  height: 120px;
+  background: $emoji-base-color;
+  display: inline-block;
+  border-radius: 50%;
+  position: relative;
+  top: 0;
+  left: 0;
+
+  &:after {
+    text-align: center;
+    position: absolute;
+    bottom: -40px;
+    font-size: 18px;
+    width: 60px;
+    left: calc(50% - 30px);
+    color: $emoji-text-color;
+  }
+}
+
+.emoji__face,
+.emoji__eyebrows,
+.emoji__eyes,
+.emoji__mouth,
+.emoji__tongue,
+.emoji__heart,
+.emoji__hand,
+.emoji__thumb {
+  position: absolute;
+
+  &:before,
+  &:after {
+    position: absolute;
+    content: "";
+  }
+}
+
+.emoji__face {
+  width: inherit;
+  height: inherit;
+}
+
+.emoji-responsive-wrapper {
+  transition: filter 0.3s ease-in-out;
+
+  &.with-css-filter {
+    &:hover {
+      filter: grayscale(0) opacity(100%);
+    }
+
+    &:not(:hover) {
+      &.emoji-animation-disabled {
+        filter: grayscale(1) opacity(50%);
+      }
+    }
+  }
+
+  @apply inline-block relative origin-top-left;
+
+  &:not(:hover) {
+    &.emoji-animation-disabled,
+    &.emoji-animation-disabled * {
+      &,
+      &::before,
+      &::after {
+        animation: none !important;
+      }
+    }
+  }
+
+  &:focus {
+    outline: none;
+
+    > .emoji {
+      animation: scale-up 0.2s 2 ease-out alternate;
+    }
+  }
+}
