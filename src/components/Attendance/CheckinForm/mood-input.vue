@@ -11,6 +11,11 @@
     >
     <FormInputHeader
       :title="inputTitle">
+      <template #subtitle>
+        <span class="text-gray-600">
+          {{ inputSubtitle }}
+        </span>
+      </template>
     </FormInputHeader>
     <input
       type="hidden"
@@ -63,6 +68,7 @@ export default {
   data () {
     return {
       inputTitle: 'Bagaimana mood kamu hari ini?',
+      inputSubtitle: 'Yuk bantu rekan kamu untuk tahu mood kamu hari ini',
       moodVariants: moods.map((m) => m.value),
       mValue: null
     }
@@ -100,7 +106,7 @@ export default {
     grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
     gap: 3rem 2rem;
 
-    @apply grid mt-2;
+    @apply grid mt-4;
 
     @media screen and (min-width: 360px) {
 
