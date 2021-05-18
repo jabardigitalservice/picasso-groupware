@@ -69,6 +69,7 @@ import VPagination from 'vuejs-paginate'
 import listMixin from './list-mixin'
 import DateRangePicker from './date-range-picker.vue'
 import TableRow from './table-row'
+import _isEqual from 'lodash/isEqual'
 
 export default {
   name: 'LogbookTable',
@@ -77,6 +78,12 @@ export default {
     VPagination,
     TableRow,
     DateRangePicker
+  },
+  props: {
+    query: {
+      type: Object,
+      default: () => null
+    }
   },
   data () {
     return {
@@ -123,8 +130,28 @@ export default {
       }
     }
   },
-  created () {
-    this.loadData()
+  watch: {
+    query: {
+      immediate: true,
+      deep: true,
+      handler (newObject, oldObject) {
+        if (_isEqual(newObject, oldObject)) {
+          return
+        }
+
+        const {
+          page,
+          perPage,
+          start_date: startDate,
+          end_date: endDate
+        } = (newObject || {})
+        this.page = page || 1
+        this.perPage = perPage || 10
+        this.startDate = startDate
+        this.endDate = endDate
+        this.loadData()
+      }
+    }
   },
   methods: {
     onDateChanged ({ start_date: startDate, end_date: endDate }) {
