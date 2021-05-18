@@ -1,5 +1,8 @@
 <template>
-  <ResponsiveComponentLoader for-desktop="LogbookList/table.vue" for-mobile="LogbookList/card-list.vue" />
+  <ResponsiveComponentLoader
+    v-bind="$attrs"
+    for-desktop="LogbookList/table.vue"
+    for-mobile="LogbookList/card-list.vue" />
 </template>
 
 <script>
