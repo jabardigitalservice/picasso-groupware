@@ -5,7 +5,8 @@
         <template v-if="items.length > 0">
           <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 md:px-6" :class="getRowClass(item)">
             <div class="flex items-center">
-              <div class="flex-none w-12 h-12 mr-4 md:mr-6">
+              <div
+                class="flex-none w-12 h-12 mr-4 md:mr-6">
                 <component
                   v-if="hasValidMoodValue(item.mood)"
                   :is="getMoodComponent(item.mood)"
@@ -13,7 +14,7 @@
                 <i
                   v-else
                   aria-hidden="true"
-                  class="block w-full h-full rounded-full bg-gray-400 opacity-25" />
+                  class="block w-full h-full rounded-full bg-white opacity-50" />
               </div>
               <div class="flex-auto text-sm">
                 <p class="text-gray-900 font-bold">
