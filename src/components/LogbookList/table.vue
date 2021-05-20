@@ -167,7 +167,6 @@ export default {
         }, {
           sync: false
         })
-        this.loadData()
       }
     }
   },
@@ -189,6 +188,7 @@ export default {
       if (sync) {
         this.$emit('update:query', this.mQuery)
       }
+      this.loadData()
     },
     getQueryAsAPISpec () {
       const { page, perPage, startDate, endDate } = this.mQuery
