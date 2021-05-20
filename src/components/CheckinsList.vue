@@ -3,7 +3,9 @@
     <template v-if="!loading">
       <div class="flex flex-wrap">
         <template v-if="items.length > 0">
-          <div v-for="item in items" :key="item.id" class="w-full bg-white shadow p-4 md:px-6" :class="getRowClass(item)">
+          <div
+            v-for="item in items" :key="item.id"
+            :class="['w-full bg-white shadow p-4 md:px-6', getRowClass(item)]">
             <div class="flex items-center">
               <div class="flex-none w-12 h-12 mr-4 md:mr-6">
                 <component
@@ -13,16 +15,33 @@
                 <i
                   v-else
                   aria-hidden="true"
-                  class="block w-full h-full rounded-full bg-gray-400 opacity-25" />
+                  class="block w-full h-full rounded-full bg-white opacity-50" />
               </div>
               <div class="flex-auto text-sm">
                 <p class="text-gray-900 font-bold">
                     {{ item['fullname'] }}
                 </p>
-                <p v-if="item['message']" class="my-1"><span class="inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white" :class="getStatusColor(item['message'])">{{ getStatusLabel(item['message']) }}</span></p>
-                <p class="text-gray-900">{{ item['location'] }}</p>
-                <p v-if="item['note']" class="text-gray-900">{{ item['note'] }}</p>
-                <p class="text-gray-600">
+                <p
+                  v-if="hasDivisionAndRole(item)"
+                  class="text-gray-900 text-opacity-50 text-sm">
+                  {{ item['divisi'] }} - {{ item['jabatan'] }}
+                </p>
+                <p
+                  v-if="item['message']"
+                  class="my-1">
+                  <span
+                    :class="['inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white', getStatusColor(item['message'])]">
+                    {{ getStatusLabel(item['message'], item['location']) }}
+                    </span>
+                  </p>
+                <p
+                  v-if="item['note']"
+                  class="text-gray-900">
+                  {{ item['note'] }}
+                </p>
+                <p
+                  v-if="isPresent(item)"
+                  class="text-gray-800">
                   <template v-if="hasCheckout(item)">
                     {{ getCheckInDate(item) }} - {{ getCheckOutDate(item) }}
                   </template>
@@ -82,20 +101,23 @@ export default {
   methods: {
     formatTime,
 
-    getStatusLabel (value) {
-      if (value === ATTENDANCE.PRESENT) {
-        return 'Hadir'
+    getStatusLabel (attendanceType, locationType) {
+      if (attendanceType === ATTENDANCE.PRESENT) {
+        const label = 'Hadir'
+        return locationType
+          ? `${label} - ${locationType}`
+          : label
       }
 
-      if (value === ATTENDANCE.LEAVE) {
+      if (attendanceType === ATTENDANCE.LEAVE) {
         return 'Izin'
       }
 
-      if (value === ATTENDANCE.SICK_LEAVE) {
+      if (attendanceType === ATTENDANCE.SICK_LEAVE) {
         return 'Sakit'
       }
 
-      if (value === ATTENDANCE.PAID_LEAVE) {
+      if (attendanceType === ATTENDANCE.PAID_LEAVE) {
         return 'Cuti'
       }
 
@@ -140,6 +162,12 @@ export default {
       }
 
       return 'bg-white'
+    },
+    hasDivisionAndRole (item) {
+      return !!item.divisi && !!item.jabatan
+    },
+    isPresent (item) {
+      return item.message === ATTENDANCE.PRESENT
     },
     hasCheckout (item) {
       return item.endDate !== null
