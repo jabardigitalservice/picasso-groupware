@@ -103,7 +103,7 @@ export default {
 
     getStatusLabel (attendanceType, locationType) {
       if (attendanceType === ATTENDANCE.PRESENT) {
-        let label = 'Hadir'
+        const label = 'Hadir'
         return locationType
           ? `${label} - ${locationType}`
           : label
