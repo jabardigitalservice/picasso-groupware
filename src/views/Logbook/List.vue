@@ -59,6 +59,8 @@ export default {
     onLogbookListQueryUpdated (newQuery) {
       this.$router.push({
         query: _omitBy(newQuery, _isNil)
+      }).catch(() => {
+        // silent error
       })
     }
   },
