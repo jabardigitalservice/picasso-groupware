@@ -21,11 +21,15 @@
         </a>
       </div>
     </div>
-    <LogbookList :query="logbookListQuery" />
+    <LogbookList
+      :query="logbookListQuery"
+      @update:query="onLogbookListQueryUpdated" />
   </div>
 </template>
 
 <script>
+import _omitBy from 'lodash/omitBy'
+import _isNil from 'lodash/isNil'
 import { parseQuery } from '../../lib/querystring-parser'
 
 export default {
@@ -45,10 +49,19 @@ export default {
       handler (newObject) {
         this.logbookListQuery = parseQuery(newObject, {
           page: Number,
-          start_date: String,
-          end_date: String
+          startDate: String,
+          endDate: String
         })
       }
+    }
+  },
+  methods: {
+    onLogbookListQueryUpdated (newQuery) {
+      this.$router.push({
+        query: _omitBy(newQuery, _isNil)
+      }).catch(() => {
+        // silent error
+      })
     }
   },
   beforeRouteEnter (to, from, next) {
