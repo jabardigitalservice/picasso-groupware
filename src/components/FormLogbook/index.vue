@@ -374,9 +374,7 @@ export default {
         showCancelButton: false,
         confirmButtonText: 'Tutup'
       }).then(() => {
-        this.$router.push({
-          path: '/report'
-        })
+        this.$router.back()
       })
     },
     onError (msg) {

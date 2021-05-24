@@ -42,7 +42,7 @@
           </template>
         </InputText>
       </div>
-      <DateRangePickerHelpers v-bind="rangeOfDateValue" @change="performFilter"/>
+      <DateRangePickerHelpers v-bind="mRange" @change="performFilter"/>
     </div>
     <div :class="['date-range-picker__modal', showModal && 'is-active']">
       <div class="p-4 rounded-lg bg-white shadow-lg">
@@ -53,7 +53,7 @@
           v-if="showModal"
           ref="rangeDatePicker"
           mode="range"
-          :value="rangeOfDateValue"
+          :value="mRange"
           :is-inline="true"
         />
         <div class="flex justify-end items-center mt-4">
@@ -79,7 +79,12 @@ import format from 'date-fns/format'
 import InputText from '../Form/Input'
 import DateRangePickerHelpers from './date-range-picker-helpers'
 
-const formatDateToYMD = (date) => format(date, 'yyyy-MM-dd')
+const formatDateToYMD = (date) => {
+  if (date instanceof Date === false) {
+    return null
+  }
+  return format(date, 'yyyy-MM-dd')
+}
 
 const DATE_OPTION = {
   TODAY: 'TODAY',
@@ -94,10 +99,30 @@ export default {
     DateRangePickerHelpers,
     VDatePicker
   },
+  props: {
+    range: {
+      type: Object,
+      default: () => ({
+        start: null,
+        end: null
+      }),
+      validator: (obj) => {
+        const isObject = !!obj && typeof obj === 'object'
+        const hasValidFields = ['start', 'end']
+          .every((key) => {
+            const hasKey = key in obj
+            const isNullOrDate = obj[key] === null ||
+              obj[key] instanceof Date
+            return hasKey && isNullOrDate
+          })
+        return isObject && hasValidFields
+      }
+    }
+  },
   data () {
     return {
       showModal: false,
-      rangeOfDateValue: {
+      mRange: {
         start: null,
         end: null
       },
@@ -106,10 +131,21 @@ export default {
   },
   computed: {
     startDateText () {
-      return this.rangeOfDateValue.start ? formatDateToYMD(this.rangeOfDateValue.start) : '-'
+      return this.mRange.start ? formatDateToYMD(this.mRange.start) : '-'
     },
     endDateText () {
-      return this.rangeOfDateValue.end ? formatDateToYMD(this.rangeOfDateValue.end) : '-'
+      return this.mRange.end ? formatDateToYMD(this.mRange.end) : '-'
+    }
+  },
+  watch: {
+    range: {
+      immediate: true,
+      deep: true,
+      handler (newObject) {
+        this.mRange = newObject
+          ? { ...newObject }
+          : { start: null, end: null }
+      }
     }
   },
   methods: {
@@ -128,7 +164,7 @@ export default {
       })
     },
     performFilter ({ start, end } = {}) {
-      this.rangeOfDateValue = { start, end }
+      this.mRange = { start, end }
       const params = {}
       if (start instanceof Date || end instanceof Date) {
         Object.assign(params, {
