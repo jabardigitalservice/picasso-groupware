@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { props, components } from '../Form/input-mixin'
+import { props, components } from './input-mixin'
 import debounce from 'lodash/debounce'
 
 export default {
@@ -89,6 +89,10 @@ export default {
     value: {
       type: [String, Number],
       default: ''
+    },
+    searchCallback: {
+      type: Function,
+      default: null
     }
   },
   data () {
@@ -111,7 +115,7 @@ export default {
     onInputFocused () {
       this.showResultsPopover = true
       this.isSearching = true
-      this.onSearch()
+      this.handleSearch()
     },
     onInputBlur () {
       setTimeout(() => {
@@ -122,15 +126,15 @@ export default {
       this.mValue = e.target.value
       this.showResultsPopover = true
       this.isSearching = true
-      this.onSearch()
+
+      this.handleSearch()
     },
-    onSearch: debounce(function () {
+    handleSearch: debounce(async function () {
       const searchString = typeof this.mValue === 'string' ? this.mValue : ''
-      this.results = this.$store
-        .getters['organizations/listOfProjects']
-        .filter(x => {
-          return `${x.name}`.toLowerCase().includes(searchString.toLowerCase())
-        })
+      if (typeof this.searchCallback === 'function') {
+        const searchResults = this.searchCallback(searchString)
+        this.results = searchResults instanceof Promise ? await searchResults : searchResults
+      }
       this.isSearching = false
     }, 600),
     onSelect (project) {
