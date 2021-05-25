@@ -2,47 +2,14 @@
   <div>
     <FormLogbookSkeleton v-if="isLoadingLogbook" />
     <ValidationObserver v-if="!isLoadingLogbook" ref="validationObserver">
-      <FormInputProject
-        name="projectId"
-        title="Nama Project"
-        type="text"
+      <FormInputProjectName
+        v-model="payload.projectName"
         :disabled="!isEditable"
-        rules="required"
-        :custom-messages="{
-          required: 'Nama project harus diisi'
-        }"
-        :value="payload.projectName"
-        @change="onSelectedProjectChanged"
-      >
-        <template
-          v-if="!isViewingOnly"
-          #subtitle
-        >
-          <p>
-            <i aria-hidden="true" class="text-gray-600">
-              Nama project Anda tidak ada? Kontak admin via
-            </i>
-            <a
-              class="cursor-pointer hover:underline"
-              :href="adminWhatsappBacklink"
-              target="_blank"
-            >
-              <strong class="text-green-500">Whatsapp</strong>
-            </a>
-          </p>
-        </template>
-      </FormInputProject>
+      />
       <br />
-      <FormInput
-        name="nameTask"
-        title="Nama Task"
-        type="text"
-        :disabled="!isEditable"
-        rules="required"
-        :custom-messages="{
-          required: 'Nama task harus diisi'
-        }"
+      <FormInputTaskName
         v-model="payload.nameTask"
+        :disabled="!isEditable"
       />
       <br />
       <FormInputTupoksi
@@ -145,9 +112,10 @@
 
 <script>
 import FormLogbookSkeleton from './Skeleton'
+import FormInputTaskName from './InputTaskName'
 import FormInputTupoksi from './InputTupoksi'
 import FormInputLink from './InputLink'
-import FormInputProject from './InputProjectAutocomplete'
+import FormInputProjectName from './InputProjectName'
 import FormInput from '../Form/Input'
 import FormInputEvidence from '../Form/EvidenceImageInput'
 import FormInputDateTime from '../Form/InputDateTime'
@@ -180,9 +148,10 @@ const ACTIONS = [
 
 export default {
   components: {
+    FormInputTaskName,
     FormInputTupoksi,
     FormInputLink,
-    FormInputProject,
+    FormInputProjectName,
     FormInput,
     FormInputEvidence,
     FormInputDateTime,
@@ -205,12 +174,7 @@ export default {
     }
   },
   data () {
-    const {
-      VUE_APP_ADMIN_WHATSAPP_NUMBER: adminWhatsappNumber
-    } = process.env
-    const adminWhatsappBacklink = `https://api.whatsapp.com/send?phone=${adminWhatsappNumber}&text=Usulan nama project/product anda`
     return {
-      adminWhatsappBacklink,
       isLoadingLogbook: false,
       originalData: null,
       payload: Object.assign({}, modelData),
