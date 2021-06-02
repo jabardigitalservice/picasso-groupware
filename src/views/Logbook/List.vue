@@ -49,6 +49,7 @@ export default {
       handler (newObject) {
         this.logbookListQuery = parseQuery(newObject, {
           page: Number,
+          perPage: Number,
           startDate: String,
           endDate: String
         })
