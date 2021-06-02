@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { subDays, setDate, getDaysInMonth, isEqual } from 'date-fns'
+import { subDays, setDate, getDaysInMonth, isSameDay } from 'date-fns'
 
 export default {
   props: {
@@ -35,8 +35,8 @@ export default {
   methods: {
     isHelperSelected (helper) {
       const { value: { start, end } } = helper
-      return isEqual(start, this.start) &&
-        isEqual(end, this.end)
+      return isSameDay(start, this.start) &&
+        isSameDay(end, this.end)
     },
     onHelperClick (helper) {
       if (this.isHelperSelected(helper)) {
