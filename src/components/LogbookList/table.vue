@@ -3,7 +3,7 @@
     <DateRangePicker
       :range="dateRange"
       @change-date="onDateChanged"/>
-      <div class="v-pagination-container">
+      <div class="v-pagination-container -mt-4">
         <VPagination v-bind="pagination" />
       </div>
       <header class="mb-4 flex justify-between items-center">
@@ -62,6 +62,12 @@
             </template>
           </tbody>
       </table>
+    </div>
+    <div
+      v-if="showBottomPagination"
+      class="v-pagination-container mt-4"
+    >
+      <VPagination v-bind="pagination" />
     </div>
   </div>
 </template>
@@ -142,6 +148,10 @@ export default {
         nextClass: 'v-pagination__page v-pagination__page--next',
         clickHandler: this.onPageChanged
       }
+    },
+    showBottomPagination () {
+      return Array.isArray(this.logbookListData) &&
+        this.logbookListData.length >= 5
     }
   },
   watch: {
@@ -282,7 +292,7 @@ export default {
 <style lang="scss">
 .v-pagination-container {
   @apply rounded border border-solid border-gray-300
-  p-4 mb-4 -mt-4;
+  p-4 mb-4;
 }
 
 .v-pagination {
