@@ -40,7 +40,7 @@
       </i>
     </div>
     <p v-if="errors.length"
-       class="mt-3 form-input__error-hint">
+       class="mt-10 form-input__error-hint">
       <slot name="error">
         {{ errors[0] }}
       </slot>
