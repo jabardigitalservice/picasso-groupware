@@ -197,8 +197,9 @@ export default {
       }
       if (sync) {
         this.$emit('update:query', this.mQuery)
+      } else {
+        this.loadData()
       }
-      this.loadData()
     },
     getQueryAsAPISpec () {
       const { page, perPage, startDate, endDate } = this.mQuery
