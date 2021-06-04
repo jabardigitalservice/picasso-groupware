@@ -2,66 +2,67 @@
   <div>
     <DateRangePicker
       :range="dateRange"
-      @change-date="onDateChanged"/>
-      <div class="v-pagination-container -mt-4">
-        <VPagination v-bind="pagination" />
-      </div>
-      <header class="mb-4 flex justify-between items-center">
-        <p class="text-sm text-gray-600">
-          <template v-if="totalCount">
-            Menampilkan {{ startIndex + 1 }} - {{ endIndex + 1 }} dari total {{ totalCount }} data
-          </template>
-        </p>
-        <p>
-          <button
-            class="header-action-button bg-blue-500"
-            @click="onCreateNewLogbook">
-            + Buat Laporan Baru
-          </button>
-        </p>
-      </header>
-      <div class="overflow-x-auto overflow-y-hidden">
-        <table class="logbook-table">
-          <thead>
-            <tr>
-              <th style="width: 1%;">No.</th>
-              <th style="width: 1%;">Tanggal</th>
-              <th style="width: 1%;">Project</th>
-              <th style="width: 50%;">Task</th>
-              <th style="width: 1%;">Tupoksi</th>
-              <th style="width: 1%;">Foto Kegiatan</th>
-              <th style="width: 1%;">Lampiran</th>
-              <th style="width: 1%;">Action</th>
+      @change-date="onDateChanged"
+    />
+    <div class="v-pagination-container -mt-4">
+      <VPagination v-bind="pagination" />
+    </div>
+    <header class="mb-4 flex justify-between items-center">
+      <p class="text-sm text-gray-600">
+        <template v-if="totalCount">
+          Menampilkan {{ startIndex + 1 }} - {{ endIndex + 1 }} dari total {{ totalCount }} data
+        </template>
+      </p>
+      <p>
+        <button
+          class="header-action-button bg-blue-500"
+          @click="onCreateNewLogbook">
+          + Buat Laporan Baru
+        </button>
+      </p>
+    </header>
+    <div class="overflow-x-auto overflow-y-hidden">
+      <table class="logbook-table">
+        <thead>
+          <tr>
+            <th style="width: 1%;">No.</th>
+            <th style="width: 1%;">Tanggal</th>
+            <th style="width: 1%;">Project</th>
+            <th style="width: 50%;">Task</th>
+            <th style="width: 1%;">Tupoksi</th>
+            <th style="width: 1%;">Foto Kegiatan</th>
+            <th style="width: 1%;">Lampiran</th>
+            <th style="width: 1%;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-if="isLoadingLogbookList">
+            <tr v-for="i in mQuery.perPage" :key="`skeleton:${i}`">
+              <td v-for="j in 8" :key="`col:${j}`" class="p-4">
+                <div class="w-full h-2 rounded-full bg-shimmering" />
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <template v-if="isLoadingLogbookList">
-              <tr v-for="i in mQuery.perPage" :key="`skeleton:${i}`">
-                <td v-for="j in 8" :key="`col:${j}`" class="p-4">
-                  <div class="w-full h-2 rounded-full bg-shimmering" />
-                </td>
-              </tr>
-            </template>
-            <template v-else-if="!logbookListData || !logbookListData.length">
-              <tr>
-                <td colspan="7">
-                  <div class="p-4 text-center font-bold text-gray-400 bg-gray-200 uppercase">
-                    Tidak ada data
-                  </div>
-                </td>
-              </tr>
-            </template>
-            <template v-else>
-              <TableRow
-                v-for="(data, index) in logbookListData"
-                :key="index"
-                :logbook="data"
-                :index="getAbsoluteIndex(index)"
-                @delete:success="loadData">
-              </TableRow>
-            </template>
-          </tbody>
-      </table>
+          </template>
+          <template v-else-if="!logbookListData || !logbookListData.length">
+            <tr>
+              <td colspan="7">
+                <div class="p-4 text-center font-bold text-gray-400 bg-gray-200 uppercase">
+                  Tidak ada data
+                </div>
+              </td>
+            </tr>
+          </template>
+          <template v-else>
+            <TableRow
+              v-for="(data, index) in logbookListData"
+              :key="index"
+              :logbook="data"
+              :index="getAbsoluteIndex(index)"
+              @delete:success="loadData">
+            </TableRow>
+          </template>
+        </tbody>
+    </table>
     </div>
     <div
       v-if="showBottomPagination"
