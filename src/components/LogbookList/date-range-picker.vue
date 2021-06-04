@@ -1,22 +1,14 @@
 <template>
-  <div class="mb-8">
-    <div class="p-4 border border-solid border-gray-300 rounded">
-      <header class="flex justify-between items-center">
-        <h5 class="font-bold text-gray-700 text-sm">
-          Filter Tanggal
-        </h5>
-        <span class="text-xs text-blue-500 font-bold cursor-pointer" @click="onReset">
-          RESET
-        </span>
-      </header>
-      <br/>
-      <div class="flex justify-between sm:justify-start items-stretch">
+  <div>
+    <div>
+      <div class="flex justify-start items-stretch">
         <InputText
           name="startDate"
           type="text"
           title="Awal"
           :value="startDateText"
           :disabled="true"
+          style="width: 180px;"
           @click.native.capture="showModal = true"
         >
           <template #title>
@@ -25,7 +17,7 @@
             </span>
           </template>
         </InputText>
-        <span class="w-8">
+        <span class="w-4">
         </span>
         <InputText
           name="startDate"
@@ -33,6 +25,7 @@
           title="Akhir"
           :value="endDateText"
           :disabled="true"
+          style="width: 180px;"
           @click.native.capture="showModal = true"
         >
           <template #title>
