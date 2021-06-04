@@ -1,12 +1,10 @@
 <template>
   <div>
-    <DateRangePicker
-      :range="dateRange"
-      @change-date="onDateChanged"
+    <TableFilter
+      class="mb-8"
+      :filter="tableFilter"
+      @change="onFilterChanged"
     />
-    <div class="v-pagination-container -mt-4">
-      <VPagination v-bind="pagination" />
-    </div>
     <header class="mb-4 flex justify-between items-center">
       <p class="text-sm text-gray-600">
         <template v-if="totalCount">
@@ -64,19 +62,16 @@
         </tbody>
     </table>
     </div>
-    <div
-      v-if="showBottomPagination"
-      class="v-pagination-container mt-4"
-    >
-      <VPagination v-bind="pagination" />
+    <div class="v-pagination-container mt-4">
+      <Pagination v-bind="pagination" />
     </div>
   </div>
 </template>
 
 <script>
-import VPagination from 'vuejs-paginate'
+import Pagination from '../Pagination'
 import listMixin from './list-mixin'
-import DateRangePicker from './date-range-picker.vue'
+import TableFilter from './table-filter'
 import TableRow from './table-row'
 import _isEqual from 'lodash/isEqual'
 
@@ -84,9 +79,9 @@ export default {
   name: 'LogbookTable',
   mixins: [listMixin],
   components: {
-    VPagination,
-    TableRow,
-    DateRangePicker
+    Pagination,
+    TableFilter,
+    TableRow
   },
   props: {
     query: {
@@ -111,13 +106,11 @@ export default {
     }
   },
   computed: {
-    dateRange () {
-      const { startDate, endDate } = this.mQuery
-      const start = startDate ? new Date(startDate) : null
-      const end = endDate ? new Date(endDate) : null
+    tableFilter () {
       return {
-        start,
-        end
+        startDate: this.mQuery.startDate,
+        endDate: this.mQuery.endDate,
+        perPage: this.mQuery.perPage
       }
     },
     startIndex () {
@@ -141,18 +134,9 @@ export default {
         value: this.mQuery.page,
         pageCount: this.totalPage,
         pageRange: 3,
-        containerClass: 'v-pagination',
-        pageClass: 'v-pagination__page',
-        prevText: 'Prev',
-        nextText: 'Next',
-        prevClass: 'v-pagination__page v-pagination__page--prev',
-        nextClass: 'v-pagination__page v-pagination__page--next',
-        clickHandler: this.onPageChanged
+        clickHandler: this.onPageChanged,
+        firstLastButton: true
       }
-    },
-    showBottomPagination () {
-      return Array.isArray(this.logbookListData) &&
-        this.logbookListData.length >= 5
     }
   },
   watch: {
@@ -211,12 +195,12 @@ export default {
         end_date: endDate
       }
     },
-    onDateChanged ({ start_date: startDate, end_date: endDate }) {
+    onFilterChanged ({ startDate, endDate, perPage } = {}) {
       this.updateQuery({
-        perPage: this.mQuery.perPage,
         page: 1,
         startDate,
-        endDate
+        endDate,
+        perPage
       })
       this.totalCount = 0
       this.totalPage = 0
@@ -287,64 +271,6 @@ export default {
   &:hover,
   &:focus {
     @apply outline-none opacity-50;
-  }
-}
-</style>
-
-<style lang="scss">
-.v-pagination-container {
-  @apply rounded border border-solid border-gray-300
-  p-4 mb-4;
-}
-
-.v-pagination {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-
-  &__page {
-    background-color: #eee;
-    @apply cursor-pointer
-    inline-block
-    rounded
-    bg-white
-    leading-none;
-
-    &:not(.disabled):not(.active):hover {
-      opacity: 0.5;
-    }
-
-    &.active {
-      @apply bg-blue-500 text-white;
-    }
-
-    &.disabled {
-      @apply cursor-not-allowed opacity-50;
-    }
-
-    & + & {
-      margin-left: 0.5rem;
-    }
-
-    > a {
-      padding: 0.5rem 0.75rem;
-      cursor: inherit;
-      @apply block w-full h-full text-sm;
-
-      &:focus,
-      &:active {
-        outline: none;
-        border: none;
-      }
-    }
-  }
-}
-
-.v-pagination__page {
-  &--prev,
-  &--next {
-    @apply border border-solid border-gray-300
-    text-blue-500 font-bold;
   }
 }
 </style>
