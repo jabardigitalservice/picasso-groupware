@@ -1,10 +1,18 @@
 <template>
   <div class="date-range-picker__helpers">
-    <button v-for="(h, index) in pickerHelpers"
-            :key="index"
-            :class="[isHelperSelected(h) && 'is-active']"
-            @click="onHelperClick(h)">
+    <button
+      v-for="(h, index) in pickerHelpers"
+      :key="index"
+      :class="[isHelperSelected(h) && 'is-active']"
+      @click="onHelperClick(h)"
+    >
       {{ h.label }}
+      <span
+        v-show="isHelperSelected(h)"
+        class="font-bold ml-2 leading-none"
+      >
+        ✕
+      </span>
     </button>
   </div>
 </template>
@@ -55,6 +63,7 @@ export default {
   @apply mt-2;
   > button {
     @apply px-3 py-1 rounded-full
+    inline-flex items-center
     text-xs
     bg-blue-100 text-blue-500;
 
