@@ -1,22 +1,14 @@
 <template>
-  <div class="mb-8">
-    <div class="p-4 border border-solid border-gray-300 rounded">
-      <header class="flex justify-between items-center">
-        <h5 class="font-bold text-gray-700 text-sm">
-          Filter Tanggal
-        </h5>
-        <span class="text-xs text-blue-500 font-bold cursor-pointer" @click="onReset">
-          RESET
-        </span>
-      </header>
-      <br/>
-      <div class="flex justify-between sm:justify-start items-stretch">
+  <div>
+    <div>
+      <div class="flex justify-start items-stretch">
         <InputText
           name="startDate"
           type="text"
           title="Awal"
           :value="startDateText"
           :disabled="true"
+          style="width: 180px;"
           @click.native.capture="showModal = true"
         >
           <template #title>
@@ -25,7 +17,7 @@
             </span>
           </template>
         </InputText>
-        <span class="w-8">
+        <span class="w-4">
         </span>
         <InputText
           name="startDate"
@@ -33,6 +25,7 @@
           title="Akhir"
           :value="endDateText"
           :disabled="true"
+          style="width: 180px;"
           @click.native.capture="showModal = true"
         >
           <template #title>
@@ -42,7 +35,7 @@
           </template>
         </InputText>
       </div>
-      <DateRangePickerHelpers v-bind="rangeOfDateValue" @change="performFilter"/>
+      <DateRangePickerHelpers v-bind="mRange" @change="performFilter"/>
     </div>
     <div :class="['date-range-picker__modal', showModal && 'is-active']">
       <div class="p-4 rounded-lg bg-white shadow-lg">
@@ -53,7 +46,7 @@
           v-if="showModal"
           ref="rangeDatePicker"
           mode="range"
-          :value="rangeOfDateValue"
+          :value="mRange"
           :is-inline="true"
         />
         <div class="flex justify-end items-center mt-4">
@@ -79,7 +72,12 @@ import format from 'date-fns/format'
 import InputText from '../Form/Input'
 import DateRangePickerHelpers from './date-range-picker-helpers'
 
-const formatDateToYMD = (date) => format(date, 'yyyy-MM-dd')
+const formatDateToYMD = (date) => {
+  if (date instanceof Date === false) {
+    return null
+  }
+  return format(date, 'yyyy-MM-dd')
+}
 
 const DATE_OPTION = {
   TODAY: 'TODAY',
@@ -94,10 +92,30 @@ export default {
     DateRangePickerHelpers,
     VDatePicker
   },
+  props: {
+    range: {
+      type: Object,
+      default: () => ({
+        start: null,
+        end: null
+      }),
+      validator: (obj) => {
+        const isObject = !!obj && typeof obj === 'object'
+        const hasValidFields = ['start', 'end']
+          .every((key) => {
+            const hasKey = key in obj
+            const isNullOrDate = obj[key] === null ||
+              obj[key] instanceof Date
+            return hasKey && isNullOrDate
+          })
+        return isObject && hasValidFields
+      }
+    }
+  },
   data () {
     return {
       showModal: false,
-      rangeOfDateValue: {
+      mRange: {
         start: null,
         end: null
       },
@@ -106,10 +124,21 @@ export default {
   },
   computed: {
     startDateText () {
-      return this.rangeOfDateValue.start ? formatDateToYMD(this.rangeOfDateValue.start) : '-'
+      return this.mRange.start ? formatDateToYMD(this.mRange.start) : '-'
     },
     endDateText () {
-      return this.rangeOfDateValue.end ? formatDateToYMD(this.rangeOfDateValue.end) : '-'
+      return this.mRange.end ? formatDateToYMD(this.mRange.end) : '-'
+    }
+  },
+  watch: {
+    range: {
+      immediate: true,
+      deep: true,
+      handler (newObject) {
+        this.mRange = newObject
+          ? { ...newObject }
+          : { start: null, end: null }
+      }
     }
   },
   methods: {
@@ -128,7 +157,7 @@ export default {
       })
     },
     performFilter ({ start, end } = {}) {
-      this.rangeOfDateValue = { start, end }
+      this.mRange = { start, end }
       const params = {}
       if (start instanceof Date || end instanceof Date) {
         Object.assign(params, {

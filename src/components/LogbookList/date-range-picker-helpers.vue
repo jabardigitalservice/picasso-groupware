@@ -1,16 +1,24 @@
 <template>
   <div class="date-range-picker__helpers">
-    <button v-for="(h, index) in pickerHelpers"
-            :key="index"
-            :class="[isHelperSelected(h) && 'is-active']"
-            @click="onHelperClick(h)">
+    <button
+      v-for="(h, index) in pickerHelpers"
+      :key="index"
+      :class="[isHelperSelected(h) && 'is-active']"
+      @click="onHelperClick(h)"
+    >
       {{ h.label }}
+      <span
+        v-show="isHelperSelected(h)"
+        class="font-bold ml-2 leading-none"
+      >
+        ✕
+      </span>
     </button>
   </div>
 </template>
 
 <script>
-import { subDays, setDate, getDaysInMonth, isEqual } from 'date-fns'
+import { subDays, setDate, getDaysInMonth, isSameDay } from 'date-fns'
 
 export default {
   props: {
@@ -35,8 +43,8 @@ export default {
   methods: {
     isHelperSelected (helper) {
       const { value: { start, end } } = helper
-      return isEqual(start, this.start) &&
-        isEqual(end, this.end)
+      return isSameDay(start, this.start) &&
+        isSameDay(end, this.end)
     },
     onHelperClick (helper) {
       if (this.isHelperSelected(helper)) {
@@ -55,6 +63,7 @@ export default {
   @apply mt-2;
   > button {
     @apply px-3 py-1 rounded-full
+    inline-flex items-center
     text-xs
     bg-blue-100 text-blue-500;
 

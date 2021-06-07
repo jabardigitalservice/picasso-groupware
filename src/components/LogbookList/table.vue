@@ -1,82 +1,93 @@
 <template>
   <div>
-    <DateRangePicker @change-date="onDateChanged"/>
-      <div class="v-pagination-container">
-        <VPagination v-bind="pagination" />
-      </div>
-      <header class="mb-4 flex justify-between items-center">
-        <p class="text-sm text-gray-600">
-          <template v-if="totalCount">
-            Menampilkan {{ startIndex + 1 }} - {{ endIndex + 1 }} dari total {{ totalCount }} data
-          </template>
-        </p>
-        <p>
-          <button
-            class="header-action-button bg-blue-500"
-            @click="onCreateNewLogbook">
-            + Buat Laporan Baru
-          </button>
-        </p>
-      </header>
-      <div class="overflow-x-auto overflow-y-hidden">
-        <table class="logbook-table">
-          <thead>
-            <tr>
-              <th style="width: 1%;">No.</th>
-              <th style="width: 1%;">Tanggal</th>
-              <th style="width: 1%;">Project</th>
-              <th style="width: 50%;">Task</th>
-              <th style="width: 1%;">Tupoksi</th>
-              <th style="width: 1%;">Foto Kegiatan</th>
-              <th style="width: 1%;">Lampiran</th>
-              <th style="width: 1%;">Action</th>
+    <TableFilter
+      class="mb-8"
+      :filter="tableFilter"
+      @change="onFilterChanged"
+    />
+    <header class="mb-4 flex justify-between items-center">
+      <p class="text-sm text-gray-600">
+        <template v-if="totalCount">
+          Menampilkan {{ startIndex + 1 }} - {{ endIndex + 1 }} dari total {{ totalCount }} data
+        </template>
+      </p>
+      <p>
+        <button
+          class="header-action-button bg-blue-500"
+          @click="onCreateNewLogbook">
+          + Buat Laporan Baru
+        </button>
+      </p>
+    </header>
+    <div class="overflow-x-auto overflow-y-hidden">
+      <table class="logbook-table">
+        <thead>
+          <tr>
+            <th style="width: 1%;">No.</th>
+            <th style="width: 1%;">Tanggal</th>
+            <th style="width: 1%;">Project</th>
+            <th style="width: 50%;">Task</th>
+            <th style="width: 1%;">Tupoksi</th>
+            <th style="width: 1%;">Foto Kegiatan</th>
+            <th style="width: 1%;">Lampiran</th>
+            <th style="width: 1%;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-if="isLoadingLogbookList">
+            <tr v-for="i in mQuery.perPage" :key="`skeleton:${i}`">
+              <td v-for="j in 8" :key="`col:${j}`" class="p-4">
+                <div class="w-full h-2 rounded-full bg-shimmering" />
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <template v-if="isLoadingLogbookList">
-              <tr v-for="i in perPage" :key="`skeleton:${i}`">
-                <td v-for="j in 8" :key="`col:${j}`" class="p-4">
-                  <div class="w-full h-2 rounded-full bg-shimmering" />
-                </td>
-              </tr>
-            </template>
-            <template v-else-if="!logbookListData || !logbookListData.length">
-              <tr>
-                <td colspan="7">
-                  <div class="p-4 text-center font-bold text-gray-400 bg-gray-200 uppercase">
-                    Tidak ada data
-                  </div>
-                </td>
-              </tr>
-            </template>
-            <template v-else>
-              <TableRow
-                v-for="(data, index) in logbookListData"
-                :key="index"
-                :logbook="data"
-                :index="getAbsoluteIndex(index)"
-                @delete:success="loadData">
-              </TableRow>
-            </template>
-          </tbody>
-      </table>
+          </template>
+          <template v-else-if="!logbookListData || !logbookListData.length">
+            <tr>
+              <td colspan="7">
+                <div class="p-4 text-center font-bold text-gray-400 bg-gray-200 uppercase">
+                  Tidak ada data
+                </div>
+              </td>
+            </tr>
+          </template>
+          <template v-else>
+            <TableRow
+              v-for="(data, index) in logbookListData"
+              :key="index"
+              :logbook="data"
+              :index="getAbsoluteIndex(index)"
+              @delete:success="loadData">
+            </TableRow>
+          </template>
+        </tbody>
+    </table>
+    </div>
+    <div class="v-pagination-container mt-4">
+      <Pagination v-bind="pagination" />
     </div>
   </div>
 </template>
 
 <script>
-import VPagination from 'vuejs-paginate'
+import Pagination from '../Pagination'
 import listMixin from './list-mixin'
-import DateRangePicker from './date-range-picker.vue'
+import TableFilter from './table-filter'
 import TableRow from './table-row'
+import _isEqual from 'lodash/isEqual'
 
 export default {
   name: 'LogbookTable',
   mixins: [listMixin],
   components: {
-    VPagination,
-    TableRow,
-    DateRangePicker
+    Pagination,
+    TableFilter,
+    TableRow
+  },
+  props: {
+    query: {
+      type: Object,
+      default: () => null
+    }
   },
   data () {
     return {
@@ -85,22 +96,32 @@ export default {
       logbookListData: null,
       totalPage: 0,
       totalCount: 0,
-      page: 1,
-      perPage: 10,
-      startDate: null,
-      endDate: null
+
+      mQuery: {
+        page: 1,
+        perPage: 10,
+        startDate: null,
+        endDate: null
+      }
     }
   },
   computed: {
+    tableFilter () {
+      return {
+        startDate: this.mQuery.startDate,
+        endDate: this.mQuery.endDate,
+        perPage: this.mQuery.perPage
+      }
+    },
     startIndex () {
       if (this.totalCount) {
-        return (this.page - 1) * (this.perPage)
+        return (this.mQuery.page - 1) * (this.mQuery.perPage)
       }
       return 0
     },
     endIndex () {
       if (this.totalCount) {
-        if (this.page === Math.ceil(this.totalCount / this.perPage)) {
+        if (this.mQuery.page === Math.ceil(this.totalCount / this.mQuery.perPage)) {
           return this.totalCount - 1
         } else {
           return this.startIndex + this.logbookListData.length - 1
@@ -110,39 +131,88 @@ export default {
     },
     pagination () {
       return {
-        value: this.page,
+        value: this.mQuery.page,
         pageCount: this.totalPage,
         pageRange: 3,
-        containerClass: 'v-pagination',
-        pageClass: 'v-pagination__page',
-        prevText: 'Prev',
-        nextText: 'Next',
-        prevClass: 'v-pagination__page v-pagination__page--prev',
-        nextClass: 'v-pagination__page v-pagination__page--next',
-        clickHandler: this.onPageChanged
+        clickHandler: this.onPageChanged,
+        firstLastButton: true
       }
     }
   },
-  created () {
-    this.loadData()
+  watch: {
+    query: {
+      immediate: true,
+      deep: true,
+      handler (newObject, oldObject) {
+        if (_isEqual(newObject, oldObject)) {
+          return
+        }
+
+        const {
+          page = 1,
+          perPage = 10,
+          startDate = null,
+          endDate = null
+        } = (newObject || {})
+        this.updateQuery({
+          page,
+          perPage,
+          startDate,
+          endDate
+        }, {
+          sync: false
+        })
+      }
+    }
   },
   methods: {
-    onDateChanged ({ start_date: startDate, end_date: endDate }) {
-      this.page = 1
+    updateQuery ({
+      page,
+      perPage,
+      startDate,
+      endDate
+    }, {
+      sync = true
+    } = {}) {
+      this.mQuery = {
+        page,
+        perPage,
+        startDate,
+        endDate
+      }
+      if (sync) {
+        this.$emit('update:query', this.mQuery)
+      } else {
+        this.loadData()
+      }
+    },
+    getQueryAsAPISpec () {
+      const { page, perPage, startDate, endDate } = this.mQuery
+      return {
+        page,
+        pageSize: perPage,
+        start_date: startDate,
+        end_date: endDate
+      }
+    },
+    onFilterChanged ({ startDate, endDate, perPage } = {}) {
+      this.updateQuery({
+        page: 1,
+        startDate,
+        endDate,
+        perPage
+      })
       this.totalCount = 0
       this.totalPage = 0
-      this.startDate = startDate
-      this.endDate = endDate
-      this.loadData()
     },
     onPageChanged (newPage) {
-      this.page = newPage
-      this.loadData()
+      this.updateQuery({
+        ...this.mQuery,
+        page: newPage
+      })
     },
     onLoadSuccess ({ results, _meta }) {
-      const { currentPage, perPage, totalPage, totalCount } = _meta
-      this.page = currentPage
-      this.perPage = perPage
+      const { totalPage, totalCount } = _meta
       this.totalPage = totalPage
       this.totalCount = totalCount
       this.logbookListData = results
@@ -157,12 +227,9 @@ export default {
       this.isLoadingLogbookList = true
       this.logbookListError = null
 
-      this.$store.dispatch('logbook-list/getLogbookList', {
-        page: this.page,
-        pageSize: this.perPage,
-        start_date: this.startDate,
-        end_date: this.endDate
-      }).then(this.onLoadSuccess)
+      const params = this.getQueryAsAPISpec()
+      this.$store.dispatch('logbook-list/getLogbookList', params)
+        .then(this.onLoadSuccess)
         .catch(this.onLoadError)
         .finally(this.onLoadFinished)
     }
@@ -204,64 +271,6 @@ export default {
   &:hover,
   &:focus {
     @apply outline-none opacity-50;
-  }
-}
-</style>
-
-<style lang="scss">
-.v-pagination-container {
-  @apply rounded border border-solid border-gray-300
-  p-4 mb-4 -mt-4;
-}
-
-.v-pagination {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-
-  &__page {
-    background-color: #eee;
-    @apply cursor-pointer
-    inline-block
-    rounded
-    bg-white
-    leading-none;
-
-    &:not(.disabled):not(.active):hover {
-      opacity: 0.5;
-    }
-
-    &.active {
-      @apply bg-blue-500 text-white;
-    }
-
-    &.disabled {
-      @apply cursor-not-allowed opacity-50;
-    }
-
-    & + & {
-      margin-left: 0.5rem;
-    }
-
-    > a {
-      padding: 0.5rem 0.75rem;
-      cursor: inherit;
-      @apply block w-full h-full text-sm;
-
-      &:focus,
-      &:active {
-        outline: none;
-        border: none;
-      }
-    }
-  }
-}
-
-.v-pagination__page {
-  &--prev,
-  &--next {
-    @apply border border-solid border-gray-300
-    text-blue-500 font-bold;
   }
 }
 </style>
