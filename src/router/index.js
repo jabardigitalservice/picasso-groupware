@@ -6,6 +6,7 @@ import Meta from 'vue-meta'
 import routes from './routes'
 import store from '@/store'
 import { sync } from 'vuex-router-sync'
+import * as Sentry from '@sentry/core'
 
 Vue.use(Meta)
 Vue.use(Router)
@@ -63,6 +64,11 @@ async function beforeEach (to, from, next) {
       return
     }
   }
+
+  // TODO: check if configureScope can be imported using direct import
+  Sentry.configureScope((scope) => {
+    scope.setTransactionName(to.path)
+  })
 
   if (components.length === 0) {
     return next()
