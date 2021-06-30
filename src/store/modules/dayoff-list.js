@@ -23,7 +23,7 @@ export const mutations = {
 // actions
 export const actions = {
   async getDayoffList (_, { page = 1, perPage = 10 } = {}) {
-    const get = await GroupwareAPI.get('day-off/list', {
+    const get = await GroupwareAPI.get('day-off/', {
       params: {
         page,
         limit: perPage
