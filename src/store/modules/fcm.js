@@ -9,17 +9,15 @@ export const actions = {
   },
   createRegistrationToken ({ rootState }, { token } = {}) {
     return GroupwareAPI.post('notification/device-token/', {
-      userID: rootState.auth.user.id,
-      appID: process.env.VUE_APP_FIREBASE_APP_ID,
-      deviceToken: token
+      app_id: process.env.VUE_APP_FIREBASE_APP_ID,
+      device_token: token
     })
   },
   updateRegistrationToken ({ rootState }, { token } = {}) {
     const userId = rootState.auth.user.id
     return GroupwareAPI.put(`notification/device-token/${userId}`, {
-      userID: rootState.auth.user.id,
-      appID: process.env.VUE_APP_FIREBASE_APP_ID,
-      deviceToken: token
+      app_id: process.env.VUE_APP_FIREBASE_APP_ID,
+      device_token: token
     })
   },
   deleteRegistrationToken ({ rootState }) {
