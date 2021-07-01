@@ -140,7 +140,7 @@ export default {
         Object.entries(this.formattedPayload).forEach(([key, value]) => {
           formData.append(key, value)
         })
-        const post = GroupwareAPI.post('day-off/create', formData)
+        const post = GroupwareAPI.post('day-off/', formData)
         await pMinDelay(post, 1500)
         await this.onSubmitSuccess()
       } catch (e) {
