@@ -7,6 +7,3 @@
 [context.development.environment]
   VUE_APP_MODE = "development"
   ENVERYWHERE_APP_MODE = "development"
-[context.fix-firebase-env.environment]
-  VUE_APP_MODE = "production"
-  ENVERYWHERE_APP_MODE = "production"
