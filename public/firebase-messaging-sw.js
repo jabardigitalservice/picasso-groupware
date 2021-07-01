@@ -14,7 +14,10 @@ if (ENVERYWHERE_APP_MODE !== 'production') {
 firebase.initializeApp(firebaseConfig)
 
 if (firebase.messaging.isSupported()) {
-  const messaging = firebase.messaging()
+  const messaging = firebase
+    .messaging()
+    .usePublicVapidKey(firebaseConfig.publicVapidKey)
+
   messaging.setBackgroundMessageHandler(function (payload) {
     const notificationTitle = payload.notification.title
     const notificationOptions = {
