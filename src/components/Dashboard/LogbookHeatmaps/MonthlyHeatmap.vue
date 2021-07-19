@@ -8,6 +8,26 @@
       :viewBox="viewBoxRectSize"
       class="monthly-heatmap__blocks"
       :key="`${year}/${month}`">
+      <g v-for="dayIndex in 7"
+        :key="`day:${dayIndex}`"
+        class="monthly-heatmap__block"
+        fill="transparent"
+      >
+        <rect
+          :width="rectSize"
+          :height="rectSize"
+          :x="getRectX(dayIndex - 1)"
+          :y="getRectY(dayIndex - 1)"
+        />
+        <text
+          :x="getDayNameTextX(dayIndex - 1)"
+          :y="getDayNameTextY(dayIndex - 1)"
+          fill="#bbb"
+          style="font: bold 20px sans-serif; text-transform: uppercase;"
+        >
+          {{ getDayName(dayIndex) }}
+        </text>
+      </g>
       <g
         v-for="(dateNum, index) in numOfDays"
         :key="dateNum"
@@ -27,7 +47,7 @@
           :height="rectSize"
           :rx="rectSize / 10"
           :ry="rectSize / 10"
-          :x="getRectX(index + startOfMonthOffsetInDays)"
+          :x="getRectX(7 + index + startOfMonthOffsetInDays)"
           :y="getRectY(index + startOfMonthOffsetInDays)" />
         <title>
           {{ getTooltipContentByDateNum(dateNum) }}
@@ -119,9 +139,13 @@ export default {
     },
 
     viewBoxRectSize () {
-      const maxNumOfWeeks = 6
-      const width = (this.rectSize * maxNumOfWeeks) + (this.rectGap * (maxNumOfWeeks + 1))
-      const height = (this.rectSize * 7) + (this.rectGap * 9)
+      // 7 is maximum num of weeks in month (6) + 1 column for day name
+      const maxNumOfColumns = 7
+      const width = (this.rectSize * maxNumOfColumns) + (this.rectGap * (maxNumOfColumns + 1))
+
+      // 7 is number of days within week
+      // 8 is number of gap for 7 rows
+      const height = (this.rectSize * 7) + (this.rectGap * 8)
       return `0 0 ${width} ${height}`
     },
     monthName () {
@@ -131,6 +155,21 @@ export default {
     }
   },
   methods: {
+    getDayName (dayIndex) {
+      // monday is zero in date-fns
+      const i = dayIndex === 7 ? 0 : dayIndex
+      return id.localize.day(i, {
+        width: 'short'
+      })
+    },
+    getDayNameTextY (dayIndex) {
+      const rectY = this.getRectY(dayIndex)
+      // 10 is half of font size
+      return 10 + rectY + Math.floor(this.rectSize / 2)
+    },
+    getDayNameTextX (dayIndex) {
+      return 0
+    },
     getRectY (itemIndex) {
       return this.rectGap + ((itemIndex % 7)) * (this.rectSize + this.rectGap)
     },
