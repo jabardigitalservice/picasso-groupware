@@ -36,7 +36,7 @@
             }"
             placeholder="Tanggal Mulai"
             :value="startDateISOString"
-            value-zone="local"
+            value-zone="UTC+7"
             @change="onStartDateChanged"
           />
           <InputDateTime
@@ -49,7 +49,7 @@
             }"
             placeholder="Tanggal Akhir"
             :value="endDateISOString"
-            value-zone="local"
+            value-zone="UTC+7"
             @change="onEndDateChanged"
           />
         </div>
